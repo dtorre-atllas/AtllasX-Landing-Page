@@ -23,6 +23,7 @@ import {
   Users,
 } from "lucide-react";
 import { Intercom } from "./components/Intercom";
+import heroVideo from "../assets/hero.mp4";
 
 /* ============================== Constants ============================== */
 
@@ -347,7 +348,7 @@ function Hero() {
     <section id="top" style={{ position: "relative", overflow: "hidden", background: "var(--ax-ink)", color: "#fff", marginTop: -64 }}>
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,#15161B 0%,#101115 45%,#0B0C0F 100%)" }} />
       <video autoPlay muted loop playsInline preload="auto" aria-hidden="true" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}>
-        <source src="/hero.mp4" type="video/mp4" />
+        <source src={heroVideo} type="video/mp4" />
       </video>
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(90deg, rgba(8,9,12,.86) 0%, rgba(8,9,12,.58) 45%, rgba(8,9,12,.3) 100%), linear-gradient(180deg, rgba(8,9,12,.4) 0%, transparent 28%, rgba(8,9,12,.55) 100%)" }} />
       <div className="ax-grain" style={{ position: "absolute", zIndex: 1 }} />
