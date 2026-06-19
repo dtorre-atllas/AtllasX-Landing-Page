@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import heroVideo from "../assets/hero.mp4";
 import footerImg from "../assets/footer.jpg";
+import bannerSpeed from "../assets/speed-to-lead.jpg";
+import bannerOutbound from "../assets/outbound-calling.jpg";
+import bannerReceptionist from "../assets/ai-receptionist.jpg";
+import bannerPricing from "../assets/pricing.jpg";
 import { MemoryRouter, Routes, Route, Link, Outlet, useLocation } from "react-router";
 import { motion } from "motion/react";
 import {
@@ -13,7 +17,6 @@ import {
   ChevronDown,
   Play,
   Pause,
-  ShieldCheck,
   Mail,
   Instagram,
   Linkedin,
@@ -266,7 +269,7 @@ function Nav() {
     return () => obs.disconnect();
   }, []);
 
-  const links: [string, string][] = [["Pricing", "/pricing"], ["Compliance", "/compliance"]];
+  const links: [string, string][] = [["Pricing", "/pricing"]];
   const sol: [string, string][] = [["Speed to Lead", "/speed-to-lead"], ["Outbound Calling", "/outbound-calling"], ["AI Receptionist", "/ai-receptionist"]];
   const linkColor = scrolled ? "var(--ax-ink)" : "#ffffff";
 
@@ -536,7 +539,6 @@ function DashboardSection() {
             </div>
           </div>
         </div>
-        <p className="ax-mono" style={{ textAlign: "center", fontSize: 11, color: "rgba(255,255,255,.4)", marginTop: 16 }}>Product dashboard — your real screenshot drops in here</p>
       </div>
     </section>
   );
@@ -627,59 +629,52 @@ function FAQ() {
   );
 }
 
-function FinalCTA() {
-  return (
-    <section className="ax-dark" style={{ padding: "120px 0", textAlign: "center", position: "relative", overflow: "hidden" }}>
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "radial-gradient(50% 60% at 50% 0%, rgba(31,91,255,.18), transparent 70%)" }} />
-      <div className="ax-wrap" style={{ position: "relative", zIndex: 2 }}>
-        <h2 style={{ fontSize: "clamp(2.3rem,5.4vw,4rem)", letterSpacing: "-.03em", maxWidth: "18ch", margin: "0 auto" }}>Your next lead should not have to wait.</h2>
-        <p style={{ color: "rgba(255,255,255,.62)", fontSize: "1.1rem", margin: "22px auto 34px", maxWidth: "46ch" }}>See how AtllasX would call, qualify, and book leads for your business.</p>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 24px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
-          <a href="#hear" className="ax-btn ax-btn-ghost" style={{ borderColor: "rgba(255,255,255,.28)", color: "#fff", padding: "13px 22px" }}><Play style={{ width: 15, height: 15 }} /> Hear AtllasX</a>
-        </div>
-        <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap", marginTop: 30, color: "rgba(255,255,255,.45)", fontSize: 12.5 }}>
-          {["Set up in as little as five minutes", "Cancel anytime", "Custom workflows available"].map((t) => (
-            <span key={t} style={{ display: "inline-flex", gap: 6, alignItems: "center" }}><Check style={{ width: 14, height: 14 }} /> {t}</span>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function Footer() {
   const cols: [string, [string, string][]][] = [
     ["Product", [["Speed to Lead", "/speed-to-lead"], ["Outbound Calling", "/outbound-calling"], ["AI Receptionist", "/ai-receptionist"], ["Pricing", "/pricing"]]],
-    ["Resources", [["Documentation", DOCS_URL], ["Compliance", "/compliance"], ["Contact", "mailto:info@atllas.com"]]],
+    ["Resources", [["Documentation", DOCS_URL], ["Contact", "mailto:info@atllas.com"]]],
     ["Company", [["Privacy", "https://app.atllas.com/legal/privacy-policy"], ["Terms", "https://app.atllas.com/legal/terms-of-service"], ["Accessibility", "mailto:info@atllas.com"], ["Log in", LOGIN_URL]]],
   ];
-  const lk = { color: "rgba(255,255,255,.6)", fontSize: 13.5 } as React.CSSProperties;
+  const lk = { color: "rgba(255,255,255,.62)", fontSize: 13.5 } as React.CSSProperties;
+  const card: React.CSSProperties = { background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 16, padding: "22px 20px", backdropFilter: "blur(6px)" };
   const renderLink = (l: string, href: string) =>
     href.startsWith("/")
       ? <Link key={l} to={href} style={lk}>{l}</Link>
       : <a key={l} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" style={lk}>{l}</a>;
   return (
-    <footer style={{ position: "relative", color: "#fff", padding: "58px 0 30px", overflow: "hidden", background: "#070809" }}>
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: `url(${footerImg})`, backgroundSize: "cover", backgroundPosition: "center", opacity: 0.35 }} />
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(7,8,9,.74) 0%, rgba(7,8,9,.93) 100%)" }} />
+    <footer style={{ position: "relative", color: "#fff", overflow: "hidden", background: "#0b0c0e" }}>
+      <img src={footerImg} alt="" aria-hidden="true" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.45, zIndex: 0 }} />
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(8,9,11,.7) 0%, rgba(8,9,11,.9) 60%, rgba(8,9,11,.96) 100%)", zIndex: 1 }} />
       <div className="ax-wrap" style={{ position: "relative", zIndex: 2 }}>
-        <div className="ax-foot" style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr 1fr 1fr 1fr", gap: 40 }}>
-          <div>
+        <div style={{ textAlign: "center", padding: "92px 0 64px" }}>
+          <h2 style={{ fontSize: "clamp(2.1rem,5vw,3.4rem)", letterSpacing: "-.03em", lineHeight: 1.05, color: "#fff", maxWidth: "20ch", margin: "0 auto" }}>Your next lead should not have to wait.</h2>
+          <p style={{ color: "rgba(255,255,255,.65)", fontSize: "1.05rem", margin: "18px auto 28px", maxWidth: "46ch" }}>See how AtllasX would call, qualify, and book leads for your business.</p>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 24px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
+            <button onClick={() => window.dispatchEvent(new CustomEvent("ax:livecall"))} className="ax-btn ax-btn-ghost" style={{ borderColor: "rgba(255,255,255,.28)", color: "#fff", padding: "13px 22px", cursor: "pointer" }}><Phone style={{ width: 15, height: 15 }} /> Get a live call</button>
+          </div>
+          <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap", marginTop: 26, color: "rgba(255,255,255,.5)", fontSize: 12.5 }}>
+            {["Set up in as little as five minutes", "Cancel anytime", "Custom workflows available"].map((t) => (
+              <span key={t} style={{ display: "inline-flex", gap: 6, alignItems: "center" }}><Check style={{ width: 14, height: 14 }} /> {t}</span>
+            ))}
+          </div>
+        </div>
+        <div className="ax-foot" style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr 1fr 1fr 1fr", gap: 16 }}>
+          <div style={card}>
             <Link to="/" style={{ fontFamily: "var(--ax-head)", fontWeight: 700, fontSize: 20, letterSpacing: "-.03em", color: "#fff" }}>Atllas<span style={{ color: "var(--ax-accent)" }}>X</span></Link>
             <p style={{ color: "rgba(255,255,255,.55)", fontSize: 13, lineHeight: 1.6, marginTop: 14, maxWidth: "32ch" }}>AI phone agents for inbound and outbound calls.</p>
             <a href="tel:+14159694084" style={{ color: "rgba(255,255,255,.65)", fontSize: 13.5, marginTop: 16, display: "inline-flex", gap: 7, alignItems: "center" }}><Phone style={{ width: 14, height: 14 }} /> {PHONE}</a>
           </div>
           {cols.map(([h, items]) => (
-            <div key={h}>
-              <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(255,255,255,.45)", marginBottom: 16 }}>{h}</div>
+            <div key={h} style={card}>
+              <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(255,255,255,.45)", marginBottom: 14 }}>{h}</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
                 {items.map(([l, href]) => renderLink(l, href))}
               </div>
             </div>
           ))}
-          <div>
-            <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(255,255,255,.45)", marginBottom: 16 }}>Connect</div>
+          <div style={card}>
+            <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(255,255,255,.45)", marginBottom: 14 }}>Connect</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
               <a href="https://www.linkedin.com/company/atllas-inc/" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,.6)", fontSize: 13.5, display: "inline-flex", gap: 8, alignItems: "center" }}><Linkedin style={{ width: 14, height: 14 }} /> LinkedIn</a>
               <a href="https://www.instagram.com/atllasai" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,.6)", fontSize: 13.5, display: "inline-flex", gap: 8, alignItems: "center" }}><Instagram style={{ width: 14, height: 14 }} /> Instagram</a>
@@ -780,15 +775,21 @@ function HomePage() {
       <Integrations />
       <Pricing />
       <FAQ />
-      <FinalCTA />
     </>
   );
 }
 
-function DarkHeader({ eyebrow, title, sub, children }: { eyebrow: string; title: string; sub?: string; children?: React.ReactNode }) {
+function DarkHeader({ eyebrow, title, sub, banner, children }: { eyebrow: string; title: string; sub?: string; banner?: string; children?: React.ReactNode }) {
   return (
     <section style={{ background: "var(--ax-ink)", color: "#fff", marginTop: -64, position: "relative", overflow: "hidden" }}>
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "radial-gradient(60% 70% at 72% 0%, rgba(31,91,255,.16), transparent 70%)" }} />
+      {banner ? (
+        <>
+          <img src={banner} alt="" aria-hidden="true" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
+          <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(8,9,12,.92) 0%, rgba(8,9,12,.6) 52%, rgba(8,9,12,.3) 100%), linear-gradient(180deg, rgba(8,9,12,.25) 0%, rgba(8,9,12,.72) 100%)" }} />
+        </>
+      ) : (
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "radial-gradient(60% 70% at 72% 0%, rgba(31,91,255,.16), transparent 70%)" }} />
+      )}
       <div className="ax-wrap" style={{ position: "relative", zIndex: 2, paddingTop: 138, paddingBottom: children ? 64 : 80 }}>
         <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(255,255,255,.55)", marginBottom: 16 }}>{eyebrow}</div>
         <h1 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, letterSpacing: "-.03em", fontSize: "clamp(2.4rem,5vw,3.8rem)", lineHeight: 1.05, maxWidth: "20ch" }}>{title}</h1>
@@ -800,15 +801,117 @@ function DarkHeader({ eyebrow, title, sub, children }: { eyebrow: string; title:
 }
 
 const SOLUTION_PAGES: Record<string, any> = {
-  speed: { eyebrow: "Speed to Lead", h1: "Call new leads while their intent is still high.", sub: "Connect a lead source and AtllasX calls each new lead within ~60 seconds — introducing itself, qualifying against your criteria, and booking the meeting. Day or night.", mock: "speed", line: ["New lead", "AI call in ~60s", "Qualified", "Meeting booked"], caps: ["Calls within ~60 seconds", "Personalized conversation", "Qualification against your criteria", "Appointment booking", "Booking confirmation text", "Human transfer"] },
-  outbound: { eyebrow: "Outbound Calling", h1: "Turn existing contact lists into qualified conversations.", sub: "Upload a contact list, define the objective, and AtllasX works through the campaign — handling objections, qualifying interest, and booking the next step.", mock: "outbound", line: ["Contact list", "AI calls", "Interest qualified", "Next step booked"], caps: ["Contact-list uploads", "Custom campaign objective", "Objection handling", "Qualification", "Appointment setting", "Campaign outcomes & transcripts"] },
-  receptionist: { eyebrow: "AI Receptionist", h1: "Never send another inbound call to voicemail.", sub: "AtllasX answers every incoming call 24/7 — responding from your knowledge base, capturing details, qualifying, booking, and routing callers by your rules.", mock: "receptionist", line: ["Incoming call", "AI answers 24/7", "Intent understood", "Resolved or routed"], caps: ["24/7 answering", "Business-specific knowledge", "Call qualification", "Appointment booking", "Human transfer", "Call transcription"] },
+  speed: {
+    id: "speed", banner: bannerSpeed, eyebrow: "Speed to Lead",
+    h1: "Call new leads while their intent is still high.",
+    sub: "Connect a lead source and AtllasX calls each new lead within ~60 seconds — introducing itself, qualifying against your criteria, and booking the meeting. Day or night.",
+    mock: "speed", line: ["New lead", "AI call in ~60s", "Qualified", "Meeting booked"],
+    intro: "One agent that picks up where your forms leave off — calling, qualifying, and booking without anyone lifting a finger.",
+    caps: ["Calls within ~60 seconds", "Personalized conversation", "Qualification against your criteria", "Appointment booking", "Booking confirmation text", "Human transfer"],
+    stepsHead: "From new lead to booked meeting.",
+    stepsSub: "Four steps, fully automatic — the lead never waits and your team never lifts a finger.",
+    steps: [["01", "Connect a lead source", "Point AtllasX at your inbound lead flow. New leads trigger a call the moment they arrive."], ["02", "AtllasX calls in ~60 seconds", "It introduces itself for your business and holds a natural, real-time phone conversation."], ["03", "Qualifies the lead", "It asks the questions you define, captures the answers, and records the outcome on every call."], ["04", "Books & confirms", "It books the meeting, sends a confirmation text, and warm-transfers to a human on request."]],
+    call: 0, callSub: "A live speed-to-lead conversation, start to finish.",
+    integHead: "Connect the systems that send you leads.",
+    integSub: "Trigger AtllasX calls from your existing lead workflow.",
+    integ: [["Lead sources", ["Meta Lead Ads", "Website forms", "Contact-list uploads"]], ["Automation", ["Zapier", "Webhooks", "Custom triggers"]], ["Scheduling", ["Calendar booking", "Confirmation texts"]]],
+    faq: [["How quickly can AtllasX call a new lead?", "When a lead arrives from a connected source, AtllasX typically calls within approximately 60 seconds — day or night, including nights and weekends."], ["What does it say on the call?", "It introduces itself for your business, asks the qualifying questions you define, and works to book a meeting. You control the script, criteria, and tone."], ["Can it transfer to a human?", "Yes. AtllasX can warm-transfer to your team the moment a lead wants to speak with a person."], ["Does it work with my CRM?", "Native HubSpot integration is coming soon. Today, leads can be connected through supported sources, and custom CRM, webhook, and follow-up workflows are available by request."]],
+  },
+  outbound: {
+    id: "outbound", banner: bannerOutbound, eyebrow: "Outbound Calling",
+    h1: "Turn existing contact lists into qualified conversations.",
+    sub: "Upload a contact list, define the objective, and AtllasX works through the campaign — handling objections, qualifying interest, and booking the next step.",
+    mock: "outbound", line: ["Contact list", "AI calls", "Interest qualified", "Next step booked"],
+    intro: "Point AtllasX at a list and an objective, and it runs the campaign end to end — calling, qualifying, and booking.",
+    caps: ["Contact-list uploads", "Custom campaign objective", "Objection handling", "Qualification", "Appointment setting", "Campaign outcomes & transcripts"],
+    stepsHead: "From cold list to booked pipeline.",
+    stepsSub: "Four steps, fully automatic — upload, set the goal, and let AtllasX work the list.",
+    steps: [["01", "Upload a contact list", "Bring the list you want worked. AtllasX takes it from there."], ["02", "Define the objective", "Set the goal, script, and qualifying criteria for the campaign."], ["03", "AtllasX works the list", "It calls through your contacts, handles objections, and qualifies interest."], ["04", "Books the next step", "It sets the appointment and records every outcome and transcript."]],
+    call: 1, callSub: "A live outbound conversation, start to finish.",
+    integHead: "Connect the tools behind your campaigns.",
+    integSub: "Run AtllasX alongside the systems you already use.",
+    integ: [["Lists", ["Contact-list uploads", "CSV import"]], ["Automation", ["Zapier", "Webhooks", "Custom triggers"]], ["Scheduling", ["Calendar booking", "Confirmation texts"]]],
+    faq: [["What kind of lists can I upload?", "Upload a contact list or CSV and define your campaign objective — AtllasX works through the list and records every outcome."], ["Does it handle objections?", "Yes. AtllasX handles common objections, qualifies interest, and keeps the conversation moving toward the next step."], ["What happens after each call?", "Every call's outcome and transcript is recorded in the AtllasX dashboard, and qualified contacts get booked automatically."], ["Can it follow up by SMS or email?", "Booking-related texts are native. SMS and email follow-up sequences are available as custom workflows configured around your process."]],
+  },
+  receptionist: {
+    id: "receptionist", banner: bannerReceptionist, eyebrow: "AI Receptionist",
+    h1: "Never send another inbound call to voicemail.",
+    sub: "AtllasX answers every incoming call 24/7 — responding from your knowledge base, capturing details, qualifying, booking, and routing callers by your rules.",
+    mock: "receptionist", line: ["Incoming call", "AI answers 24/7", "Intent understood", "Resolved or routed"],
+    intro: "A 24/7 voice agent that answers every inbound call, helps the caller, and routes anyone who needs a human.",
+    caps: ["24/7 answering", "Business-specific knowledge", "Call qualification", "Appointment booking", "Human transfer", "Call transcription"],
+    stepsHead: "From ring to resolved.",
+    stepsSub: "Four steps, fully automatic — every caller answered, helped, and routed.",
+    steps: [["01", "Forward your number", "Point your inbound line to AtllasX in minutes."], ["02", "AtllasX answers 24/7", "Every call is picked up instantly — day, night, weekends, holidays."], ["03", "Understands & qualifies", "It answers from your knowledge base and qualifies the caller."], ["04", "Resolves or routes", "It books, answers, or warm-transfers the caller to the right person."]],
+    call: 2, callSub: "A live inbound conversation, start to finish.",
+    integHead: "Fits the way calls already reach you.",
+    integSub: "Point your inbound line at AtllasX and connect your tools.",
+    integ: [["Telephony", ["Call forwarding", "Business number"]], ["Knowledge", ["Business knowledge base", "Custom Q&A"]], ["Scheduling", ["Calendar booking", "Human transfer"]]],
+    faq: [["Does it really answer 24/7?", "Yes. AtllasX answers every incoming call around the clock — nights, weekends, and holidays included."], ["How does it know about my business?", "It responds from the knowledge base you provide, so callers get accurate answers in your business's voice."], ["Can it send callers to a human?", "Yes. AtllasX qualifies the caller and warm-transfers or routes them to the right person based on your rules."], ["Are calls recorded?", "Yes. Every call is transcribed and the outcome is logged inside the AtllasX dashboard."]],
+  },
 };
 
+const SOL_LINKS: Record<string, { to: string; label: string; title: string; blurb: string }> = {
+  speed: { to: "/speed-to-lead", label: "Speed to Lead", title: "Call leads in ~60s.", blurb: "Call new leads while their intent is still high — qualified and booked, 24/7." },
+  outbound: { to: "/outbound-calling", label: "Outbound Calling", title: "Work your lists.", blurb: "Turn existing contact lists into qualified conversations and booked next steps." },
+  receptionist: { to: "/ai-receptionist", label: "AI Receptionist", title: "Answer every call.", blurb: "Never send another inbound call to voicemail — answered, qualified, routed 24/7." },
+};
+
+function CallPlayer({ call }: { call: any }) {
+  const [playing, setPlaying] = useState(false);
+  const [tline, setTline] = useState(0);
+  const reduced = useReducedMotion();
+  useEffect(() => {
+    if (!playing || reduced) return;
+    const t = setInterval(() => setTline((l) => { if (l >= call.transcript.length - 1) { setPlaying(false); return l; } return l + 1; }), 1500);
+    return () => clearInterval(t);
+  }, [playing, reduced, call.transcript.length]);
+  return (
+    <div style={{ marginTop: 32, border: "1px solid var(--ax-line)", borderRadius: 14, padding: "16px 18px", background: "#fff", maxWidth: 560 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <button onClick={() => { if (!playing) setTline(0); setPlaying((p) => !p); }} aria-label={playing ? "Pause" : "Play"} style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--ax-ink)", color: "#fff", border: "none", cursor: "pointer", flex: "none", display: "flex", alignItems: "center", justifyContent: "center" }}>{playing ? <Pause style={{ width: 14, height: 14 }} /> : <Play style={{ width: 14, height: 14, marginLeft: 1 }} />}</button>
+        <Wave active={playing} />
+        <span className="ax-mono" style={{ fontSize: 12, color: "var(--ax-ink-3)", marginLeft: "auto" }}>Demo · {call.duration}</span>
+      </div>
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 9 }}>
+        {call.transcript.map((row: any, i: number) => (
+          <div key={i} style={{ opacity: playing ? (i <= tline ? 1 : 0.25) : 1, transition: "opacity .3s" }}>
+            <div className="ax-mono" style={{ fontSize: 9.5, letterSpacing: ".06em", marginBottom: 3, color: row[0] === "agent" ? "var(--ax-accent)" : "var(--ax-live)" }}>{row[0] === "agent" ? "AI AGENT" : "CALLER"}</div>
+            <div style={{ fontSize: 13, color: "var(--ax-ink-2)", lineHeight: 1.45 }}>{row[1]}</div>
+          </div>
+        ))}
+      </div>
+      <p className="ax-mono" style={{ fontSize: 10.5, color: "var(--ax-ink-3)", marginTop: 12 }}>Product demonstration. Callers are speaking with an AI agent.</p>
+    </div>
+  );
+}
+
+function FaqList({ items }: { items: [string, string][] }) {
+  const [open, setOpen] = useState<number | null>(0);
+  return (
+    <div style={{ marginTop: 36, borderTop: "1px solid var(--ax-line)" }}>
+      {items.map(([q, a], i) => {
+        const on = open === i;
+        return (
+          <div key={q} style={{ borderBottom: "1px solid var(--ax-line)" }}>
+            <button onClick={() => setOpen(on ? null : i)} aria-expanded={on} style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, padding: "20px 4px", background: "none", border: "none", cursor: "pointer", textAlign: "left", font: "inherit", fontWeight: 500, fontSize: "1.02rem", color: "var(--ax-ink)" }}>
+              {q}
+              <Plus style={{ width: 18, height: 18, color: "var(--ax-ink-3)", transform: on ? "rotate(45deg)" : "none", transition: ".2s", flex: "none" }} />
+            </button>
+            {on && <p style={{ color: "var(--ax-ink-2)", fontSize: ".95rem", lineHeight: 1.6, padding: "0 4px 22px", maxWidth: "70ch" }}>{a}</p>}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function SolutionPage({ data }: { data: any }) {
+  const others = Object.keys(SOL_LINKS).filter((k) => k !== data.id);
+  const card: React.CSSProperties = { display: "block", border: "1px solid var(--ax-line)", borderRadius: 16, padding: 26, background: "#fff" };
   return (
     <>
-      <DarkHeader eyebrow={data.eyebrow} title={data.h1} sub={data.sub}>
+      <DarkHeader eyebrow={data.eyebrow} title={data.h1} sub={data.sub} banner={data.banner}>
         <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap", alignItems: "center" }}>
           <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 22px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
           <button onClick={() => window.dispatchEvent(new CustomEvent("ax:livecall"))} className="ax-btn ax-btn-ghost" style={{ borderColor: "rgba(255,255,255,.28)", color: "#fff", padding: "13px 20px", cursor: "pointer" }}><Phone style={{ width: 15, height: 15 }} /> Get a live call</button>
@@ -818,11 +921,13 @@ function SolutionPage({ data }: { data: any }) {
         </div>
       </DarkHeader>
 
+      {/* What it does */}
       <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
         <div className="ax-wrap ax-sol-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center" }}>
           <div>
-            <h2 style={{ fontSize: "clamp(1.6rem,3vw,2.2rem)" }}>What it does</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 22 }}>
+            <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>What it does</h2>
+            <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "46ch", lineHeight: 1.55 }}>{data.intro}</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 24 }}>
               {data.caps.map((c: string) => (
                 <div key={c} style={{ display: "flex", gap: 10, alignItems: "flex-start", fontSize: 15.5, color: "var(--ax-ink-2)" }}><Check style={{ width: 18, height: 18, color: "var(--ax-live)", flex: "none", marginTop: 2 }} /> {c}</div>
               ))}
@@ -832,14 +937,86 @@ function SolutionPage({ data }: { data: any }) {
         </div>
       </section>
 
-      <section className="ax-dark" style={{ padding: "72px 0" }}>
+      {/* How it works */}
+      <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)", background: "var(--ax-paper-2)" }}>
         <div className="ax-wrap">
-          <h2 style={{ fontSize: "clamp(1.6rem,3vw,2.2rem)", color: "#fff", maxWidth: "20ch" }}>One agent, every channel.</h2>
-          <p style={{ color: "rgba(255,255,255,.6)", marginTop: 14, maxWidth: "62ch", lineHeight: 1.55 }}>AtllasX runs the conversation on the phone and sends booking texts natively. With custom workflows, it follows up over SMS and email too. Custom multichannel workflows available by request.</p>
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>{data.stepsHead}</h2>
+          <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>{data.stepsSub}</p>
+          <div style={{ marginTop: 40, borderTop: "1px solid var(--ax-line)" }}>
+            {data.steps.map((s: string[]) => (
+              <div key={s[0]} className="ax-step" style={{ display: "grid", gridTemplateColumns: "64px 1fr", gap: 24, padding: "26px 4px", borderBottom: "1px solid var(--ax-line)", alignItems: "baseline" }}>
+                <div className="ax-mono" style={{ fontSize: 13, color: "var(--ax-accent)" }}>{s[0]}</div>
+                <div>
+                  <h3 style={{ fontSize: "1.2rem", letterSpacing: "-.02em" }}>{s[1]}</h3>
+                  <p style={{ color: "var(--ax-ink-2)", fontSize: "1rem", lineHeight: 1.55, marginTop: 6, maxWidth: "62ch" }}>{s[2]}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <FinalCTA />
+      {/* Hear a real call */}
+      <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
+        <div className="ax-wrap">
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>Hear a real call.</h2>
+          <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>{data.callSub}</p>
+          <CallPlayer call={CALLS[data.call]} />
+        </div>
+      </section>
+
+      {/* Integrations */}
+      <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)", background: "var(--ax-paper-2)" }}>
+        <div className="ax-wrap">
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>{data.integHead}</h2>
+          <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>{data.integSub}</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 20, marginTop: 40 }}>
+            {data.integ.map((g: [string, string[]]) => (
+              <div key={g[0]} style={{ border: "1px solid var(--ax-line)", borderRadius: 14, padding: 22, background: "#fff" }}>
+                <div className="ax-mono" style={{ fontSize: 10.5, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--ax-ink-3)", marginBottom: 14 }}>{g[0]}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+                  {g[1].map((it) => (<span key={it} style={{ fontSize: 14, color: "var(--ax-ink)" }}>{it}</span>))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p style={{ color: "var(--ax-ink-3)", fontSize: 13, marginTop: 20 }}>Native HubSpot integration coming soon · SMS &amp; email follow-up available as custom workflows.</p>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
+        <div className="ax-wrap" style={{ maxWidth: 820 }}>
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>Questions, answered.</h2>
+          <FaqList items={data.faq} />
+        </div>
+      </section>
+
+      {/* Explore the platform */}
+      <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
+        <div className="ax-wrap">
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>One platform. Three ways to grow.</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 18, marginTop: 40 }}>
+            {others.map((k) => {
+              const s = SOL_LINKS[k];
+              return (
+                <Link key={k} to={s.to} style={card}>
+                  <div className="ax-mono" style={{ fontSize: 10.5, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ax-ink-3)" }}>{s.label}</div>
+                  <h3 style={{ fontSize: "1.25rem", margin: "12px 0 8px", letterSpacing: "-.02em" }}>{s.title}</h3>
+                  <p style={{ color: "var(--ax-ink-2)", fontSize: ".94rem", lineHeight: 1.5 }}>{s.blurb}</p>
+                  <span style={{ color: "var(--ax-accent)", fontWeight: 500, fontSize: 14, marginTop: 16, display: "inline-flex", alignItems: "center", gap: 6 }}>Explore {s.label} <ArrowRight style={{ width: 15, height: 15 }} /></span>
+                </Link>
+              );
+            })}
+            <Link to="/pricing" style={card}>
+              <div className="ax-mono" style={{ fontSize: 10.5, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ax-ink-3)" }}>Pricing</div>
+              <h3 style={{ fontSize: "1.25rem", margin: "12px 0 8px", letterSpacing: "-.02em" }}>Plans by call volume.</h3>
+              <p style={{ color: "var(--ax-ink-2)", fontSize: ".94rem", lineHeight: 1.5 }}>Every plan includes a monthly call allotment you can use anytime, any day.</p>
+              <span style={{ color: "var(--ax-accent)", fontWeight: 500, fontSize: 14, marginTop: 16, display: "inline-flex", alignItems: "center", gap: 6 }}>See pricing <ArrowRight style={{ width: 15, height: 15 }} /></span>
+            </Link>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
@@ -847,39 +1024,9 @@ function SolutionPage({ data }: { data: any }) {
 function PricingPage() {
   return (
     <>
-      <DarkHeader eyebrow="Pricing" title="Plans that scale with your call volume." sub="Every plan includes a monthly call allotment you can use anytime. Book a demo and we'll size it to your lead flow." />
+      <DarkHeader eyebrow="Pricing" title="Plans that scale with your call volume." sub="Every plan includes a monthly call allotment you can use anytime. Book a demo and we'll size it to your lead flow." banner={bannerPricing} />
       <Pricing />
       <FAQ />
-      <FinalCTA />
-    </>
-  );
-}
-
-function CompliancePage() {
-  const items: [string, string][] = [
-    ["Call recording & retention", "Configure how calls are recorded and how long transcripts are retained."],
-    ["Consent & do-not-call", "Set consent rules and respect do-not-call handling in your workflows."],
-    ["Access controls", "Manage who on your team can configure agents and view calls."],
-    ["Transcripts & auditability", "Every call is transcribed and reviewable inside the AtllasX dashboard."],
-  ];
-  return (
-    <>
-      <DarkHeader eyebrow="Compliance" title="Built for calls you can stand behind." sub="The controls and visibility your team needs to run AI calling responsibly." />
-      <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
-        <div className="ax-wrap">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 20 }}>
-            {items.map(([t, d]) => (
-              <div key={t} style={{ border: "1px solid var(--ax-line)", borderRadius: 14, padding: 22 }}>
-                <ShieldCheck style={{ width: 20, height: 20, color: "var(--ax-accent)" }} />
-                <h3 style={{ fontSize: "1.05rem", fontWeight: 600, margin: "12px 0 7px" }}>{t}</h3>
-                <p style={{ color: "var(--ax-ink-2)", fontSize: ".92rem", lineHeight: 1.55 }}>{d}</p>
-              </div>
-            ))}
-          </div>
-          <a href="https://app.atllas.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", marginTop: 26, color: "var(--ax-accent)", fontSize: 14, fontWeight: 500 }}>Review privacy &amp; data handling →</a>
-        </div>
-      </section>
-      <FinalCTA />
     </>
   );
 }
@@ -894,7 +1041,6 @@ export default function App() {
           <Route path="/outbound-calling" element={<SolutionPage data={SOLUTION_PAGES.outbound} />} />
           <Route path="/ai-receptionist" element={<SolutionPage data={SOLUTION_PAGES.receptionist} />} />
           <Route path="/pricing" element={<PricingPage />} />
-          <Route path="/compliance" element={<CompliancePage />} />
           <Route path="*" element={<HomePage />} />
         </Route>
       </Routes>
