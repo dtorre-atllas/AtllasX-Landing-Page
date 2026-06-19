@@ -1,0 +1,90 @@
+import { Calendar, Clock, Video } from "lucide-react";
+
+export function CalendarBookingMockup() {
+  const timeSlots = [
+    { time: "9:00 AM", available: true },
+    { time: "10:00 AM", available: true },
+    { time: "11:00 AM", available: false },
+    { time: "1:00 PM", available: true },
+    { time: "2:00 PM", available: true },
+    { time: "3:00 PM", available: false },
+  ];
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm p-4">
+      {/* Header */}
+      <div className="mb-4">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#5372ea] to-[#7a63eb] flex items-center justify-center">
+            <Calendar className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <div className="font-semibold text-gray-900 text-sm">Book a Demo Call</div>
+            <div className="text-gray-500 text-xs">with AtllasX Team</div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-gray-600">
+          <Clock className="w-3 h-3" />
+          <span>30 min</span>
+          <span className="text-gray-400">•</span>
+          <Video className="w-3 h-3" />
+          <span>Phone Call</span>
+        </div>
+      </div>
+
+      {/* Calendar mini view */}
+      <div className="bg-gray-50 rounded-lg p-3 mb-4">
+        <div className="flex items-center justify-between mb-3">
+          <button className="text-gray-400 hover:text-gray-600">←</button>
+          <div className="font-medium text-gray-900 text-sm">November 2025</div>
+          <button className="text-gray-400 hover:text-gray-600">→</button>
+        </div>
+        
+        <div className="grid grid-cols-7 gap-1 text-center text-xs">
+          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
+            <div key={i} className="text-gray-500 font-medium mb-1">{day}</div>
+          ))}
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21].map((date) => (
+            <div 
+              key={date} 
+              className={`p-1 rounded ${
+                date === 15 ? 'bg-[#5372ea] text-white font-semibold' : 
+                date > 10 && date < 20 ? 'text-gray-900 hover:bg-gray-200 cursor-pointer' : 
+                'text-gray-300'
+              }`}
+            >
+              {date}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Time slots */}
+      <div>
+        <div className="text-xs font-medium text-gray-700 mb-2">Friday, November 15</div>
+        <div className="grid grid-cols-2 gap-2">
+          {timeSlots.map((slot, index) => (
+            <button
+              key={index}
+              disabled={!slot.available}
+              className={`p-2 rounded-lg text-xs font-medium transition-colors ${
+                slot.available
+                  ? 'bg-white border border-[#5372ea] text-[#5372ea] hover:bg-[#5372ea] hover:text-white cursor-pointer'
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              }`}
+            >
+              {slot.time}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="mt-4 pt-3 border-t border-gray-200">
+        <div className="text-center text-xs text-gray-500">
+          Timezone: Pacific Time (PT)
+        </div>
+      </div>
+    </div>
+  );
+}

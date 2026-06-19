@@ -1,0 +1,115 @@
+import { motion } from "motion/react";
+import { Check, X } from "lucide-react";
+
+const features = [
+  { feature: "24/7 Calling", atllas: true, traditional: false, competitors: true },
+  { feature: "Natural AI Voices", atllas: true, traditional: false, competitors: true },
+  { feature: "Unlimited Simultaneous Calls", atllas: true, traditional: false, competitors: false },
+  { feature: "Advanced Analytics", atllas: true, traditional: false, competitors: true },
+  { feature: "Custom Voice Training", atllas: true, traditional: false, competitors: false },
+  { feature: "Real-time Call Monitoring", atllas: true, traditional: true, competitors: true },
+  { feature: "No Per-Minute Charges", atllas: true, traditional: false, competitors: false },
+  { feature: "Instant Lead Follow-up", atllas: true, traditional: false, competitors: true },
+  { feature: "Setup Time", atllas: "5 minutes", traditional: "2-4 weeks", competitors: "1-2 days" },
+  { feature: "Monthly Cost", atllas: "$499", traditional: "$5,000+", competitors: "$799+" },
+];
+
+export function ComparisonTable() {
+  return (
+    <div>
+      <div className="md:hidden text-white/50 text-xs text-center mb-2 pt-4">
+        ← Scroll to compare →
+      </div>
+      <div className="overflow-x-auto overflow-y-hidden -mx-6 px-6 md:mx-0 md:px-0">
+        <table className="w-full min-w-[600px]">
+          <thead>
+            <tr className="border-b border-white/10">
+              <th className="text-left py-3 md:py-4 px-3 md:px-6 text-white/70 font-medium text-sm md:text-base">Feature</th>
+              <th className="py-3 md:py-4 px-3 md:px-6">
+                <div className="flex flex-col items-center">
+                  <div className="bg-gradient-to-r from-[#5372ea] to-[#7a63eb] text-white px-3 md:px-4 py-1 rounded-full text-xs md:text-sm font-semibold mb-2">
+                    Best
+                  </div>
+                  <span className="text-white font-semibold text-sm md:text-base">AtllasX</span>
+                </div>
+              </th>
+              <th className="text-center py-3 md:py-4 px-3 md:px-6 text-white/70 font-medium text-xs md:text-base">Traditional</th>
+              <th className="text-center py-3 md:py-4 px-3 md:px-6 text-white/70 font-medium text-xs md:text-base">Others</th>
+            </tr>
+          </thead>
+          <tbody>
+            {features.map((row, index) => (
+              <motion.tr
+                key={row.feature}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                className="border-b border-white/5 hover:bg-white/5 transition-colors"
+              >
+                <td className="py-3 md:py-4 px-3 md:px-6 text-white/90 text-sm md:text-base">{row.feature}</td>
+                <td className="py-3 md:py-4 px-3 md:px-6 text-center">
+                  {typeof row.atllas === "boolean" ? (
+                    row.atllas ? (
+                      <div className="flex justify-center">
+                        <div className="bg-green-500/20 rounded-full p-1">
+                          <Check className="w-5 h-5 text-green-400" />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex justify-center">
+                        <div className="bg-red-500/20 rounded-full p-1">
+                          <X className="w-5 h-5 text-red-400" />
+                        </div>
+                      </div>
+                    )
+                  ) : (
+                    <span className="text-green-400 font-semibold text-sm md:text-base">{row.atllas}</span>
+                  )}
+                </td>
+                <td className="py-3 md:py-4 px-3 md:px-6 text-center">
+                  {typeof row.traditional === "boolean" ? (
+                    row.traditional ? (
+                      <div className="flex justify-center">
+                        <div className="bg-green-500/20 rounded-full p-1">
+                          <Check className="w-5 h-5 text-green-400" />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex justify-center">
+                        <div className="bg-red-500/20 rounded-full p-1">
+                          <X className="w-5 h-5 text-red-400" />
+                        </div>
+                      </div>
+                    )
+                  ) : (
+                    <span className="text-white/60 text-sm md:text-base">{row.traditional}</span>
+                  )}
+                </td>
+                <td className="py-3 md:py-4 px-3 md:px-6 text-center">
+                  {typeof row.competitors === "boolean" ? (
+                    row.competitors ? (
+                      <div className="flex justify-center">
+                        <div className="bg-green-500/20 rounded-full p-1">
+                          <Check className="w-5 h-5 text-green-400" />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex justify-center">
+                        <div className="bg-red-500/20 rounded-full p-1">
+                          <X className="w-5 h-5 text-red-400" />
+                        </div>
+                      </div>
+                    )
+                  ) : (
+                    <span className="text-white/60 text-sm md:text-base">{row.competitors}</span>
+                  )}
+                </td>
+              </motion.tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

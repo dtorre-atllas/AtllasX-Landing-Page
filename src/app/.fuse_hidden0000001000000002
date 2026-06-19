@@ -1,0 +1,880 @@
+import { useState, useEffect, lazy, Suspense, useRef, useId } from "react";
+import { CountingNumber } from "./components/CountingNumber";
+import { Intercom } from "./components/Intercom";
+import { CampaignDemoShowcase } from "./components/CampaignDemoShowcase";
+import { LeadProviderBanner } from "./components/LeadProviderBanner";
+import { UseCasesSection } from "./components/UseCasesSection";
+import { motion } from "motion/react";
+import {
+  Phone,
+  Play,
+  Check,
+  Star,
+  ArrowRight,
+  Menu,
+  X,
+  Mail,
+  Instagram,
+  Facebook,
+  Linkedin,
+  ChevronRight,
+} from "lucide-react";
+import { Button } from "./components/ui/button";
+
+const ComparisonTable = lazy(() =>
+  import("./components/ComparisonTable").then((m) => ({ default: m.ComparisonTable })),
+);
+const TrustBadges = lazy(() =>
+  import("./components/TrustBadges").then((m) => ({ default: m.TrustBadges })),
+);
+const PricingSection = lazy(() =>
+  import("./components/PricingSection").then((m) => ({ default: m.PricingSection })),
+);
+const GuaranteeBanner = lazy(() =>
+  import("./components/GuaranteeBanner").then((m) => ({ default: m.GuaranteeBanner })),
+);
+
+// Figma assets
+import imgGreatOaks from "figma:asset/4649f9aa7035453c653360662376043bed9eadd5.png";
+import imgAmb from "figma:asset/fad70d4366b25137fc170114973102e89e906151.png";
+import imgSpeechify from "figma:asset/089e84197bd7f0498a63af5ad34df253f7a62ff8.png";
+import imgScale from "figma:asset/7792bff5ed0d6a508df365deaa27144520af1d01.png";
+import imgCharlesSchwab from "figma:asset/ed7bdef2d807efa9af6666389c35a41b0f1ec723.png";
+import imgNewAtllasLogo from "figma:asset/1e92e0e6bcf98f1e05ff176c9126ea436cff368d.png";
+import imgLinkDownloadOnAppStore from "figma:asset/8beff87d38de1d55ce2344d4c9bd2a5771cd8685.png";
+import imgHero from "figma:asset/d8ff1a606c9c2ab8a0e2e3b66c9df3c8e79ece4c.png";
+import imgStatistics from "figma:asset/b2f4cc575b37ee91e943802be5b905991da5d11b.png";
+import imgCampaigns from "figma:asset/d5ac0b729101dbc1a6e1cb16e350f5a24f3ced2b.png";
+import imgVoices from "figma:asset/959781584fb1df4c01d0cfbe903993ad2a42a838.png";
+
+const imgElevenLabsGrants =
+  "https://eleven-public-cdn.elevenlabs.io/payloadcms/cy7rxce8uki-IIElevenLabsGrants%201.webp";
+
+// Diagonal line texture for dark sections — matches Figma hero bg
+function DiagonalTexture({ opacity = 0.035 }: { opacity?: number }) {
+  const uid = useId().replace(/:/g, "");
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      aria-hidden="true"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      <defs>
+        <pattern id={`diag-${uid}`} width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+          <line x1="0" y1="0" x2="0" y2="40" stroke="white" strokeWidth="0.5" strokeOpacity={opacity} />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill={`url(#diag-${uid})`} />
+    </svg>
+  );
+}
+
+// Inline CRM mockup card — matches screenshot 3 right panel
+function CrmMockup() {
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden font-['Geist',sans-serif] text-sm w-full max-w-[480px]">
+      {/* Breadcrumb bar */}
+      <div className="flex items-center justify-between px-5 py-3 bg-gray-50 border-b border-gray-200">
+        <span className="text-gray-500 font-mono text-xs tracking-wide">leads / inbound / contact_8472</span>
+        <span className="text-green-700 bg-green-50 border border-green-200 text-xs font-medium px-2.5 py-0.5 rounded">ACTIVE</span>
+      </div>
+      {/* Contact row */}
+      <div className="flex items-center gap-4 px-5 py-4 border-b border-gray-100">
+        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold text-sm flex-shrink-0">
+          CN
+        </div>
+        <div>
+          <div className="font-semibold text-gray-900">[Customer Name]</div>
+          <div className="text-gray-500 text-xs">[Title, Company]</div>
+          <div className="text-gray-400 font-mono text-xs mt-0.5">Source: HubSpot · Demo form</div>
+        </div>
+      </div>
+      {/* Stats row */}
+      <div className="grid grid-cols-3 px-5 py-5 gap-4">
+        <div>
+          <div className="text-gray-400 text-xs uppercase tracking-wider mb-1">Arrived</div>
+          <div className="font-mono font-medium text-gray-900 text-base">14:42:17</div>
+        </div>
+        <div>
+          <div className="text-gray-400 text-xs uppercase tracking-wider mb-1">First Touch</div>
+          <div className="font-mono font-medium text-green-600 text-base">+29s</div>
+        </div>
+        <div>
+          <div className="text-gray-400 text-xs uppercase tracking-wider mb-1">Outcome</div>
+          <div className="font-medium text-green-600 text-base">Booked</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Stats mockup — for outbound section
+function StatsMockup() {
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden font-['Geist',sans-serif] text-sm w-full max-w-[480px]">
+      <div className="px-5 py-3 bg-gray-50 border-b border-gray-200">
+        <span className="text-gray-500 font-mono text-xs tracking-wide">campaigns / outbound / this-week</span>
+      </div>
+      <div className="p-5 space-y-4">
+        {[
+          { label: "Calls Placed", value: "1,248", delta: "+18%", positive: true },
+          { label: "Contacts Reached", value: "847", delta: "+24%", positive: true },
+          { label: "Meetings Booked", value: "63", delta: "+31%", positive: true },
+          { label: "Avg Handle Time", value: "2m 14s", delta: "-8%", positive: true },
+        ].map(({ label, value, delta, positive }) => (
+          <div key={label} className="flex items-center justify-between">
+            <span className="text-gray-500 text-xs uppercase tracking-wider">{label}</span>
+            <div className="flex items-center gap-3">
+              <span className="font-mono font-semibold text-gray-900">{value}</span>
+              <span className={`text-xs font-mono px-2 py-0.5 rounded ${positive ? "text-green-700 bg-green-50" : "text-red-600 bg-red-50"}`}>{delta}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Automation flow mockup — for third pillar
+function AutomationMockup() {
+  const steps = [
+    { time: "0s", label: "Lead submitted", status: "done" },
+    { time: "+29s", label: "AI call placed", status: "done" },
+    { time: "+31s", label: "Lead answered", status: "done" },
+    { time: "+2m 14s", label: "Qualified → ICP match", status: "done" },
+    { time: "+2m 45s", label: "Meeting booked", status: "done" },
+    { time: "+3m 01s", label: "CRM updated", status: "active" },
+  ];
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden font-['Geist',sans-serif] text-sm w-full max-w-[480px]">
+      <div className="px-5 py-3 bg-gray-50 border-b border-gray-200">
+        <span className="text-gray-500 font-mono text-xs tracking-wide">automation / lead-flow / live</span>
+      </div>
+      <div className="p-5 space-y-3">
+        {steps.map(({ time, label, status }) => (
+          <div key={label} className="flex items-center gap-4">
+            <span className="font-mono text-xs text-gray-400 w-16 flex-shrink-0">{time}</span>
+            <div className={`w-2 h-2 rounded-full flex-shrink-0 ${status === "active" ? "bg-green-500 ring-2 ring-green-200" : "bg-gray-300"}`} />
+            <span className={status === "active" ? "text-gray-900 font-medium" : "text-gray-500"}>{label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  const [dailyCallCount, setDailyCallCount] = useState(47);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+
+  const handlePlayVideo = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+      setIsVideoPlaying(true);
+    }
+  };
+
+  useEffect(() => {
+    const today = new Date().toDateString();
+    const savedDate = localStorage.getItem("atllasCallDate");
+    const savedCount = localStorage.getItem("atllasCallCount");
+    if (savedDate === today && savedCount) {
+      setDailyCallCount(parseInt(savedCount));
+    } else {
+      const n = Math.floor(Math.random() * 51) + 30;
+      setDailyCallCount(n);
+      localStorage.setItem("atllasCallDate", today);
+      localStorage.setItem("atllasCallCount", n.toString());
+    }
+  }, []);
+
+  return (
+    <div id="top" className="relative bg-[#0a0a0a] min-h-screen" style={{ fontFamily: "'Geist', sans-serif" }}>
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded focus:font-semibold">
+        Skip to main content
+      </a>
+
+      {/* ── ANNOUNCEMENT BANNER ── */}
+      <div className="bg-[#111] border-b border-white/10 py-2 px-4 text-center text-xs text-white/60" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+        <span className="text-white/40 mr-2">→</span>
+        AtllasX was voted <span className="text-white/90">#1 for demo response.</span>
+        <span className="mx-2 text-white/30">·</span>
+        <span className="text-white/60">72% completed by design.</span>
+      </div>
+
+      {/* ── NAVIGATION ── */}
+      <nav className="sticky top-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/[0.07]">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-8">
+          <a href="#top" className="flex-shrink-0">
+            <img src={imgNewAtllasLogo} alt="Atllas X" className="h-8" />
+          </a>
+
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-7 text-sm text-white/60">
+            {["Product", "Pricing", "Compliance", "Industries", "Docs"].map((item) => (
+              <a
+                key={item}
+                href={item === "Docs" ? "https://docs.atllasx.com" : `#${item.toLowerCase()}`}
+                target={item === "Docs" ? "_blank" : undefined}
+                rel={item === "Docs" ? "noopener noreferrer" : undefined}
+                className="hover:text-white transition-colors"
+              >
+                {item}
+              </a>
+            ))}
+          </div>
+
+          <div className="hidden md:flex items-center gap-4">
+            <a href="https://app.atllasx.com/authentication/login" className="text-sm text-white/60 hover:text-white transition-colors">
+              Login
+            </a>
+            <a href="https://calendly.com/nicole-atllas/atllas-demo-call" target="_blank" rel="noopener noreferrer">
+              <button className="flex items-center gap-2 text-sm font-medium text-white border border-white/30 rounded px-4 py-2 hover:bg-white hover:text-black transition-all">
+                Book a Demo
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </a>
+          </div>
+
+          {/* Mobile */}
+          <button
+            className="md:hidden text-white/70 hover:text-white p-1"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+
+        {mobileMenuOpen && (
+          <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="md:hidden bg-[#0a0a0a] border-t border-white/[0.07] px-6 py-5 flex flex-col gap-4">
+            {["Product", "Pricing", "Compliance", "Industries", "Docs"].map((item) => (
+              <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setMobileMenuOpen(false)} className="text-white/60 hover:text-white text-sm transition-colors py-1">
+                {item}
+              </a>
+            ))}
+            <a href="https://calendly.com/nicole-atllas/atllas-demo-call" target="_blank" rel="noopener noreferrer" className="mt-2">
+              <button className="w-full flex items-center justify-center gap-2 text-sm font-medium text-white border border-white/30 rounded px-4 py-2.5 hover:bg-white hover:text-black transition-all">
+                Book a Demo <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </a>
+          </motion.div>
+        )}
+      </nav>
+
+      <main id="main-content" className="overflow-x-hidden">
+
+        {/* ── HERO ── */}
+        <section className="relative overflow-hidden bg-[#0a0a0a] pt-24 pb-28 px-6" aria-label="Hero">
+          <DiagonalTexture opacity={0.04} />
+
+          {/* Subtle radial glow top-center */}
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] pointer-events-none"
+            aria-hidden="true"
+            style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 70%)" }}
+          />
+
+          <div className="relative z-10 max-w-5xl mx-auto">
+            {/* Label */}
+            <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+              <span
+                className="text-white/40 text-xs tracking-widest uppercase"
+                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+              >
+                [ A-155 · For AI-Driven Business ]
+              </span>
+            </motion.div>
+
+            {/* Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              style={{
+                fontSize: "clamp(2.5rem, 8vw, 5.5rem)",
+                fontFamily: "'Bricolage Grotesque', sans-serif",
+                fontWeight: 800,
+                lineHeight: 1.05,
+                letterSpacing: "-0.02em",
+              }}
+              className="text-white mb-7 max-w-3xl"
+            >
+              Inbound demand,<br />converted faster.
+            </motion.h1>
+
+            {/* Subtext */}
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-white/55 text-lg max-w-xl mb-10 leading-relaxed"
+            >
+              Atllas X works every new CRM lead instantly: response, qualification, follow-up, demo booking, confirmation, and CRM updates handled end to end.
+            </motion.p>
+
+            {/* CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col sm:flex-row gap-3"
+            >
+              <a href="https://calendly.com/nicole-atllas/atllas-demo-call" target="_blank" rel="noopener noreferrer">
+                <button className="flex items-center gap-2 text-sm font-medium text-white border border-white/30 rounded px-6 py-3 hover:bg-white hover:text-black transition-all w-full sm:w-auto justify-center">
+                  Book a Demo
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </a>
+              <a href="tel:+14159694084" aria-label="Call (415) 969-4084">
+                <button className="flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors px-4 py-3 w-full sm:w-auto justify-center">
+                  <Phone className="w-4 h-4" />
+                  (415) 969-4084
+                </button>
+              </a>
+            </motion.div>
+
+            {/* Stats strip */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="mt-16 flex flex-wrap gap-x-12 gap-y-6 border-t border-white/[0.08] pt-10"
+            >
+              {[
+                { stat: "300K+", label: "Calls handled" },
+                { stat: "<60s", label: "Avg first-touch response" },
+                { stat: "24/7", label: "Always on, zero burnout" },
+              ].map(({ stat, label }) => (
+                <div key={label}>
+                  <div className="text-white text-2xl font-bold" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>{stat}</div>
+                  <div className="text-white/40 text-xs mt-1 tracking-wide">{label}</div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ── DEMO VIDEO ── */}
+        <section className="relative bg-[#0a0a0a] py-16 px-6 border-t border-white/[0.07]" aria-label="Product demo">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <span className="text-white/30 text-xs uppercase tracking-widest" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                [ See it in action ]
+              </span>
+            </div>
+            <div className="relative group cursor-pointer" onClick={handlePlayVideo}>
+              <div className="relative rounded-xl overflow-hidden border border-white/10 aspect-video bg-black">
+                {!isVideoPlaying && (
+                  <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
+                    <div className="w-16 h-16 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white/60 transition-all">
+                      <Play className="w-6 h-6 text-white fill-white ml-0.5" />
+                    </div>
+                  </div>
+                )}
+                <video
+                  ref={videoRef}
+                  src="https://res.cloudinary.com/atllas/video/upload/f_auto:video,q_auto/v1770243008/videos/tutorials/atllasx-trailer_erwpov"
+                  className="w-full h-full object-cover"
+                  controls={isVideoPlaying}
+                  playsInline
+                  preload="metadata"
+                  aria-label="Atllas X Product Demo"
+                  onPlay={() => setIsVideoPlaying(true)}
+                >
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── DARK CTA BAND ── */}
+        <section className="relative overflow-hidden bg-[#0d0d0d] py-28 px-6 border-t border-white/[0.07]" aria-label="Stop letting leads cool off">
+          <DiagonalTexture opacity={0.03} />
+          <div className="relative z-10 max-w-3xl mx-auto text-center">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              style={{
+                fontSize: "clamp(2.5rem, 8vw, 5.5rem)",
+                fontFamily: "'Bricolage Grotesque', sans-serif",
+                fontWeight: 800,
+                lineHeight: 1.05,
+                letterSpacing: "-0.02em",
+              }}
+              className="text-white mb-8"
+            >
+              Stop letting inbound leads cool off.
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-white/50 text-lg mb-10 leading-relaxed"
+            >
+              30-minute demo. We'll use your own CRM data to show you what happens when every inbound lead gets a 60-second response.
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <a href="https://calendly.com/nicole-atllas/atllas-demo-call" target="_blank" rel="noopener noreferrer">
+                <button className="inline-flex items-center gap-2 text-sm font-medium text-white border border-white/30 rounded px-6 py-3 hover:bg-white hover:text-black transition-all">
+                  Book a Demo
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </a>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ── PILLARS — LIGHT BG FEATURE SECTIONS ── */}
+        <section id="product" aria-label="Platform pillars">
+          {/* Pillar 01 — Speed-to-Lead */}
+          <div className="bg-white border-t border-gray-100 py-24 px-6">
+            <div className="max-w-6xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-16 items-center">
+                <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+                  <div className="text-gray-400 text-xs tracking-widest mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                    [ PILLAR 01 / 03 ]
+                  </div>
+                  <div className="text-gray-700 text-sm font-medium mb-8">Speed-to-Lead</div>
+                  <h2
+                    className="text-gray-900 mb-6"
+                    style={{
+                      fontSize: "clamp(1.8rem, 4vw, 2.75rem)",
+                      fontFamily: "'Bricolage Grotesque', sans-serif",
+                      fontWeight: 800,
+                      lineHeight: 1.1,
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
+                    Every inbound called in under 60 seconds.
+                  </h2>
+                  <p className="text-gray-500 leading-relaxed mb-8 text-base">
+                    When a lead fills out your form, requests a demo, or signs up — AtllasX calls them right away. Day or night, weekend or holiday. It introduces itself, qualifies the lead against your ICP, books a meeting, and pushes everything to your CRM.
+                  </p>
+                  <ul className="space-y-2 text-gray-500 text-sm">
+                    {["Sub-60-second first-touch response", "24/7 coverage across timezones and quiet hours", "ICP-aligned qualification script"].map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <span className="text-gray-300 mt-0.5">·</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 }}
+                  className="flex justify-center md:justify-end"
+                >
+                  <CrmMockup />
+                </motion.div>
+              </div>
+            </div>
+          </div>
+
+          {/* Pillar 02 — Outbound Campaigns */}
+          <div className="bg-[#f9f9f9] border-t border-gray-100 py-24 px-6">
+            <div className="max-w-6xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-16 items-center">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="md:order-2"
+                >
+                  <div className="text-gray-400 text-xs tracking-widest mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                    [ PILLAR 02 / 03 ]
+                  </div>
+                  <div className="text-gray-700 text-sm font-medium mb-8">Outbound at Scale</div>
+                  <h2
+                    className="text-gray-900 mb-6"
+                    style={{
+                      fontSize: "clamp(1.8rem, 4vw, 2.75rem)",
+                      fontFamily: "'Bricolage Grotesque', sans-serif",
+                      fontWeight: 800,
+                      lineHeight: 1.1,
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
+                    Thousands of personalized calls, running while you sleep.
+                  </h2>
+                  <p className="text-gray-500 leading-relaxed mb-8 text-base">
+                    Launch outbound campaigns with custom scripts, realistic AI voices, and smart retry logic. Track every outcome in real time and let the AI handle objections, voicemails, and follow-ups automatically.
+                  </p>
+                  <ul className="space-y-2 text-gray-500 text-sm">
+                    {["1,000+ simultaneous calls, no hiring", "AI-generated or custom scripts with objection handling", "Automatic voicemail drops and SMS follow-ups"].map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <span className="text-gray-300 mt-0.5">·</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 }}
+                  className="flex justify-center md:justify-start md:order-1"
+                >
+                  <StatsMockup />
+                </motion.div>
+              </div>
+            </div>
+          </div>
+
+          {/* Pillar 03 — Full Automation */}
+          <div className="bg-white border-t border-gray-100 py-24 px-6">
+            <div className="max-w-6xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-16 items-center">
+                <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+                  <div className="text-gray-400 text-xs tracking-widest mb-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                    [ PILLAR 03 / 03 ]
+                  </div>
+                  <div className="text-gray-700 text-sm font-medium mb-8">End-to-End Automation</div>
+                  <h2
+                    className="text-gray-900 mb-6"
+                    style={{
+                      fontSize: "clamp(1.8rem, 4vw, 2.75rem)",
+                      fontFamily: "'Bricolage Grotesque', sans-serif",
+                      fontWeight: 800,
+                      lineHeight: 1.1,
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
+                    From lead form to CRM update in under 3 minutes.
+                  </h2>
+                  <p className="text-gray-500 leading-relaxed mb-8 text-base">
+                    Every step after a lead arrives is handled automatically — the call, the qualification, the booking, the confirmation email, and the CRM entry. Your team only sees leads that are already sold.
+                  </p>
+                  <ul className="space-y-2 text-gray-500 text-sm">
+                    {["Native CRM integrations: HubSpot, Salesforce, and more", "Auto-tags, notes, and pipeline stage updates", "Confirmation emails and calendar invites sent automatically"].map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <span className="text-gray-300 mt-0.5">·</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 }}
+                  className="flex justify-center md:justify-end"
+                >
+                  <AutomationMockup />
+                </motion.div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── CAMPAIGN DEMO SHOWCASE ── */}
+        <section className="bg-[#0a0a0a] border-t border-white/[0.07] py-24 px-6" aria-label="Interactive demo">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-12">
+              <span className="text-white/30 text-xs uppercase tracking-widest" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                [ Interactive demo ]
+              </span>
+              <h2
+                className="text-white mt-4"
+                style={{
+                  fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                  fontWeight: 800,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                See It In Action
+              </h2>
+              <p className="text-white/50 mt-2 text-base">Create a campaign in under 2 minutes.</p>
+            </div>
+            <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <CampaignDemoShowcase />
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Lead Provider Banner */}
+        <div className="bg-[#0a0a0a] border-t border-white/[0.07]">
+          <LeadProviderBanner />
+        </div>
+
+        {/* ── TRUSTED BY ── */}
+        <section className="bg-[#0a0a0a] border-t border-white/[0.07] py-14 px-6" aria-label="Trusted by">
+          <div className="max-w-6xl mx-auto">
+            <p className="text-white/25 text-xs uppercase tracking-widest text-center mb-8" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              Backed by leaders across the tech industry
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-10 sm:gap-16">
+              {[
+                { src: imgGreatOaks, alt: "Great Oaks" },
+                { src: imgAmb, alt: "AMB" },
+                { src: imgSpeechify, alt: "Speechify" },
+                { src: imgScale, alt: "Scale" },
+                { src: imgCharlesSchwab, alt: "Charles Schwab" },
+              ].map(({ src, alt }) => (
+                <img key={alt} src={src} alt={`${alt} logo`} className="h-7 opacity-30 hover:opacity-60 transition-opacity grayscale invert" loading="lazy" />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── USE CASES ── */}
+        <UseCasesSection />
+
+        {/* ── COMPARISON TABLE ── */}
+        <section id="product-comparison" className="bg-[#f9f9f9] border-t border-gray-100 py-24 px-6" aria-label="Comparison">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-12">
+              <span className="text-gray-400 text-xs uppercase tracking-widest" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                [ Why AtllasX ]
+              </span>
+              <h2
+                className="text-gray-900 mt-4"
+                style={{
+                  fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                  fontWeight: 800,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Why Choose Atllas X?
+              </h2>
+              <p className="text-gray-500 mt-2">See how we compare to traditional approaches.</p>
+            </div>
+            <div className="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm">
+              <Suspense fallback={<div className="h-96 animate-pulse bg-gray-50" />}>
+                <ComparisonTable />
+              </Suspense>
+            </div>
+          </div>
+        </section>
+
+        {/* ── PRICING ── */}
+        <div id="pricing" className="bg-[#0a0a0a] border-t border-white/[0.07]">
+          <Suspense fallback={<div className="py-24" />}>
+            <PricingSection />
+          </Suspense>
+        </div>
+
+        <div className="bg-[#0a0a0a] max-w-5xl mx-auto px-6">
+          <Suspense fallback={<div className="h-32" />}>
+            <GuaranteeBanner />
+          </Suspense>
+        </div>
+
+        {/* ── TESTIMONIALS ── */}
+        <section className="bg-white border-t border-gray-100 py-24 px-6" aria-label="Testimonials">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-12">
+              <span className="text-gray-400 text-xs uppercase tracking-widest" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                [ Customer stories ]
+              </span>
+              <h2
+                className="text-gray-900 mt-4"
+                style={{
+                  fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                  fontWeight: 800,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Loved by sales teams.
+              </h2>
+              <div className="flex items-center gap-1 mt-3">
+                {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
+                <span className="text-gray-400 text-sm ml-2">4.9 / 5 from 500+ reviews</span>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {[
+                {
+                  quote: "We scaled from 20 calls a day to 2,000. The AI sounds incredibly natural and our pipeline has grown significantly.",
+                  author: "Sarah Johnson",
+                  role: "VP of Sales, TechCorp Solutions",
+                },
+                {
+                  quote: "The AI handles qualification calls perfectly while my team focuses on closing deals. The ROI speaks for itself.",
+                  author: "David Chen",
+                  role: "CEO, Riverside Financial",
+                },
+              ].map((t, i) => (
+                <motion.div
+                  key={t.author}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="border border-gray-200 rounded-xl p-8"
+                >
+                  <div className="flex gap-1 mb-5">
+                    {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
+                  </div>
+                  <blockquote className="text-gray-700 text-base leading-relaxed mb-6">"{t.quote}"</blockquote>
+                  <div>
+                    <div className="text-gray-900 font-semibold text-sm">{t.author}</div>
+                    <div className="text-gray-400 text-sm">{t.role}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── FINAL CTA ── */}
+        <section className="relative overflow-hidden bg-[#0a0a0a] border-t border-white/[0.07] py-32 px-6" aria-label="Final CTA">
+          <DiagonalTexture opacity={0.04} />
+          <div className="relative z-10 max-w-3xl mx-auto text-center">
+            <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <span className="text-white/30 text-xs uppercase tracking-widest" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                [ Get started ]
+              </span>
+              <h2
+                className="text-white mt-6 mb-6"
+                style={{
+                  fontSize: "clamp(2.5rem, 7vw, 4.5rem)",
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                  fontWeight: 800,
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Ready to scale your calls?
+              </h2>
+              <p className="text-white/50 text-lg mb-10 leading-relaxed">
+                Join 1,000+ teams closing more deals with AI calling. Setup takes 5 minutes.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
+                <a href="https://calendly.com/nicole-atllas/atllas-demo-call" target="_blank" rel="noopener noreferrer">
+                  <button className="inline-flex items-center gap-2 text-sm font-medium text-white border border-white/30 rounded px-6 py-3 hover:bg-white hover:text-black transition-all w-full sm:w-auto justify-center">
+                    Book a Demo <ArrowRight className="w-4 h-4" />
+                  </button>
+                </a>
+                <a href="https://app.atllasx.com/dashboard/ai-calling/create">
+                  <button className="inline-flex items-center gap-2 text-sm font-medium text-black bg-white rounded px-6 py-3 hover:bg-white/90 transition-all w-full sm:w-auto justify-center">
+                    Get Started Free <ChevronRight className="w-4 h-4" />
+                  </button>
+                </a>
+              </div>
+
+              <div className="flex flex-wrap justify-center gap-6 text-white/30 text-xs">
+                {["Setup in 5 minutes", "Cancel anytime", "No hiring required"].map((t) => (
+                  <span key={t} className="flex items-center gap-1.5">
+                    <Check className="w-3 h-3 text-white/40" />{t}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-10">
+                <a href="https://apps.apple.com/us/app/atllas-x-ai-calling-assistant/id6749676193" target="_blank" rel="noopener noreferrer">
+                  <img src={imgLinkDownloadOnAppStore} alt="Download on the App Store" className="h-10 mx-auto opacity-40 hover:opacity-70 transition-opacity" />
+                </a>
+              </div>
+
+              <div className="mt-14">
+                <Suspense fallback={<div className="h-12" />}>
+                  <TrustBadges />
+                </Suspense>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ── FOOTER ── */}
+        <footer className="bg-[#080808] border-t border-white/[0.07]">
+          {/* App store banner */}
+          <div className="border-b border-white/[0.07] py-5 px-6">
+            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className="text-white/40 text-sm">Atllas X is now available on the App Store.</p>
+              <a href="https://apps.apple.com/us/app/atllas-x-ai-calling-assistant/id6749676193" target="_blank" rel="noopener noreferrer">
+                <img src={imgLinkDownloadOnAppStore} alt="Download on the App Store" className="h-9 opacity-50 hover:opacity-80 transition-opacity" />
+              </a>
+            </div>
+          </div>
+
+          {/* Main footer */}
+          <div className="py-14 px-6">
+            <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-10">
+              {/* Brand */}
+              <div className="col-span-2 md:col-span-1">
+                <img src={imgNewAtllasLogo} alt="Atllas X" className="h-8 mb-5 opacity-80" />
+                <p className="text-white/30 text-xs leading-relaxed mb-5">
+                  AI-powered inbound and outbound calling for modern sales teams.
+                </p>
+                <a href="https://elevenlabs.io/startup-grants" target="_blank" rel="noopener noreferrer">
+                  <img src={imgElevenLabsGrants} alt="ElevenLabs Grants" className="w-40 opacity-40 hover:opacity-70 transition-opacity" />
+                </a>
+              </div>
+
+              {/* Product */}
+              <div>
+                <div className="text-white/25 text-xs uppercase tracking-widest mb-4" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Product</div>
+                <div className="flex flex-col gap-3">
+                  {["Features", "Pricing", "Compliance", "Industries"].map((item) => (
+                    <a key={item} href={`#${item.toLowerCase()}`} className="text-white/50 hover:text-white text-sm transition-colors">{item}</a>
+                  ))}
+                </div>
+              </div>
+
+              {/* Company */}
+              <div>
+                <div className="text-white/25 text-xs uppercase tracking-widest mb-4" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Company</div>
+                <div className="flex flex-col gap-3">
+                  <a href="https://app.atllas.com/legal/terms-of-service" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white text-sm transition-colors">Terms</a>
+                  <a href="https://app.atllas.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white text-sm transition-colors">Privacy</a>
+                  <a href="#" onClick={(e) => { e.preventDefault(); alert("For accessibility assistance, contact support@atllasx.com"); }} className="text-white/50 hover:text-white text-sm transition-colors">Accessibility</a>
+                </div>
+              </div>
+
+              {/* Resources */}
+              <div>
+                <div className="text-white/25 text-xs uppercase tracking-widest mb-4" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Resources</div>
+                <div className="flex flex-col gap-3">
+                  <a href="https://docs.atllasx.com" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white text-sm transition-colors">Docs</a>
+                  <a href="https://calendly.com/nicole-atllas/atllas-demo-call" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white text-sm transition-colors">Book a Demo</a>
+                </div>
+              </div>
+
+              {/* Connect */}
+              <div>
+                <div className="text-white/25 text-xs uppercase tracking-widest mb-4" style={{ fontFamily: "'JetBrains Mono', monospace" }}>Connect</div>
+                <div className="flex flex-col gap-3">
+                  <a href="mailto:info@atllas.com" className="text-white/50 hover:text-white text-sm transition-colors flex items-center gap-2"><Mail className="w-3.5 h-3.5" />Email</a>
+                  <a href="https://www.instagram.com/atllasai" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white text-sm transition-colors flex items-center gap-2"><Instagram className="w-3.5 h-3.5" />Instagram</a>
+                  <a href="https://www.facebook.com/atllasre/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white text-sm transition-colors flex items-center gap-2"><Facebook className="w-3.5 h-3.5" />Facebook</a>
+                  <a href="https://www.linkedin.com/company/atllas-inc/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white text-sm transition-colors flex items-center gap-2"><Linkedin className="w-3.5 h-3.5" />LinkedIn</a>
+                </div>
+              </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/[0.07] flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className="text-white/20 text-xs">© Atllas Inc. 2025</p>
+              <div className="flex items-center gap-1 text-white/20 text-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
+                <CountingNumber end={dailyCallCount} />
+                <span className="ml-1">calls handled today</span>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </main>
+
+      <Intercom />
+    </div>
+  );
+}

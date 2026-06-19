@@ -1,0 +1,66 @@
+import { Phone, Volume2 } from "lucide-react";
+
+export function IPhoneCallMockup() {
+  return (
+    <div className="bg-gradient-to-b from-gray-900 to-black p-4 rounded-3xl shadow-2xl max-w-[280px] mx-auto">
+      {/* iPhone notch */}
+      <div className="flex justify-center mb-8">
+        <div className="bg-black w-32 h-6 rounded-full"></div>
+      </div>
+
+      {/* Call status */}
+      <div className="text-center mb-8">
+        <div className="text-gray-400 text-sm mb-2">Incoming Call</div>
+        <div className="text-white text-2xl font-semibold mb-1">Atllas X AI</div>
+        <div className="text-gray-400 text-base">(415) 969-4084</div>
+      </div>
+
+      {/* Profile circle */}
+      <div className="flex justify-center mb-6">
+        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#5372ea] to-[#7a63eb] flex items-center justify-center">
+          <Phone className="w-12 h-12 text-white" />
+        </div>
+      </div>
+
+      {/* Call duration */}
+      <div className="text-center mb-12">
+        <div className="text-white text-3xl font-light tracking-wider">02:34</div>
+        <div className="text-gray-400 text-sm mt-1">Connected</div>
+      </div>
+
+      {/* Action buttons */}
+      <div className="grid grid-cols-3 gap-6 mb-8">
+        <div className="flex flex-col items-center">
+          <div className="w-14 h-14 rounded-full bg-gray-800 flex items-center justify-center mb-1">
+            <div className="text-white text-xl">🔇</div>
+          </div>
+          <div className="text-white text-xs">mute</div>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="w-14 h-14 rounded-full bg-gray-800 flex items-center justify-center mb-1">
+            <div className="text-white text-xl">⊞</div>
+          </div>
+          <div className="text-white text-xs">keypad</div>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="w-14 h-14 rounded-full bg-gray-800 flex items-center justify-center mb-1">
+            <Volume2 className="w-5 h-5 text-white" />
+          </div>
+          <div className="text-white text-xs">speaker</div>
+        </div>
+      </div>
+
+      {/* End call button */}
+      <div className="flex justify-center">
+        <div className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center shadow-lg shadow-red-500/50">
+          <Phone className="w-7 h-7 text-white rotate-[135deg]" />
+        </div>
+      </div>
+
+      {/* iPhone home indicator */}
+      <div className="flex justify-center mt-6">
+        <div className="w-32 h-1 bg-white/30 rounded-full"></div>
+      </div>
+    </div>
+  );
+}
