@@ -356,10 +356,10 @@ function Hero() {
       <div className="ax-wrap" style={{ position: "relative", zIndex: 2, paddingTop: 150, paddingBottom: 110 }}>
         <Eyebrow light>AI phone agents for revenue teams</Eyebrow>
         <h1 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, letterSpacing: "-.035em", lineHeight: 0.98, fontSize: "clamp(3.2rem, 8vw, 6.4rem)", margin: "22px 0 0", maxWidth: "15ch" }}>
-          Every conversation.<br />Handled.
+          Every conversation.<br />Handled. 24/7.
         </h1>
-        <p style={{ color: "rgba(255,255,255,.78)", fontSize: "clamp(1.05rem,1.6vw,1.3rem)", maxWidth: "46ch", marginTop: 24, lineHeight: 1.5 }}>
-          AtllasX deploys personalized AI phone agents that call new leads, run outbound campaigns, and answer every incoming call.
+        <p style={{ color: "rgba(255,255,255,.78)", fontSize: "clamp(1.05rem,1.6vw,1.3rem)", maxWidth: "50ch", marginTop: 24, lineHeight: 1.5 }}>
+          With AtllasX, your team can deploy personalized AI phone agents that call leads, run outbound campaigns, and answer every incoming call to book, qualify, or handle your leads.
         </p>
         <div style={{ display: "flex", gap: 12, marginTop: 30, flexWrap: "wrap", alignItems: "center" }}>
           <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 22px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
