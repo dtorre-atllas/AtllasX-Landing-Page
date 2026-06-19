@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import heroVideo from "../assets/hero.mp4";
 import { motion } from "motion/react";
 import {
   ArrowRight,
@@ -26,11 +27,15 @@ import { Intercom } from "./components/Intercom";
 
 /* ============================== Constants ============================== */
 
-const DEMO_URL = "https://calendly.com/nicole-atllas/atllas-demo-call";
+const DEMO_URL = "https://meetings-na2.hubspot.com/atllas/roundrobin-atllas?uuid=17d7d132-7147-4bc3-9aaa-d0aa0a242990";
 const GET_STARTED_URL = "https://app.atllasx.com/dashboard/ai-calling/create";
 const LOGIN_URL = "https://app.atllasx.com/authentication/login";
 const DOCS_URL = "https://docs.atllasx.com";
 const APPSTORE_URL = "https://apps.apple.com/us/app/atllas-x-ai-calling-assistant/id6749676193";
+
+// HubSpot live call form — replace with your Portal ID and Form GUID
+const HS_PORTAL_ID = "245145631";
+const HS_FORM_GUID = "f6433507-f011-4c42-846b-98af4206ea4b";
 const PHONE = "(415) 969-4084";
 
 const CUSTOMERS: [string, string][] = [
@@ -248,23 +253,113 @@ function Announcement() {
   );
 }
 
+function LiveCallModal({ onClose }: { onClose: () => void }) {
+  const [form, setForm] = useState({ firstname: "", lastname: "", email: "", phone: "", company: "" });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch(
+        `https://api.hsforms.com/submissions/v3/integration/submit/${HS_PORTAL_ID}/${HS_FORM_GUID}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fields: [
+              { name: "firstname", value: form.firstname },
+              { name: "lastname", value: form.lastname },
+              { name: "email", value: form.email },
+              { name: "phone", value: form.phone },
+              { name: "company", value: form.company },
+            ],
+            context: { pageUri: window.location.href, pageName: document.title },
+          }),
+        }
+      );
+      if (res.ok) setStatus("success");
+      else setStatus("error");
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: "100%", padding: "10px 12px", borderRadius: 8,
+    border: "1px solid #e2e2e2", fontSize: 14, fontFamily: "var(--ax-body)",
+    outline: "none", background: "#fafafa", boxSizing: "border-box",
+  };
+
+  return (
+    <div
+      style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,.55)", backdropFilter: "blur(4px)" }}
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div style={{ background: "#fff", borderRadius: 16, padding: "36px 32px", width: "100%", maxWidth: 460, boxShadow: "0 24px 64px rgba(0,0,0,.18)", position: "relative" }}>
+        <button onClick={onClose} style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", cursor: "pointer", color: "#999", fontSize: 20, lineHeight: 1 }} aria-label="Close">✕</button>
+
+        {status === "success" ? (
+          <div style={{ textAlign: "center", padding: "24px 0" }}>
+            <div style={{ fontSize: 36, marginBottom: 12 }}>📞</div>
+            <h2 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, fontSize: 22, marginBottom: 8 }}>Expect a call shortly.</h2>
+            <p style={{ color: "#666", fontSize: 14 }}>AtllasX will call your number in the next few seconds. Pick up!</p>
+          </div>
+        ) : (
+          <>
+            <h2 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, fontSize: 22, letterSpacing: "-.02em", marginBottom: 6 }}>Meet your AI phone agent</h2>
+            <p style={{ color: "#666", fontSize: 14, marginBottom: 24 }}>Enter your details and AtllasX will call you now.</p>
+            <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <input required placeholder="First name" value={form.firstname} onChange={set("firstname")} style={inputStyle} />
+                <input required placeholder="Last name" value={form.lastname} onChange={set("lastname")} style={inputStyle} />
+              </div>
+              <input required type="email" placeholder="Work email" value={form.email} onChange={set("email")} style={inputStyle} />
+              <input required type="tel" placeholder="Phone number" value={form.phone} onChange={set("phone")} style={inputStyle} />
+              <input required placeholder="Company" value={form.company} onChange={set("company")} style={inputStyle} />
+              {status === "error" && <p style={{ color: "#c0392b", fontSize: 13 }}>Something went wrong. Please try again.</p>}
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                style={{ marginTop: 4, padding: "12px 20px", background: "var(--ax-accent)", color: "#fff", border: "none", borderRadius: 8, fontFamily: "var(--ax-body)", fontWeight: 600, fontSize: 15, cursor: "pointer", opacity: status === "loading" ? 0.7 : 1 }}
+              >
+                {status === "loading" ? "Calling…" : "Call me now →"}
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [solOpen, setSolOpen] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 14);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    const el = sentinelRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setScrolled(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
-  const links: [string, string][] = [["Product", "#solutions"], ["Integrations", "#integrations"], ["Pricing", "#pricing"], ["Compliance", "#security"]];
+  const links: [string, string][] = [["Product", "#solutions"], ["Integrations", "#integrations"], ["Pricing", "#pricing"]];
   const sol: [string, string][] = [["Speed to Lead", "#solutions"], ["Outbound Calling", "#solutions"], ["AI Receptionist", "#solutions"], ["Custom Workflows", "#workflows"]];
   const linkColor = scrolled ? "var(--ax-ink)" : "#ffffff";
 
   return (
-    <nav style={{ position: "sticky", top: 0, zIndex: 50, background: scrolled ? "#ffffff" : "transparent", backdropFilter: scrolled ? "blur(16px)" : "none", borderBottom: scrolled ? "1px solid var(--ax-line)" : "1px solid transparent", transition: "background .28s ease, border-color .28s ease" }}>
+    <>
+    <div ref={sentinelRef} style={{ position: "absolute", top: 80, height: 1, width: 1, pointerEvents: "none" }} aria-hidden="true" />
+    <nav style={{ position: "sticky", top: 0, zIndex: 50, background: scrolled ? "#ffffff" : "transparent", backdropFilter: "none", borderBottom: scrolled ? "1px solid var(--ax-line)" : "none", transition: "background .28s ease, border-color .28s ease" }}>
       <div className="ax-wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 64, gap: 28 }}>
         <a href="#top" style={{ fontFamily: "var(--ax-head)", fontWeight: 700, fontSize: 20, letterSpacing: "-.03em", color: scrolled ? "var(--ax-ink)" : "#fff" }}>
           Atllas<span style={{ color: "var(--ax-accent)" }}>X</span>
@@ -306,6 +401,7 @@ function Nav() {
         </div>
       )}
     </nav>
+    </>
   );
 }
 
@@ -347,28 +443,22 @@ function Hero() {
     <section id="top" style={{ position: "relative", overflow: "hidden", background: "var(--ax-ink)", color: "#fff", marginTop: -64 }}>
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,#15161B 0%,#101115 45%,#0B0C0F 100%)" }} />
       <video autoPlay muted loop playsInline preload="auto" aria-hidden="true" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}>
-        <source src="/hero.mp4" type="video/mp4" />
+        <source src={heroVideo} type="video/mp4" />
       </video>
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(90deg, rgba(8,9,12,.86) 0%, rgba(8,9,12,.58) 45%, rgba(8,9,12,.3) 100%), linear-gradient(180deg, rgba(8,9,12,.4) 0%, transparent 28%, rgba(8,9,12,.55) 100%)" }} />
       <div className="ax-grain" style={{ position: "absolute", zIndex: 1 }} />
 
-      <div className="ax-wrap" style={{ position: "relative", zIndex: 2, paddingTop: 150, paddingBottom: 110 }}>
+      <div className="ax-wrap" style={{ position: "relative", zIndex: 2, paddingTop: 200, paddingBottom: 160 }}>
         <Eyebrow light>AI phone agents for revenue teams</Eyebrow>
         <h1 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, letterSpacing: "-.035em", lineHeight: 0.98, fontSize: "clamp(3.2rem, 8vw, 6.4rem)", margin: "22px 0 0", maxWidth: "15ch" }}>
           Every conversation.<br />Handled.
         </h1>
         <p style={{ color: "rgba(255,255,255,.78)", fontSize: "clamp(1.05rem,1.6vw,1.3rem)", maxWidth: "46ch", marginTop: 24, lineHeight: 1.5 }}>
-          AtllasX deploys personalized AI phone agents that call new leads, run outbound campaigns, and answer every incoming call.
+          AI growth agents that call, qualify, and book leads 24/7.
         </p>
         <div style={{ display: "flex", gap: 12, marginTop: 30, flexWrap: "wrap", alignItems: "center" }}>
           <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 22px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
-          <a href="#hear" className="ax-btn ax-btn-ghost" style={{ borderColor: "rgba(255,255,255,.28)", color: "#fff", padding: "13px 20px" }}><Play style={{ width: 15, height: 15 }} /> Hear AtllasX</a>
-        </div>
-        <p style={{ color: "rgba(255,255,255,.45)", fontSize: 12.5, marginTop: 16, fontFamily: "var(--ax-mono)" }}>Set up in as little as five minutes. Custom workflows available.</p>
-        <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", marginTop: 30, color: "rgba(255,255,255,.55)", fontSize: 13 }}>
-          <span><b style={{ color: "#fff" }}>300K+</b> calls handled</span><span style={{ color: "rgba(255,255,255,.25)" }}>·</span>
-          <span><b style={{ color: "#fff" }}>Under 60s</b> first response</span><span style={{ color: "rgba(255,255,255,.25)" }}>·</span>
-          <span><b style={{ color: "#fff" }}>24/7</b> availability</span>
+          <button onClick={() => window.dispatchEvent(new CustomEvent("ax:livecall"))} className="ax-btn ax-btn-ghost" style={{ borderColor: "rgba(255,255,255,.28)", color: "#fff", padding: "13px 20px", cursor: "pointer" }}><Phone style={{ width: 15, height: 15 }} /> Get a live call</button>
         </div>
       </div>
 
@@ -398,7 +488,6 @@ function SpeedTimeline() {
   return (
     <section className="ax-dark" style={{ padding: "96px 0" }}>
       <div className="ax-wrap">
-        <Eyebrow light>Product proof</Eyebrow>
         <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16, maxWidth: "18ch" }}>From new lead to live conversation in seconds.</h2>
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 0, marginTop: 44, maxWidth: 720 }}>
           {TIMELINE.map(([t, label, sub], i) => {
@@ -489,7 +578,6 @@ function ThreeSolutions() {
   return (
     <section id="solutions" style={{ padding: "96px 0", borderTop: "1px solid var(--ax-line)" }}>
       <div className="ax-wrap">
-        <Eyebrow>The platform</Eyebrow>
         <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Three ways to put AtllasX to work.</h2>
         <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>One personalized AI phone-agent platform supports three calling motions.</p>
         <div style={{ display: "grid", gridTemplateColumns: "0.9fr 1.1fr", gap: 48, marginTop: 48, alignItems: "center" }} className="ax-sol-grid">
@@ -546,7 +634,6 @@ function HearTheDifference() {
   return (
     <section id="hear" className="ax-dark" style={{ padding: "96px 0" }}>
       <div className="ax-wrap">
-        <Eyebrow light>Hear the product</Eyebrow>
         <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Hear the difference.</h2>
         <p style={{ color: "rgba(255,255,255,.6)", marginTop: 14, fontSize: "1.02rem" }}>A product demonstration of how an AtllasX agent runs a call.</p>
 
@@ -591,7 +678,6 @@ function HowItWorks() {
   return (
     <section style={{ padding: "96px 0", borderTop: "1px solid var(--ax-line)" }}>
       <div className="ax-wrap">
-        <Eyebrow>How it works</Eyebrow>
         <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>One platform. Built around your objective.</h2>
         <div className="ax-how" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0, marginTop: 46, borderTop: "1px solid var(--ax-line)" }}>
           {HOW.map(([t, d], i) => (
@@ -612,7 +698,6 @@ function CustomWorkflows() {
   return (
     <section id="workflows" style={{ padding: "96px 0", background: "var(--ax-paper-2)", borderTop: "1px solid var(--ax-line)" }}>
       <div className="ax-wrap">
-        <Eyebrow>Custom workflows</Eyebrow>
         <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Built around your workflow.</h2>
         <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "62ch" }}>Go beyond individual calls with custom workflows configured around your sales and customer-engagement process.</p>
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 40 }}>
@@ -638,7 +723,6 @@ function Integrations() {
   return (
     <section id="integrations" style={{ padding: "96px 0", borderTop: "1px solid var(--ax-line)" }}>
       <div className="ax-wrap">
-        <Eyebrow>Integrations</Eyebrow>
         <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Connect the systems that send you leads.</h2>
         <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>Trigger AtllasX calls from your existing lead workflow.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(190px,1fr))", gap: 20, marginTop: 44 }}>
@@ -665,7 +749,6 @@ function WhyAtllasX() {
   return (
     <section className="ax-dark" style={{ padding: "96px 0" }}>
       <div className="ax-wrap">
-        <Eyebrow light>Why AtllasX</Eyebrow>
         <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16, maxWidth: "20ch" }}>Built to keep conversations from falling through.</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 0, marginTop: 44, borderTop: "1px solid rgba(255,255,255,.1)" }}>
           {WHY.map(([t, Icon], i) => (
@@ -684,7 +767,6 @@ function Comparison() {
   return (
     <section style={{ padding: "96px 0", borderTop: "1px solid var(--ax-line)", background: "var(--ax-paper-2)" }}>
       <div className="ax-wrap">
-        <Eyebrow>Operating models</Eyebrow>
         <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>How the calling gets done.</h2>
         <div style={{ overflowX: "auto", marginTop: 40 }}>
           <table style={{ width: "100%", minWidth: 640, borderCollapse: "collapse", background: "var(--ax-paper)", border: "1px solid var(--ax-line)", borderRadius: 16, overflow: "hidden" }}>
@@ -723,7 +805,6 @@ function Security() {
   return (
     <section id="security" style={{ padding: "96px 0", borderTop: "1px solid var(--ax-line)" }}>
       <div className="ax-wrap">
-        <Eyebrow>Trust</Eyebrow>
         <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Built for calls you can stand behind.</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 20, marginTop: 44 }}>
           {items.map(([t, d]) => (
@@ -746,7 +827,6 @@ function Proof() {
   return (
     <section style={{ padding: "96px 0", borderTop: "1px solid var(--ax-line)", background: "var(--ax-paper-2)" }}>
       <div className="ax-wrap">
-        <Eyebrow>Customer proof</Eyebrow>
         <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16, maxWidth: "22ch" }}>How AtllasX calls every new Meta lead within ~60 seconds.</h2>
         <div className="ax-proof-grid" style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 40, marginTop: 40, alignItems: "center" }}>
           <div>
@@ -771,7 +851,6 @@ function Pricing() {
   return (
     <section id="pricing" style={{ padding: "96px 0", borderTop: "1px solid var(--ax-line)" }}>
       <div className="ax-wrap">
-        <Eyebrow>Pricing</Eyebrow>
         <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Plans that scale with your call volume.</h2>
         <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>Every plan includes a monthly call allotment you can use anytime, any day.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 18, marginTop: 46 }}>
@@ -807,7 +886,6 @@ function FAQ() {
   return (
     <section style={{ padding: "96px 0", borderTop: "1px solid var(--ax-line)" }}>
       <div className="ax-wrap" style={{ maxWidth: 820 }}>
-        <Eyebrow>FAQ</Eyebrow>
         <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Questions, answered.</h2>
         <div style={{ marginTop: 36, borderTop: "1px solid var(--ax-line)" }}>
           {FAQ_ITEMS.map(([q, a], i) => {
@@ -893,14 +971,21 @@ function Footer() {
 /* ============================== App ============================== */
 
 export default function App() {
+  const [liveCallOpen, setLiveCallOpen] = useState(false);
+  useEffect(() => {
+    const open = () => setLiveCallOpen(true);
+    window.addEventListener("ax:livecall", open);
+    return () => window.removeEventListener("ax:livecall", open);
+  }, []);
   return (
     <div className="ax" style={{ background: "var(--ax-paper)", minHeight: "100vh", position: "relative" }}>
+      {liveCallOpen && <LiveCallModal onClose={() => setLiveCallOpen(false)} />}
       <style>{`
         @keyframes axmarq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         .ax-marq { animation: axmarq 64s linear infinite; }
         .ax-marq:hover { animation-play-state: paused; }
         @keyframes axwave { from { transform: scaleY(.45); } to { transform: scaleY(1); } }
-        .ax-hgrid{position:relative;z-index:2;display:grid;grid-template-columns:1.02fr .98fr;gap:24px;align-items:center;padding-top:104px;padding-bottom:76px}
+        .ax-hgrid{position:relative;z-index:2;display:grid;grid-template-columns:1.02fr .98fr;gap:24px;align-items:center;padding-top:140px;padding-bottom:110px}
         .ax-hviz{position:relative;height:560px;display:flex;align-items:center;justify-content:center}
         .ax-viz{position:relative;width:520px;height:520px;perspective:1300px;transform-style:preserve-3d;transition:transform .25s ease-out}
         .ax-coreglow{position:absolute;top:50%;left:50%;width:380px;height:380px;margin:-190px 0 0 -190px;border-radius:50%;background:radial-gradient(circle,rgba(31,91,255,.30),transparent 62%);z-index:1}
@@ -936,19 +1021,22 @@ export default function App() {
         }
       `}</style>
 
+      <div style={{ position: "relative", background: "#000", padding: "8px 16px", textAlign: "center", fontFamily: "var(--ax-mono)", fontSize: 12.5, color: "rgba(255,255,255,.75)", letterSpacing: ".04em" }}>
+        HubSpot App Integration Coming Soon
+      </div>
       <Nav />
       <main>
         <Hero />
         <SpeedTimeline />
+        <Proof />
         <ThreeSolutions />
-        <HearTheDifference />
+        {/* <HearTheDifference /> */}
         <HowItWorks />
-        <CustomWorkflows />
+        {/* <CustomWorkflows /> */}
         <Integrations />
         <WhyAtllasX />
         <Comparison />
-        <Security />
-        <Proof />
+        {/* <Security /> */}
         <Pricing />
         <FAQ />
         <FinalCTA />
