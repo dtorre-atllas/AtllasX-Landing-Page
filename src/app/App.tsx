@@ -156,7 +156,7 @@ const WORKFLOWS: string[][] = [
 ];
 
 const INTEGRATIONS: { group: string; items: { name: string; soon?: boolean }[] }[] = [
-  { group: "Lead sources", items: [{ name: "Facebook Lead Ads" }, { name: "Website forms" }, { name: "Connected lead sources" }] },
+  { group: "Lead sources", items: [{ name: "Meta Lead Ads" }, { name: "Website forms" }, { name: "Contact-list uploads" }] },
   { group: "Automation", items: [{ name: "Zapier" }, { name: "Webhooks" }, { name: "Custom triggers" }] },
   { group: "Scheduling", items: [{ name: "Calendar booking" }, { name: "Confirmation texts" }] },
   { group: "Communication", items: [{ name: "Calling" }, { name: "SMS" }, { name: "Email follow-up (custom)" }] },
@@ -572,44 +572,106 @@ function ProductMock({ which }: { which: string }) {
   );
 }
 
+const WORKFLOW_TABS = [
+  { id: "speed", eyebrow: "Speed to Lead", head: "Call new leads while their intent is still high.", line: ["New lead", "AI call", "Qualified", "Meeting booked"], explore: "Explore Speed to Lead", call: CALLS[0] },
+  { id: "outbound", eyebrow: "Outbound Calling", head: "Turn existing contact lists into qualified conversations.", line: ["Contact list", "AI calls", "Interest qualified", "Next step booked"], explore: "Explore Outbound Calling", call: CALLS[1] },
+  { id: "receptionist", eyebrow: "AI Receptionist", head: "Never send another inbound call to voicemail.", line: ["Incoming call", "AI answers", "Intent understood", "Resolved or routed"], explore: "Explore AI Receptionist", call: CALLS[2] },
+];
+
 function ThreeSolutions() {
   const [sel, setSel] = useState(0);
-  const s = SOLUTIONS[sel];
+  const [playerOpen, setPlayerOpen] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [tline, setTline] = useState(0);
+  const reduced = useReducedMotion();
+  const w = WORKFLOW_TABS[sel];
+
+  useEffect(() => { setPlayerOpen(false); setPlaying(false); setTline(0); }, [sel]);
+  useEffect(() => {
+    if (!playing || reduced) return;
+    const t = setInterval(() => setTline((l) => { if (l >= w.call.transcript.length - 1) { setPlaying(false); return l; } return l + 1; }), 1500);
+    return () => clearInterval(t);
+  }, [playing, reduced, w.call.transcript.length]);
+
   return (
-    <section id="solutions" style={{ padding: "96px 0", borderTop: "1px solid var(--ax-line)" }}>
+    <section id="solutions" style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
       <div className="ax-wrap">
-        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Three ways to put AtllasX to work.</h2>
-        <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>One personalized AI phone-agent platform supports three calling motions.</p>
-        <div style={{ display: "grid", gridTemplateColumns: "0.9fr 1.1fr", gap: 48, marginTop: 48, alignItems: "center" }} className="ax-sol-grid">
+        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>One platform. Three ways to grow.</h2>
+        <div style={{ display: "flex", gap: 30, marginTop: 34, borderBottom: "1px solid var(--ax-line)", flexWrap: "wrap" }}>
+          {WORKFLOW_TABS.map((x, i) => (
+            <button key={x.id} onClick={() => setSel(i)} style={{ fontSize: 15, fontWeight: 500, padding: "0 0 14px", marginBottom: -1, background: "none", border: "none", borderBottom: "2px solid " + (i === sel ? "var(--ax-accent)" : "transparent"), color: i === sel ? "var(--ax-accent)" : "var(--ax-ink-3)", cursor: "pointer", fontFamily: "var(--ax-head)", whiteSpace: "nowrap" }}>{x.eyebrow}</button>
+          ))}
+        </div>
+        <div className="ax-sol-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, marginTop: 32, alignItems: "center" }}>
           <div>
-            {SOLUTIONS.map((sol, i) => {
-              const on = i === sel;
-              const Icon = sol.icon;
-              return (
-                <button key={sol.id} onClick={() => setSel(i)} style={{ display: "block", width: "100%", textAlign: "left", background: "none", border: "none", cursor: "pointer", padding: "20px 0", borderTop: i === 0 ? "none" : "1px solid var(--ax-line)" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ width: 32, height: 32, borderRadius: 8, background: on ? "var(--ax-accent-soft)" : "var(--ax-paper-2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <Icon style={{ width: 16, height: 16, color: on ? "var(--ax-accent)" : "var(--ax-ink-3)" }} />
-                    </span>
-                    <span className="ax-mono" style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: on ? "var(--ax-accent)" : "var(--ax-ink-3)" }}>{sol.tag}</span>
-                  </div>
-                  <h3 style={{ fontSize: "1.35rem", marginTop: 12, color: on ? "var(--ax-ink)" : "var(--ax-ink-3)", fontWeight: 700, letterSpacing: "-.02em", transition: ".2s" }}>{sol.title}</h3>
-                  {on && (
-                    <div>
-                      <p style={{ color: "var(--ax-ink-2)", fontSize: ".97rem", marginTop: 10, lineHeight: 1.55 }}>{sol.body}</p>
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 14 }}>
-                        {sol.caps.map((c) => (<span key={c} style={{ fontSize: 12.5, color: "var(--ax-ink-2)", border: "1px solid var(--ax-line)", borderRadius: 20, padding: "5px 11px" }}>{c}</span>))}
-                      </div>
+            <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--ax-ink-3)", marginBottom: 14 }}>{w.eyebrow}</div>
+            <h3 style={{ fontFamily: "var(--ax-head)", fontWeight: 700, fontSize: "clamp(1.5rem,2.4vw,2rem)", letterSpacing: "-.02em", lineHeight: 1.14, marginBottom: 20 }}>{w.head}</h3>
+            <div className="ax-mono" style={{ fontSize: 13, color: "var(--ax-ink-2)", background: "var(--ax-paper-2)", border: "1px solid var(--ax-line)", borderRadius: 10, padding: "12px 14px" }}>
+              {w.line.map((s, i) => (<span key={i}>{s}{i < w.line.length - 1 && <span style={{ color: "var(--ax-accent)", margin: "0 6px" }}>→</span>}</span>))}
+            </div>
+            <div style={{ display: "flex", gap: 24, alignItems: "center", marginTop: 22, flexWrap: "wrap" }}>
+              <button onClick={() => setPlayerOpen((o) => !o)} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--ax-head)", fontSize: 14, fontWeight: 500, color: "var(--ax-ink-2)", padding: 0, display: "inline-flex", alignItems: "center", gap: 6 }}><Play style={{ width: 13, height: 13 }} /> Hear a call</button>
+              <a href="#solutions" style={{ fontFamily: "var(--ax-head)", fontSize: 14, fontWeight: 500, color: "var(--ax-accent)" }}>{w.explore} →</a>
+            </div>
+            {playerOpen && (
+              <div style={{ marginTop: 20, border: "1px solid var(--ax-line)", borderRadius: 12, padding: "14px 16px", background: "#fff", maxWidth: 480 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                  <button onClick={() => setPlaying((p) => !p)} aria-label={playing ? "Pause" : "Play"} style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--ax-ink)", color: "#fff", border: "none", cursor: "pointer", flex: "none", display: "flex", alignItems: "center", justifyContent: "center" }}>{playing ? <Pause style={{ width: 14, height: 14 }} /> : <Play style={{ width: 14, height: 14, marginLeft: 1 }} />}</button>
+                  <Wave active={playing} />
+                  <span className="ax-mono" style={{ fontSize: 12, color: "var(--ax-ink-3)", marginLeft: "auto" }}>Demo · {w.call.duration}</span>
+                </div>
+                <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+                  {w.call.transcript.map((row, i) => (
+                    <div key={i} style={{ opacity: i <= tline && playing ? 1 : 0.25, transition: "opacity .3s" }}>
+                      <div className="ax-mono" style={{ fontSize: 9.5, letterSpacing: ".06em", marginBottom: 3, color: row[0] === "agent" ? "var(--ax-accent)" : "var(--ax-live)" }}>{row[0] === "agent" ? "AI AGENT" : "CALLER"}</div>
+                      <div style={{ fontSize: 13, color: "var(--ax-ink-2)", lineHeight: 1.4 }}>{row[1]}</div>
                     </div>
-                  )}
-                </button>
-              );
-            })}
+                  ))}
+                </div>
+                <p className="ax-mono" style={{ fontSize: 10.5, color: "var(--ax-ink-3)", marginTop: 12 }}>Product demonstration. Callers are speaking with an AI agent.</p>
+              </div>
+            )}
           </div>
-          <motion.div key={s.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-            <ProductMock which={s.id} />
+          <motion.div key={w.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+            <ProductMock which={w.id} />
           </motion.div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function DashboardSection() {
+  const cards: any[] = [["Calls today", "1,284", "▲ 12%", false], ["Connect rate", "82.3%", "▲ 4.1%", false], ["Booked", "47", "▲ 8", true], ["Avg call", "2:41", "— flat", false]];
+  const rows: any[] = [["Marcus King", "(512) 555-0148", "Spring Buyers", "Booked", "#34d399"], ["Tom Park", "(737) 555-0102", "Expired Listings", "Not interested", "#f87171"], ["Rosa Alvarez", "(512) 555-0199", "Spring Buyers", "Callback", "#f5c85a"]];
+  return (
+    <section className="ax-dark" style={{ padding: "84px 0" }}>
+      <div className="ax-wrap">
+        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", color: "#fff" }}>Every conversation becomes a recorded outcome.</h2>
+        <p style={{ color: "rgba(255,255,255,.6)", fontSize: "1.05rem", marginTop: 14, maxWidth: "62ch" }}>Call status, transcript, notes, tags, qualification result, lead score, and appointment status — all organized inside the AtllasX dashboard.</p>
+        <div className="ax-dash" style={{ marginTop: 40, border: "1px solid rgba(255,255,255,.1)", borderRadius: 14, overflow: "hidden", display: "flex", background: "rgba(255,255,255,.03)" }}>
+          <div className="ax-dash-side" style={{ width: 130, flex: "none", borderRight: "1px solid rgba(255,255,255,.08)", padding: "14px 11px" }}>
+            <div style={{ fontFamily: "var(--ax-head)", fontWeight: 700, fontSize: 14, margin: "2px 6px 16px" }}>atllas<span style={{ color: "#7aa2ff" }}>X</span></div>
+            {["Overview", "Campaigns", "Calls", "Leads", "Analytics"].map((n, i) => (
+              <div key={n} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 12, color: i === 0 ? "#fff" : "rgba(255,255,255,.5)", padding: "7px 8px", borderRadius: 7, background: i === 0 ? "rgba(255,255,255,.08)" : "transparent" }}><span style={{ width: 12, height: 12, borderRadius: 3, border: "1.4px solid currentColor", opacity: 0.7, flex: "none" }} />{n}</div>
+            ))}
+          </div>
+          <div style={{ flex: 1, minWidth: 0, padding: "16px 18px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}><span style={{ fontWeight: 600, fontSize: 14, color: "#fff" }}>Overview</span><span style={{ fontSize: 11, background: "#5b8cff", color: "#fff", padding: "6px 11px", borderRadius: 7 }}>+ New campaign</span></div>
+            <div className="ax-dash-cards" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8, marginBottom: 14 }}>
+              {cards.map((c) => (
+                <div key={c[0]} style={{ background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.06)", borderRadius: 9, padding: 10 }}><div style={{ fontSize: 9, color: "rgba(255,255,255,.45)" }}>{c[0]}</div><div style={{ fontWeight: 700, fontSize: 17, marginTop: 3, letterSpacing: "-.02em", color: c[3] ? "#7aa2ff" : "#fff" }}>{c[1]}</div><div className="ax-mono" style={{ fontSize: 9, color: c[2] === "— flat" ? "rgba(255,255,255,.4)" : "#34d399", marginTop: 3 }}>{c[2]}</div></div>
+              ))}
+            </div>
+            <div style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)", borderRadius: 9, padding: "12px 13px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "rgba(255,255,255,.5)", marginBottom: 8 }}><span>Recent calls</span><span style={{ color: "#7aa2ff" }}>View all →</span></div>
+              {rows.map((r) => (
+                <div key={r[0]} style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr auto", gap: 10, alignItems: "center", padding: "7px 0", borderTop: "1px solid rgba(255,255,255,.05)", fontSize: 11 }}><div><b style={{ color: "#f4f4f5", fontWeight: 600 }}>{r[0]}</b><span className="ax-mono" style={{ color: "rgba(255,255,255,.4)", fontSize: 10, marginLeft: 5 }}>{r[1]}</span></div><div style={{ color: "rgba(255,255,255,.5)" }}>{r[2]}</div><span className="ax-mono" style={{ fontSize: 9.5, color: r[4], justifySelf: "end" }}>{r[3]}</span></div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <p className="ax-mono" style={{ textAlign: "center", fontSize: 11, color: "rgba(255,255,255,.4)", marginTop: 16 }}>Product dashboard — your real screenshot drops in here</p>
       </div>
     </section>
   );
@@ -1010,6 +1072,8 @@ export default function App() {
         @media (prefers-reduced-motion: reduce) { .ax-marq { animation: none; } }
         @media (max-width: 900px) {
           .ax-sol-grid { grid-template-columns: 1fr !important; }
+          .ax-dash-side { display: none !important; }
+          .ax-dash-cards { grid-template-columns: 1fr 1fr !important; }
           .ax-proof-grid { grid-template-columns: 1fr !important; }
           .ax-how { grid-template-columns: 1fr 1fr !important; }
           .ax-foot { grid-template-columns: 1fr 1fr !important; }
@@ -1027,16 +1091,9 @@ export default function App() {
       <Nav />
       <main>
         <Hero />
-        <SpeedTimeline />
-        <Proof />
         <ThreeSolutions />
-        {/* <HearTheDifference /> */}
-        <HowItWorks />
-        {/* <CustomWorkflows /> */}
+        <DashboardSection />
         <Integrations />
-        <WhyAtllasX />
-        <Comparison />
-        {/* <Security /> */}
         <Pricing />
         <FAQ />
         <FinalCTA />
