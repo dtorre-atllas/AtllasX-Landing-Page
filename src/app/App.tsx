@@ -1,11 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import heroVideo from "../assets/hero.mp4";
-import footerImg from "../assets/footer.jpg";
-import bannerSpeed from "../assets/speed-to-lead.jpg";
-import bannerOutbound from "../assets/outbound-calling.jpg";
-import bannerReceptionist from "../assets/ai-receptionist.jpg";
-import bannerPricing from "../assets/pricing.jpg";
-import { MemoryRouter, Routes, Route, Link, Outlet, useLocation } from "react-router";
+const GITHUB_ASSETS = "https://raw.githubusercontent.com/dtorre-atllas/AtllasX-Landing-Page/main/src/assets";
+const footerImg = `${GITHUB_ASSETS}/footer.jpg`;
+import { MemoryRouter, Routes, Route, Link, Outlet, useLocation, Navigate } from "react-router";
 import { motion } from "motion/react";
 import {
   ArrowRight,
@@ -35,102 +32,84 @@ const HS_PORTAL_ID = "245145631";
 const HS_FORM_GUID = "f6433507-f011-4c42-846b-98af4206ea4b";
 const PHONE = "(415) 969-4084";
 
-const CUSTOMERS: [string, string][] = [
-  ["Seiretsu Wireless", "seiretsu.io"],
-  ["5th Avenue Leads", "5thavenueleads.com"],
-  ["Ascenta Media", "ascentamedia.net"],
-  ["Stabili-Teeth", "stabili-teeth.com"],
-  ["Cloudience", "cloudience.com"],
-  ["Securitas", "securitasinc.com"],
-  ["Act!", "act.com"],
-  ["Wendt Partners", "wendtpartners.com"],
-  ["Sunrise Premiums", "sunrisepremiums.com"],
-  ["AvantStay", "avantstay.com"],
-  ["Bright Spot HS", "brightspoths.com"],
-  ["Moon Logistics & Services", "moonlogisticsllc.com"],
-  ["DigitalTreehouse", "digitaltreehouse.com"],
-  ["Farmers Insurance", "farmersagent.com"],
-  ["Akciz", "akciz.com"],
-  ["Progressive Maryland", "progressivemaryland.org"],
-  ["Safe Security Homes", "safesecurity.homes"],
-  ["Onboard Home Buyers", "onboardhomebuyers.com"],
-  ["Bonelli Systems", "bonellisystems.com"],
-  ["Illumination Consulting", "illuminationconsulting.com"],
-  ["MORE Surface Care", "moresurfacecare.com"],
-  ["Option Funding", "optionfunding.net"],
-];
-
+/* Winback call transcripts. AI is disclosed on every call. */
 const CALLS = [
   {
-    tab: "New Lead",
-    objective: "Qualify a new inbound lead and book a meeting",
-    duration: "2:15",
+    tab: "Saved — price",
+    objective: "Winback call, minutes after a Stripe cancellation",
+    duration: "1:56",
     transcript: [
-      ["agent", "Hi, this is the AtllasX assistant calling about the request you just submitted. Is now an okay time?"],
-      ["caller", "Sure, that was fast."],
-      ["agent", "We move quick. Quick question so I point you the right way — inbound, outbound, or both?"],
-      ["caller", "Mostly inbound, we miss a lot of calls."],
-      ["agent", "Got it. I can put you with our team this week — does Thursday at 2pm work?"],
-      ["caller", "Thursday works."],
+      ["agent", "Hi Sarah — this is an AI assistant calling for Kite Analytics. You cancelled your subscription a few minutes ago, and I wanted to ask what happened. Do you have a minute?"],
+      ["caller", "Oh — sure. Honestly, it's a budget thing. We're cutting a few tools this month."],
+      ["agent", "That's fair, and good to know. Since it's the price — I can offer 30% off for the next three months. Same plan, cancel anytime. Does that change the math?"],
+      ["caller", "Thirty percent… yeah, actually. That works for now."],
+      ["agent", "Done — your subscription is back on, 30% off for three months. Confirmation email is on its way."],
     ],
-    outcome: "Meeting booked — confirmation text sent",
+    outcome: "Saved · 3-month 30% offer · reason logged: budget",
   },
   {
-    tab: "Outbound Campaign",
-    objective: "Work a contact list toward booked demos",
-    duration: "1:48",
+    tab: "Saved — pause",
+    objective: "Winback call after a RevenueCat cancellation (mobile app)",
+    duration: "1:38",
     transcript: [
-      ["agent", "Hi, this is AtllasX. We help teams place and answer calls with AI phone agents. Do you have thirty seconds?"],
-      ["caller", "What's this about exactly?"],
-      ["agent", "We make sure every lead gets called fast and every inbound call gets answered. Want a short walkthrough?"],
-      ["caller", "Yeah, send me something."],
-      ["agent", "Done — I'll book it and text you the details now."],
+      ["agent", "Hi Marcus — this is an AI assistant calling for the Peak fitness app. You just cancelled your membership, and I wanted to check why before you go."],
+      ["caller", "I just wasn't using it enough to justify it."],
+      ["agent", "Understood. Instead of cancelling — I can pause your membership for two months, free. It restarts only if you come back. Want me to do that?"],
+      ["caller", "Yeah, a pause is better. Do that."],
+      ["agent", "Paused for two months. No charges until you're back. You'll get a text confirming it now."],
     ],
-    outcome: "Demo set — added to campaign outcomes",
+    outcome: "Saved · 2-month pause · reason logged: low usage",
   },
   {
-    tab: "Incoming Call",
-    objective: "Answer, qualify, and route an inbound caller",
-    duration: "1:22",
+    tab: "Not saved — logged",
+    objective: "No save — but the reason is captured for the product team",
+    duration: "1:12",
     transcript: [
-      ["agent", "Thanks for calling — you've reached the AtllasX AI assistant. How can I help?"],
-      ["caller", "Do you handle after-hours calls?"],
-      ["agent", "We do, 24/7. I can answer questions, book you in, or connect you to a person. Which would you prefer?"],
-      ["caller", "Connect me to someone if they're around."],
-      ["agent", "One moment — transferring you to the team now."],
+      ["agent", "Hi Dana — this is an AI assistant calling for Ledgerly. You cancelled earlier today. Can I ask what drove the decision?"],
+      ["caller", "We moved to a tool that connects with our warehouse. Yours doesn't."],
+      ["agent", "That's clear — which integration was the dealbreaker, if you don't mind?"],
+      ["caller", "Snowflake, mainly."],
+      ["agent", "Logged. I won't pitch you — that's a real gap. If it ships, would you want a call back?"],
+      ["caller", "Sure, if it ships."],
     ],
-    outcome: "Transferred to human — transcript saved",
+    outcome: "Not saved · reason logged: missing integration · flagged for product",
   },
 ];
 
-const INTEGRATIONS: { group: string; items: { name: string; soon?: boolean }[] }[] = [
-  { group: "Lead sources", items: [{ name: "Meta Lead Ads" }, { name: "Website forms" }, { name: "Contact-list uploads" }] },
-  { group: "Automation", items: [{ name: "Zapier" }, { name: "Webhooks" }, { name: "Custom triggers" }] },
-  { group: "Scheduling", items: [{ name: "Calendar booking" }, { name: "Confirmation texts" }] },
-  { group: "Communication", items: [{ name: "Calling" }, { name: "SMS" }, { name: "Email follow-up (custom)" }] },
-  { group: "Coming soon", items: [{ name: "Native HubSpot integration", soon: true }] },
+const PILLARS: [string, string][] = [
+  ["They cancel at 2am. We call at 2:03.", "The cancel event fires. The call goes out in minutes — while the decision is still soft."],
+  ["Your offer. Your rules. Nothing else.", "The caller can only offer what you approved: discount, pause, downgrade. Hard limits."],
+  ["Everyone gets a call. Not a segment.", "100% of cancellations, each call built from that customer's own account."],
+  ["They tell us why they left. We tell you.", "Cancel reason, competitor, price signal — from a real conversation, not a survey."],
+];
+
+const REASONS: [string, number][] = [
+  ["Price", 34],
+  ["Low usage", 26],
+  ["Missing feature", 18],
+  ["Switched provider", 12],
+  ["Other", 10],
 ];
 
 const PRICING = [
-  { name: "Champion", who: "Growing teams getting started", price: "$499", calls: "3,000 calls", per: "~$0.17 per call", feat: false, points: ["AI voice clones", "Advanced analytics", "Zapier integrations", "AI Receptionist add-on", "Live video support (USA-based)"], note: "14-day money-back guarantee" },
-  { name: "Elite", who: "Teams scaling call volume", price: "$799", calls: "5,000 calls", per: "~$0.16 per call · save 6%", feat: true, points: ["Everything in Champion", "White-glove onboarding", "Custom integrations", "Engineering team consultation"], note: "Most popular" },
-  { name: "Platinum", who: "High-volume operations", price: "$1,499", calls: "10,000 calls", per: "~$0.15 per call · save 13%", feat: false, points: ["Everything in Elite", "Dedicated success manager", "Custom script optimization", "Highest self-serve volume"], note: "Best value" },
-  { name: "Enterprise", who: "Custom volume & support", price: "Custom", calls: "10,000+ calls", per: "Volume discounts", feat: false, points: ["Custom pricing", "Dedicated support", "Custom workflows & integrations", "Tailored onboarding"], note: "Talk to sales" },
+  { name: "Champion", who: "Getting started with winback", price: "$499", calls: "3,000 winback calls", per: "per month", feat: false, points: ["Stripe & RevenueCat triggers", "Pre-approved offer ladder", "Cancel reasons on every call", "Recordings & transcripts", "Live video support (USA-based)"], note: "14-day money-back guarantee" },
+  { name: "Elite", who: "Scaling cancellation volume", price: "$799", calls: "5,000 winback calls", per: "per month", feat: true, points: ["Everything in Champion", "White-glove onboarding", "Custom offer scripting", "Slack & webhook alerts"], note: "Most popular" },
+  { name: "Platinum", who: "High-volume subscription businesses", price: "$1,499", calls: "10,000 winback calls", per: "per month", feat: false, points: ["Everything in Elite", "Dedicated success manager", "Monthly churn-insight report", "Highest self-serve volume"], note: "Best value" },
+  { name: "Enterprise", who: "Custom volume & terms", price: "Custom", calls: "10,000+ winback calls", per: "performance-aligned pricing", feat: false, points: ["Pricing aligned with recovered revenue", "Custom integrations", "Dedicated support", "Tailored onboarding"], note: "Talk to sales" },
 ];
 
 const FAQ_ITEMS: [string, string][] = [
-  ["How quickly can AtllasX call a new lead?", "When a lead arrives from a connected source, AtllasX typically calls within approximately 60 seconds — day or night."],
-  ["Can I upload an existing contact list?", "Yes. Upload a contact list, define your campaign objective, and AtllasX works through it, handling objections and booking appointments."],
-  ["Can AtllasX answer inbound calls?", "Yes. The AI Receptionist answers incoming calls 24/7, responds using your business knowledge, qualifies callers, books appointments, and routes to a human when needed."],
-  ["Can I define what the agent should accomplish?", "Yes. You set the objective, knowledge, voice, questions, qualification criteria, and handoff rules for each agent."],
-  ["Can AtllasX qualify leads and book appointments?", "Yes. Agents qualify against your criteria, handle objections, and book appointments, with a booking confirmation text."],
-  ["Can it transfer callers to a human?", "Yes. Agents can transfer or route a live caller to your team based on your rules."],
-  ["What appears in the AtllasX dashboard?", "Call status, transcript, notes, tags, qualification result, lead score, pipeline stage, appointment status, and campaign performance — organized inside AtllasX."],
-  ["Can AtllasX send SMS or email follow-up?", "Booking-related texts are supported natively. SMS and email follow-up sequences are available as custom workflows configured around your process."],
-  ["Does AtllasX integrate with HubSpot?", "A native HubSpot integration for the HubSpot App Marketplace is currently in development. Native HubSpot integration coming soon."],
-  ["How long does setup take?", "You can launch your first AI phone agent in as little as five minutes. Custom workflows and integrations may require additional onboarding."],
-  ["What do custom workflows include?", "By request, AtllasX can be configured for SMS and email follow-up, cancellation-recovery campaigns, warm-lead scoring, Zapier and webhook automations, and custom integrations."],
-  ["Are calls transcribed?", "Yes. Calls are transcribed and the outcome is recorded inside the AtllasX dashboard."],
+  ["How fast is the call after a cancellation?", "Minutes. Stripe or RevenueCat fires the cancellation event, AtllasX triggers, and the call goes out — day or night."],
+  ["What can the AI offer my customers?", "Only what you approve: a discount, a pause, a downgrade. You set the ladder and the hard limits. It cannot exceed them."],
+  ["Does the customer know it's an AI?", "Yes. Every call opens with a clear AI disclosure. No pretending."],
+  ["What happens when someone isn't saved?", "The reason is captured and logged — price, missing feature, competitor — and synced to your systems. Every call produces data, saved or not."],
+  ["Which billing systems do you support?", "Stripe and RevenueCat natively. Cancellation events can also come from webhooks or CSV upload."],
+  ["What if the customer doesn't answer?", "AtllasX retries on a schedule you control, within quiet hours. Every attempt is logged."],
+  ["Can it call my whole cancellation volume?", "Yes — 100% of cancellations, not a segment. Every plan is sized by monthly winback calls."],
+  ["Are calls recorded?", "Yes. Every call is recorded, transcribed, and logged with its outcome and cancel reason."],
+  ["Do you call anyone who isn't my customer?", "No. AtllasX only calls your own cancelled subscribers — never purchased lists, never cold contacts."],
+  ["How long does setup take?", "Connect Stripe or RevenueCat, approve your offer ladder, and go live — most teams are calling the same day."],
+  ["I came from atllas.com — is this the same company?", "Yes. Atllas is now AtllasX. Your account, login, and everything else carry over — nothing has changed on your end."],
 ];
 
 /* ============================== Hooks ============================== */
@@ -164,6 +143,26 @@ function Wave({ active, light = false }: { active: boolean; light?: boolean }) {
       {bars.map((h, i) => (
         <span key={i} style={{ width: 3, borderRadius: 3, height: h, transformOrigin: "center", background: light ? "rgba(255,255,255,.55)" : "var(--ax-accent)", opacity: active ? 1 : 0.35, animation: active ? `axwave 1s ease-in-out ${i * 0.06}s infinite alternate` : "none" }} />
       ))}
+    </div>
+  );
+}
+
+/* Billing-stack strip — replaces the old customer marquee. This bar IS the ICP filter. */
+function BillingStrip() {
+  return (
+    <div style={{ position: "relative", zIndex: 2, borderTop: "1px solid rgba(255,255,255,.10)", padding: "18px 0 24px" }}>
+      <p className="ax-mono" style={{ textAlign: "center", fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(255,255,255,.4)", marginBottom: 12 }}>
+        Connect your billing stack. Live the same day.
+      </p>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "baseline", gap: 28, flexWrap: "wrap", padding: "0 16px" }}>
+        {["Stripe", "RevenueCat"].map((n) => (
+          <span key={n} style={{ fontFamily: "var(--ax-head)", fontWeight: 700, fontSize: "1.5rem", letterSpacing: "-.02em", color: "rgba(255,255,255,.85)" }}>{n}</span>
+        ))}
+        <span aria-hidden="true" style={{ color: "rgba(255,255,255,.25)" }}>·</span>
+        {["Slack", "HubSpot", "Zapier", "Webhooks"].map((n) => (
+          <span key={n} style={{ fontFamily: "var(--ax-head)", fontWeight: 500, fontSize: "1rem", color: "rgba(255,255,255,.4)" }}>{n}</span>
+        ))}
+      </div>
     </div>
   );
 }
@@ -227,8 +226,8 @@ function LiveCallModal({ onClose }: { onClose: () => void }) {
           </div>
         ) : (
           <>
-            <h2 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, fontSize: 22, letterSpacing: "-.02em", marginBottom: 6 }}>Meet your AI phone agent</h2>
-            <p style={{ color: "#666", fontSize: 14, marginBottom: 24 }}>Enter your details and AtllasX will call you now.</p>
+            <h2 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, fontSize: 22, letterSpacing: "-.02em", marginBottom: 6 }}>Get the winback call yourself</h2>
+            <p style={{ color: "#666", fontSize: 14, marginBottom: 24 }}>Enter your details and AtllasX will call you the way it calls a cancelled subscriber.</p>
             <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <input required placeholder="First name" value={form.firstname} onChange={set("firstname")} style={inputStyle} />
@@ -269,16 +268,16 @@ function Nav() {
     return () => obs.disconnect();
   }, []);
 
-  const links: [string, string][] = [["Pricing", "/pricing"]];
-  const sol: [string, string][] = [["Speed to Lead", "/speed-to-lead"], ["Outbound Calling", "/outbound-calling"], ["AI Receptionist", "/ai-receptionist"]];
+  const links: [string, string][] = [["ROI", "/roi"], ["Pricing", "/pricing"], ["Trust", "/trust"]];
+  const sol: [string, string][] = [["How It Works", "/how-it-works"], ["Churn Intelligence", "/churn-intelligence"]];
   const linkColor = scrolled ? "var(--ax-ink)" : "#ffffff";
 
   return (
     <>
     <div ref={sentinelRef} style={{ position: "absolute", top: 80, height: 1, width: 1, pointerEvents: "none" }} aria-hidden="true" />
-    <nav style={{ position: "sticky", top: 0, zIndex: 50, background: scrolled ? "#ffffff" : "transparent", backdropFilter: "none", borderBottom: scrolled ? "1px solid var(--ax-line)" : "none", transition: "background .28s ease, border-color .28s ease" }}>
+    <nav style={{ position: "relative", background: (scrolled || open) ? "#ffffff" : "transparent", backdropFilter: "none", borderBottom: scrolled ? "1px solid var(--ax-line)" : "none", transition: "background .28s ease, border-color .28s ease" }}>
       <div className="ax-wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 64, gap: 28 }}>
-        <Link to="/" style={{ fontFamily: "var(--ax-head)", fontWeight: 700, fontSize: 20, letterSpacing: "-.03em", color: scrolled ? "var(--ax-ink)" : "#fff" }}>
+        <Link to="/" style={{ fontFamily: "var(--ax-head)", fontWeight: 700, fontSize: 20, letterSpacing: "-.03em", color: (scrolled || open) ? "var(--ax-ink)" : "#fff" }}>
           Atllas<span style={{ color: "var(--ax-accent)" }}>X</span>
         </Link>
 
@@ -304,7 +303,7 @@ function Nav() {
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <a href={LOGIN_URL} className="ax-navlinks" style={{ fontSize: 13.5, color: linkColor }}>Log in</a>
           <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "9px 16px" }}>Book a demo</a>
-          <button className="ax-navtoggle" onClick={() => setOpen(!open)} aria-label="Toggle menu" style={{ display: "none", background: "none", border: "none", color: scrolled ? "var(--ax-ink)" : "#fff", cursor: "pointer" }}>
+          <button className="ax-navtoggle" onClick={() => setOpen(!open)} aria-label="Toggle menu" style={{ display: "none", background: "none", border: "none", color: (scrolled || open) ? "var(--ax-ink)" : "#fff", cursor: "pointer" }}>
             {open ? <X /> : <Menu />}
           </button>
         </div>
@@ -342,7 +341,7 @@ function Hero() {
   }, [reduced]);
 
   return (
-    <section id="top" style={{ position: "relative", overflow: "hidden", background: "var(--ax-ink)", color: "#fff", marginTop: -64 }}>
+    <section id="top" style={{ position: "relative", overflow: "hidden", background: "var(--ax-ink)", color: "#fff", marginTop: -64, minHeight: "calc(100vh - 37px)", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,#15161B 0%,#101115 45%,#0B0C0F 100%)" }} />
       <video autoPlay muted loop playsInline preload="auto" aria-hidden="true" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}>
         <source src={heroVideo} type="video/mp4" />
@@ -351,12 +350,12 @@ function Hero() {
       <div className="ax-grain" style={{ position: "absolute", zIndex: 1 }} />
 
       <div className="ax-wrap" style={{ position: "relative", zIndex: 2, paddingTop: 200, paddingBottom: 160 }}>
-        <Eyebrow light>AI phone agents for revenue teams</Eyebrow>
-        <h1 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, letterSpacing: "-.035em", lineHeight: 0.98, fontSize: "clamp(3.2rem, 8vw, 6.4rem)", margin: "22px 0 0", maxWidth: "15ch" }}>
-          Every conversation.<br />Handled.
+        <Eyebrow light>Revenue recovery with AI calling</Eyebrow>
+        <h1 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, letterSpacing: "-.035em", lineHeight: 0.98, fontSize: "clamp(3rem, 7.5vw, 6rem)", margin: "22px 0 0", maxWidth: "13ch" }}>
+          They cancel.<br />We call.<br />They come back.
         </h1>
-        <p style={{ color: "rgba(255,255,255,.78)", fontSize: "clamp(1.05rem,1.6vw,1.3rem)", maxWidth: "46ch", marginTop: 24, lineHeight: 1.5 }}>
-          AI growth agents that call, qualify, and book leads 24/7.
+        <p style={{ color: "rgba(255,255,255,.78)", fontSize: "clamp(1.05rem,1.6vw,1.3rem)", maxWidth: "48ch", marginTop: 24, lineHeight: 1.5 }}>
+          For subscription businesses on Stripe or RevenueCat. Every cancelled subscriber gets a phone call in minutes — with an offer you approved.
         </p>
         <div style={{ display: "flex", gap: 12, marginTop: 30, flexWrap: "wrap", alignItems: "center" }}>
           <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 22px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
@@ -364,179 +363,126 @@ function Hero() {
         </div>
       </div>
 
-      <div style={{ position: "relative", zIndex: 2, borderTop: "1px solid rgba(255,255,255,.10)", padding: "16px 0 22px" }}>
-        <p className="ax-mono" style={{ textAlign: "center", fontSize: 11, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(255,255,255,.4)", marginBottom: 14 }}>Trusted by teams that run on conversations</p>
-        <div style={{ overflow: "hidden", WebkitMaskImage: "linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)", maskImage: "linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)" }}>
-          <div className="ax-marq" style={{ display: "flex", width: "max-content", alignItems: "center" }}>
-            {[...CUSTOMERS, ...CUSTOMERS].map(([name, dom], i) => (
-              <a key={name + i} href={`https://${dom}`} target="_blank" rel="noopener noreferrer" style={{ whiteSpace: "nowrap", padding: "0 22px", fontFamily: "var(--ax-head)", fontWeight: 600, fontSize: "1.05rem", letterSpacing: "-.02em", color: "rgba(255,255,255,.45)" }}>{name}</a>
-            ))}
-          </div>
-        </div>
-      </div>
+      <BillingStrip />
     </section>
   );
 }
 
-function ProductMock({ which }: { which: string }) {
-  const base: React.CSSProperties = { background: "#fff", border: "1px solid var(--ax-line)", borderRadius: 14, overflow: "hidden", boxShadow: "0 30px 70px -45px rgba(11,11,30,.35)" };
-  const head = (label: string) => (
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", background: "var(--ax-paper-2)", borderBottom: "1px solid var(--ax-line)" }}>
-      <span className="ax-mono" style={{ fontSize: 11, color: "var(--ax-ink-3)" }}>{label}</span>
-      <span className="ax-mono" style={{ fontSize: 10.5, color: "var(--ax-live)", background: "rgba(15,169,104,.1)", padding: "3px 8px", borderRadius: 5 }}>● LIVE</span>
-    </div>
-  );
-  if (which === "speed") {
-    return (
-      <div style={base}>
-        {head("leads / inbound / new")}
-        <div style={{ padding: 18 }}>
-          <div style={{ display: "flex", gap: 12, alignItems: "center", paddingBottom: 14, borderBottom: "1px solid var(--ax-line)" }}>
-            <div style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--ax-paper-2)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 600, color: "var(--ax-ink-2)" }}>JM</div>
-            <div><div style={{ fontWeight: 600 }}>New lead · Facebook Lead Ads</div><div className="ax-mono" style={{ fontSize: 11, color: "var(--ax-ink-3)", marginTop: 2 }}>arrived 14:42:17 · first touch +8s</div></div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 0" }}><Wave active /><span className="ax-mono" style={{ fontSize: 12, color: "var(--ax-ink-2)" }}>calling…</span></div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
-            {[["Status", "Connected"], ["Qualified", "ICP match"], ["Outcome", "Booked"]].map(([k, v]) => (
-              <div key={k}><div className="ax-mono" style={{ fontSize: 9.5, textTransform: "uppercase", color: "var(--ax-ink-3)" }}>{k}</div><div style={{ fontSize: 14, fontWeight: 600, color: k === "Outcome" ? "var(--ax-live)" : "var(--ax-ink)", marginTop: 3 }}>{v}</div></div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-  if (which === "outbound") {
-    return (
-      <div style={base}>
-        {head("campaigns / outbound / this-week")}
-        <div style={{ padding: 18, display: "flex", flexDirection: "column", gap: 12 }}>
-          {[["Calls placed", "1,284"], ["Contacts reached", "847"], ["Meetings booked", "63"], ["Transcripts", "1,284"]].map(([k, v]) => (
-            <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span className="ax-mono" style={{ fontSize: 11, textTransform: "uppercase", color: "var(--ax-ink-3)" }}>{k}</span>
-              <span className="ax-mono" style={{ fontWeight: 600 }}>{v}</span>
-            </div>
-          ))}
-          <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 54, marginTop: 4 }}>
-            {[40, 62, 50, 78, 70, 88, 96].map((h, i) => (<div key={i} style={{ flex: 1, height: `${h}%`, background: "var(--ax-accent)", opacity: 0.85, borderRadius: 3 }} />))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div style={base}>
-      {head("receptionist / inbound / live")}
-      <div style={{ padding: 14, display: "flex", flexDirection: "column", gap: 9 }}>
-        {[["Jessica Martinez", "Asked about pricing — booked a callback", "BOOKED", "var(--ax-live)"], ["David Park", "Existing customer — routed to support", "TRANSFER", "var(--ax-accent)"], ["Emily Chen", "General question — answered from knowledge base", "ANSWERED", "var(--ax-ink-3)"]].map(([n, d, t, c]) => (
-          <div key={n} style={{ border: "1px solid var(--ax-line)", borderRadius: 10, padding: "11px 13px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
-              <div><div style={{ fontWeight: 600, fontSize: 13 }}>{n}</div><div style={{ color: "var(--ax-ink-3)", fontSize: 12, marginTop: 2 }}>{d}</div></div>
-              <span className="ax-mono" style={{ fontSize: 9.5, color: c, alignSelf: "flex-start", whiteSpace: "nowrap" }}>{t}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const WORKFLOW_TABS = [
-  { id: "speed", eyebrow: "Speed to Lead", head: "Call new leads while their intent is still high.", line: ["New lead", "AI call", "Qualified", "Meeting booked"], explore: "Explore Speed to Lead", call: CALLS[0] },
-  { id: "outbound", eyebrow: "Outbound Calling", head: "Turn existing contact lists into qualified conversations.", line: ["Contact list", "AI calls", "Interest qualified", "Next step booked"], explore: "Explore Outbound Calling", call: CALLS[1] },
-  { id: "receptionist", eyebrow: "AI Receptionist", head: "Never send another inbound call to voicemail.", line: ["Incoming call", "AI answers", "Intent understood", "Resolved or routed"], explore: "Explore AI Receptionist", call: CALLS[2] },
+/* One recovery, timestamped — the product in four rows. */
+const FEED_ROWS: { t: string; tag: string; tagColor: string; text: string }[] = [
+  { t: "14:42:17", tag: "CANCELLED", tagColor: "#f87171", text: "Sarah M. · Growth plan $349/mo · stripe: subscription.deleted" },
+  { t: "14:43:02", tag: "CALLING", tagColor: "#7e9bff", text: "AtllasX connected · 45 seconds after the cancel event" },
+  { t: "14:46:31", tag: "SAVED", tagColor: "var(--ax-live)", text: "Accepted 3-month 30% offer · reason logged: budget cut" },
+  { t: "14:46:40", tag: "SYNCED", tagColor: "rgba(255,255,255,.5)", text: "Billing reactivated · CRM updated · Slack notified" },
 ];
 
-function ThreeSolutions() {
-  const [sel, setSel] = useState(0);
-  const [playerOpen, setPlayerOpen] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const [tline, setTline] = useState(0);
-  const reduced = useReducedMotion();
-  const w = WORKFLOW_TABS[sel];
-
-  useEffect(() => { setPlayerOpen(false); setPlaying(false); setTline(0); }, [sel]);
-  useEffect(() => {
-    if (!playing || reduced) return;
-    const t = setInterval(() => setTline((l) => { if (l >= w.call.transcript.length - 1) { setPlaying(false); return l; } return l + 1; }), 1500);
-    return () => clearInterval(t);
-  }, [playing, reduced, w.call.transcript.length]);
-
+function RecoveryFeed() {
   return (
-    <section id="solutions" style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
-      <div className="ax-wrap">
-        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>One platform. Three ways to grow.</h2>
-        <div style={{ display: "flex", gap: 30, marginTop: 34, borderBottom: "1px solid var(--ax-line)", flexWrap: "wrap" }}>
-          {WORKFLOW_TABS.map((x, i) => (
-            <button key={x.id} onClick={() => setSel(i)} style={{ fontSize: 15, fontWeight: 500, padding: "0 0 14px", marginBottom: -1, background: "none", border: "none", borderBottom: "2px solid " + (i === sel ? "var(--ax-accent)" : "transparent"), color: i === sel ? "var(--ax-accent)" : "var(--ax-ink-3)", cursor: "pointer", fontFamily: "var(--ax-head)", whiteSpace: "nowrap" }}>{x.eyebrow}</button>
-          ))}
+    <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
+      <div className="ax-wrap ax-sol-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center" }}>
+        <div>
+          <Eyebrow>One recovery, start to finish</Eyebrow>
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Four minutes. One customer back.</h2>
+          <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "46ch", lineHeight: 1.55 }}>
+            The cancel event triggers the call. The call makes your offer. The save lands back in your billing, your CRM, and your Slack.
+          </p>
+          <Link to="/how-it-works" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 22, fontFamily: "var(--ax-head)", fontSize: 14, fontWeight: 500, color: "var(--ax-accent)" }}>See how it works <ArrowRight style={{ width: 15, height: 15 }} /></Link>
         </div>
-        <div className="ax-sol-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, marginTop: 32, alignItems: "center" }}>
-          <div>
-            <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--ax-ink-3)", marginBottom: 14 }}>{w.eyebrow}</div>
-            <h3 style={{ fontFamily: "var(--ax-head)", fontWeight: 700, fontSize: "clamp(1.5rem,2.4vw,2rem)", letterSpacing: "-.02em", lineHeight: 1.14, marginBottom: 20 }}>{w.head}</h3>
-            <div className="ax-mono" style={{ fontSize: 13, color: "var(--ax-ink-2)", background: "var(--ax-paper-2)", border: "1px solid var(--ax-line)", borderRadius: 10, padding: "12px 14px" }}>
-              {w.line.map((s, i) => (<span key={i}>{s}{i < w.line.length - 1 && <span style={{ color: "var(--ax-accent)", margin: "0 6px" }}>→</span>}</span>))}
-            </div>
-            <div style={{ display: "flex", gap: 24, alignItems: "center", marginTop: 22, flexWrap: "wrap" }}>
-              <button onClick={() => setPlayerOpen((o) => !o)} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--ax-head)", fontSize: 14, fontWeight: 500, color: "var(--ax-ink-2)", padding: 0, display: "inline-flex", alignItems: "center", gap: 6 }}><Play style={{ width: 13, height: 13 }} /> Hear a call</button>
-              <a href="#solutions" style={{ fontFamily: "var(--ax-head)", fontSize: 14, fontWeight: 500, color: "var(--ax-accent)" }}>{w.explore} →</a>
-            </div>
-            {playerOpen && (
-              <div style={{ marginTop: 20, border: "1px solid var(--ax-line)", borderRadius: 12, padding: "14px 16px", background: "#fff", maxWidth: 480 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                  <button onClick={() => setPlaying((p) => !p)} aria-label={playing ? "Pause" : "Play"} style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--ax-ink)", color: "#fff", border: "none", cursor: "pointer", flex: "none", display: "flex", alignItems: "center", justifyContent: "center" }}>{playing ? <Pause style={{ width: 14, height: 14 }} /> : <Play style={{ width: 14, height: 14, marginLeft: 1 }} />}</button>
-                  <Wave active={playing} />
-                  <span className="ax-mono" style={{ fontSize: 12, color: "var(--ax-ink-3)", marginLeft: "auto" }}>Demo · {w.call.duration}</span>
-                </div>
-                <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-                  {w.call.transcript.map((row, i) => (
-                    <div key={i} style={{ opacity: i <= tline && playing ? 1 : 0.25, transition: "opacity .3s" }}>
-                      <div className="ax-mono" style={{ fontSize: 9.5, letterSpacing: ".06em", marginBottom: 3, color: row[0] === "agent" ? "var(--ax-accent)" : "var(--ax-live)" }}>{row[0] === "agent" ? "AI AGENT" : "CALLER"}</div>
-                      <div style={{ fontSize: 13, color: "var(--ax-ink-2)", lineHeight: 1.4 }}>{row[1]}</div>
-                    </div>
-                  ))}
-                </div>
-                <p className="ax-mono" style={{ fontSize: 10.5, color: "var(--ax-ink-3)", marginTop: 12 }}>Product demonstration. Callers are speaking with an AI agent.</p>
-              </div>
-            )}
+        <div style={{ background: "var(--ax-ink)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 14, overflow: "hidden", boxShadow: "0 30px 70px -45px rgba(11,11,30,.5)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,.08)" }}>
+            <span className="ax-mono" style={{ fontSize: 11, color: "rgba(255,255,255,.45)" }}>recoveries / live</span>
+            <span className="ax-mono" style={{ fontSize: 10.5, color: "var(--ax-live)", background: "rgba(52,211,153,.12)", padding: "3px 8px", borderRadius: 5 }}>● LIVE</span>
           </div>
-          <motion.div key={w.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-            <ProductMock which={w.id} />
-          </motion.div>
+          <div style={{ padding: "8px 16px 14px" }}>
+            {FEED_ROWS.map((r, i) => (
+              <motion.div key={r.t} initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.35, delay: i * 0.12 }} style={{ display: "grid", gridTemplateColumns: "76px 96px 1fr", gap: 12, alignItems: "baseline", padding: "11px 0", borderBottom: i < FEED_ROWS.length - 1 ? "1px solid rgba(255,255,255,.06)" : "none" }}>
+                <span className="ax-mono" style={{ fontSize: 11, color: "rgba(255,255,255,.35)" }}>{r.t}</span>
+                <span className="ax-mono" style={{ fontSize: 10, letterSpacing: ".08em", color: r.tagColor }}>{r.tag}</span>
+                <span style={{ fontSize: 13, color: "rgba(255,255,255,.75)", lineHeight: 1.45 }}>{r.text}</span>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function DashboardSection() {
-  const cards: any[] = [["Calls today", "1,284", "▲ 12%", false], ["Connect rate", "82.3%", "▲ 4.1%", false], ["Booked", "47", "▲ 8", true], ["Avg call", "2:41", "— flat", false]];
-  const rows: any[] = [["Marcus King", "(512) 555-0148", "Spring Buyers", "Booked", "#34d399"], ["Tom Park", "(737) 555-0102", "Expired Listings", "Not interested", "#f87171"], ["Rosa Alvarez", "(512) 555-0199", "Spring Buyers", "Callback", "#f5c85a"]];
+function Pillars() {
+  return (
+    <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)", background: "var(--ax-paper-2)" }}>
+      <div className="ax-wrap">
+        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", maxWidth: "22ch" }}>Built to do one job: bring cancelled revenue back.</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))", gap: 18, marginTop: 44 }}>
+          {PILLARS.map(([h, p], i) => (
+            <div key={h} style={{ border: "1px solid var(--ax-line)", borderRadius: 16, padding: 26, background: "#fff" }}>
+              <div className="ax-mono" style={{ fontSize: 11, color: "var(--ax-accent)", marginBottom: 14 }}>{String(i + 1).padStart(2, "0")}</div>
+              <h3 style={{ fontSize: "1.25rem", letterSpacing: "-.02em", lineHeight: 1.25 }}>{h}</h3>
+              <p style={{ color: "var(--ax-ink-2)", fontSize: ".95rem", lineHeight: 1.55, marginTop: 10 }}>{p}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SaveCallSection() {
+  return (
+    <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
+      <div className="ax-wrap">
+        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>This is what a save sounds like.</h2>
+        <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>A winback call, minutes after a Stripe cancellation. The AI is disclosed on every call.</p>
+        <CallPlayer call={CALLS[0]} />
+        <p style={{ marginTop: 20, fontSize: 14, color: "var(--ax-ink-3)" }}>
+          Want the real thing? <button onClick={() => window.dispatchEvent(new CustomEvent("ax:livecall"))} style={{ background: "none", border: "none", padding: 0, font: "inherit", color: "var(--ax-accent)", cursor: "pointer", fontWeight: 500 }}>Get the winback call yourself</button> or dial <a href="tel:+14159694084" style={{ color: "var(--ax-accent)", fontWeight: 500 }}>{PHONE}</a>.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* Dark section — churn intelligence dashboard mock. Illustrative product UI. */
+function IntelligenceSection() {
+  const rows: [string, string, string, string][] = [
+    ["Sarah M.", "Budget cut — saved with 3-month 30% offer", "SAVED", "var(--ax-live)"],
+    ["Marcus T.", "Low usage — saved with 2-month pause", "SAVED", "var(--ax-live)"],
+    ["Dana R.", "Missing Snowflake integration — flagged for product", "LOGGED", "#f5c85a"],
+    ["Priya K.", "No answer after 3 attempts — retry scheduled", "RETRY", "#7e9bff"],
+  ];
   return (
     <section className="ax-dark" style={{ padding: "84px 0" }}>
       <div className="ax-wrap">
-        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", color: "#fff" }}>Every conversation becomes a recorded outcome.</h2>
-        <p style={{ color: "rgba(255,255,255,.6)", fontSize: "1.05rem", marginTop: 14, maxWidth: "62ch" }}>Call status, transcript, notes, tags, qualification result, lead score, and appointment status — all organized inside the AtllasX dashboard.</p>
-        <div className="ax-dash" style={{ marginTop: 40, border: "1px solid rgba(255,255,255,.1)", borderRadius: 14, overflow: "hidden", display: "flex", background: "rgba(255,255,255,.03)" }}>
-          <div className="ax-dash-side" style={{ width: 130, flex: "none", borderRight: "1px solid rgba(255,255,255,.08)", padding: "14px 11px" }}>
-            <div style={{ fontFamily: "var(--ax-head)", fontWeight: 700, fontSize: 14, margin: "2px 6px 16px" }}>atllas<span style={{ color: "#7aa2ff" }}>X</span></div>
-            {["Overview", "Campaigns", "Calls", "Leads", "Analytics"].map((n, i) => (
-              <div key={n} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 12, color: i === 0 ? "#fff" : "rgba(255,255,255,.5)", padding: "7px 8px", borderRadius: 7, background: i === 0 ? "rgba(255,255,255,.08)" : "transparent" }}><span style={{ width: 12, height: 12, borderRadius: 3, border: "1.4px solid currentColor", opacity: 0.7, flex: "none" }} />{n}</div>
+        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", color: "#fff", maxWidth: "20ch" }}>Why they leave. From their own mouths.</h2>
+        <p style={{ color: "rgba(255,255,255,.6)", fontSize: "1.05rem", marginTop: 14, maxWidth: "62ch" }}>Every call ends with a logged cancel reason — saved or not. Your churn report finally says why, not just how many.</p>
+        <div className="ax-sol-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: 18, marginTop: 40 }}>
+          <div style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 14, padding: "18px 20px" }}>
+            <div className="ax-mono" style={{ fontSize: 11, color: "rgba(255,255,255,.45)", marginBottom: 16 }}>cancel reasons / last 30 days</div>
+            {REASONS.map(([label, pct]) => (
+              <div key={label} style={{ marginBottom: 14 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 5 }}>
+                  <span style={{ color: "rgba(255,255,255,.75)" }}>{label}</span>
+                  <span className="ax-mono" style={{ color: "rgba(255,255,255,.45)" }}>{pct}%</span>
+                </div>
+                <div style={{ height: 6, borderRadius: 4, background: "rgba(255,255,255,.06)" }}>
+                  <div style={{ width: `${pct}%`, height: "100%", borderRadius: 4, background: "var(--ax-accent)", opacity: 0.9 }} />
+                </div>
+              </div>
             ))}
+            <p className="ax-mono" style={{ fontSize: 10, color: "rgba(255,255,255,.3)", marginTop: 16 }}>Illustrative dashboard data.</p>
           </div>
-          <div style={{ flex: 1, minWidth: 0, padding: "16px 18px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}><span style={{ fontWeight: 600, fontSize: 14, color: "#fff" }}>Overview</span><span style={{ fontSize: 11, background: "#5b8cff", color: "#fff", padding: "6px 11px", borderRadius: 7 }}>+ New campaign</span></div>
-            <div className="ax-dash-cards" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8, marginBottom: 14 }}>
-              {cards.map((c) => (
-                <div key={c[0]} style={{ background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.06)", borderRadius: 9, padding: 10 }}><div style={{ fontSize: 9, color: "rgba(255,255,255,.45)" }}>{c[0]}</div><div style={{ fontWeight: 700, fontSize: 17, marginTop: 3, letterSpacing: "-.02em", color: c[3] ? "#7aa2ff" : "#fff" }}>{c[1]}</div><div className="ax-mono" style={{ fontSize: 9, color: c[2] === "— flat" ? "rgba(255,255,255,.4)" : "#34d399", marginTop: 3 }}>{c[2]}</div></div>
-              ))}
-            </div>
-            <div style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.06)", borderRadius: 9, padding: "12px 13px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "rgba(255,255,255,.5)", marginBottom: 8 }}><span>Recent calls</span><span style={{ color: "#7aa2ff" }}>View all →</span></div>
-              {rows.map((r) => (
-                <div key={r[0]} style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr auto", gap: 10, alignItems: "center", padding: "7px 0", borderTop: "1px solid rgba(255,255,255,.05)", fontSize: 11 }}><div><b style={{ color: "#f4f4f5", fontWeight: 600 }}>{r[0]}</b><span className="ax-mono" style={{ color: "rgba(255,255,255,.4)", fontSize: 10, marginLeft: 5 }}>{r[1]}</span></div><div style={{ color: "rgba(255,255,255,.5)" }}>{r[2]}</div><span className="ax-mono" style={{ fontSize: 9.5, color: r[4], justifySelf: "end" }}>{r[3]}</span></div>
-              ))}
-            </div>
+          <div style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 14, padding: "18px 20px" }}>
+            <div className="ax-mono" style={{ fontSize: 11, color: "rgba(255,255,255,.45)", marginBottom: 12 }}>recent winback calls</div>
+            {rows.map(([n, d, t, c]) => (
+              <div key={n} style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start", padding: "11px 0", borderTop: "1px solid rgba(255,255,255,.06)" }}>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 13, color: "#f4f4f5" }}>{n}</div>
+                  <div style={{ color: "rgba(255,255,255,.5)", fontSize: 12.5, marginTop: 2, lineHeight: 1.45 }}>{d}</div>
+                </div>
+                <span className="ax-mono" style={{ fontSize: 9.5, color: c, whiteSpace: "nowrap", marginTop: 2 }}>{t}</span>
+              </div>
+            ))}
+            <Link to="/churn-intelligence" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 14, fontSize: 13, color: "#7e9bff", fontWeight: 500 }}>Explore churn intelligence <ArrowRight style={{ width: 14, height: 14 }} /></Link>
           </div>
         </div>
       </div>
@@ -544,27 +490,50 @@ function DashboardSection() {
   );
 }
 
-function Integrations() {
+function WhoItsFor() {
+  const cards: [string, string, string[]][] = [
+    ["Stripe", "SaaS · web subscriptions · memberships", ["Triggers on subscription.deleted and cancellations at period end", "Winback offers applied straight to the Stripe subscription", "Saves show up as reactivations in your MRR"]],
+    ["RevenueCat", "Mobile subscription apps", ["Triggers on cancellation and auto-renew-off events", "Offers built for app subscribers: pause, discount, plan switch", "Cancel reasons your app-store dashboard can't tell you"]],
+  ];
   return (
-    <section id="integrations" style={{ padding: "96px 0", borderTop: "1px solid var(--ax-line)" }}>
+    <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)", background: "var(--ax-paper-2)" }}>
       <div className="ax-wrap">
-        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Connect the systems that send you leads.</h2>
-        <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>Trigger AtllasX calls from your existing lead workflow.</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(190px,1fr))", gap: 20, marginTop: 44 }}>
-          {INTEGRATIONS.map((g) => (
-            <div key={g.group} style={{ border: "1px solid var(--ax-line)", borderRadius: 14, padding: 22 }}>
-              <div className="ax-mono" style={{ fontSize: 10.5, letterSpacing: ".12em", textTransform: "uppercase", color: "var(--ax-ink-3)", marginBottom: 14 }}>{g.group}</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-                {g.items.map((it) => (
-                  <div key={it.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-                    <span style={{ fontSize: 14, color: "var(--ax-ink)" }}>{it.name}</span>
-                    {it.soon && <span className="ax-mono" style={{ fontSize: 9.5, color: "var(--ax-accent)", background: "var(--ax-accent-soft)", padding: "3px 7px", borderRadius: 5 }}>SOON</span>}
-                  </div>
+        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", maxWidth: "24ch" }}>Charge with Stripe or RevenueCat? We can call your cancelled subscribers today.</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 18, marginTop: 44 }}>
+          {cards.map(([name, who, points]) => (
+            <div key={name} style={{ border: "1px solid var(--ax-line)", borderRadius: 16, padding: 28, background: "#fff" }}>
+              <div style={{ fontFamily: "var(--ax-head)", fontWeight: 800, fontSize: "1.6rem", letterSpacing: "-.02em" }}>{name}</div>
+              <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--ax-ink-3)", marginTop: 6 }}>{who}</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 11, marginTop: 18 }}>
+                {points.map((p) => (
+                  <div key={p} style={{ display: "flex", gap: 9, fontSize: 14, color: "var(--ax-ink-2)", lineHeight: 1.5 }}><Check style={{ width: 16, height: 16, color: "var(--ax-live)", flex: "none", marginTop: 2 }} /> {p}</div>
                 ))}
               </div>
             </div>
           ))}
         </div>
+        <p style={{ color: "var(--ax-ink-3)", fontSize: 13, marginTop: 20 }}>On something else? Cancellation events can also arrive by webhook or CSV.</p>
+      </div>
+    </section>
+  );
+}
+
+function StatsStrip() {
+  const stats: [string, string][] = [
+    ["Minutes", "from cancel event to call"],
+    ["100%", "of cancellations called"],
+    ["24/7", "nights, weekends, holidays"],
+    ["Every call", "recorded, transcribed, logged"],
+  ];
+  return (
+    <section style={{ padding: "64px 0", borderTop: "1px solid var(--ax-line)" }}>
+      <div className="ax-wrap" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 18 }}>
+        {stats.map(([v, l]) => (
+          <div key={l}>
+            <div style={{ fontFamily: "var(--ax-head)", fontWeight: 800, fontSize: "2rem", letterSpacing: "-.02em" }}>{v}</div>
+            <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--ax-ink-3)", marginTop: 6 }}>{l}</div>
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -574,8 +543,8 @@ function Pricing() {
   return (
     <section id="pricing" style={{ padding: "96px 0", borderTop: "1px solid var(--ax-line)" }}>
       <div className="ax-wrap">
-        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Plans that scale with your call volume.</h2>
-        <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>Every plan includes a monthly call allotment you can use anytime, any day.</p>
+        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Priced on cancellations. Not calls.</h2>
+        <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>Plans sized by monthly winback volume. Every plan calls 100% of your cancellations.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 18, marginTop: 46 }}>
           {PRICING.map((p) => {
             const dark = p.feat;
@@ -598,7 +567,7 @@ function Pricing() {
             );
           })}
         </div>
-        <p style={{ color: "var(--ax-ink-3)", fontSize: 13, marginTop: 22 }}>Initial setup can take approximately five minutes. Custom workflows and integrations may require additional onboarding.</p>
+        <p style={{ color: "var(--ax-ink-3)", fontSize: 13, marginTop: 22 }}>Connect Stripe or RevenueCat, approve your offers, go live — most teams call the same day.</p>
       </div>
     </section>
   );
@@ -631,7 +600,7 @@ function FAQ() {
 
 function Footer() {
   const cols: [string, [string, string][]][] = [
-    ["Product", [["Speed to Lead", "/speed-to-lead"], ["Outbound Calling", "/outbound-calling"], ["AI Receptionist", "/ai-receptionist"], ["Pricing", "/pricing"]]],
+    ["Product", [["How It Works", "/how-it-works"], ["Churn Intelligence", "/churn-intelligence"], ["ROI", "/roi"], ["Pricing", "/pricing"], ["Trust", "/trust"]]],
     ["Resources", [["Documentation", DOCS_URL], ["Contact", "mailto:info@atllas.com"]]],
     ["Company", [["Privacy", "https://app.atllas.com/legal/privacy-policy"], ["Terms", "https://app.atllas.com/legal/terms-of-service"], ["Accessibility", "mailto:info@atllas.com"], ["Log in", LOGIN_URL]]],
   ];
@@ -647,14 +616,14 @@ function Footer() {
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(8,9,11,.7) 0%, rgba(8,9,11,.9) 60%, rgba(8,9,11,.96) 100%)", zIndex: 1 }} />
       <div className="ax-wrap" style={{ position: "relative", zIndex: 2 }}>
         <div style={{ textAlign: "center", padding: "92px 0 64px" }}>
-          <h2 style={{ fontSize: "clamp(2.1rem,5vw,3.4rem)", letterSpacing: "-.03em", lineHeight: 1.05, color: "#fff", maxWidth: "20ch", margin: "0 auto" }}>Your next lead should not have to wait.</h2>
-          <p style={{ color: "rgba(255,255,255,.65)", fontSize: "1.05rem", margin: "18px auto 28px", maxWidth: "46ch" }}>See how AtllasX would call, qualify, and book leads for your business.</p>
+          <h2 style={{ fontSize: "clamp(2.1rem,5vw,3.4rem)", letterSpacing: "-.03em", lineHeight: 1.05, color: "#fff", maxWidth: "22ch", margin: "0 auto" }}>Cancelled customers still answer the phone. For about 30 days.</h2>
+          <p style={{ color: "rgba(255,255,255,.65)", fontSize: "1.05rem", margin: "18px auto 28px", maxWidth: "48ch" }}>Book a demo and we'll show you the calls on your own last 90 days of cancellations.</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 24px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
             <button onClick={() => window.dispatchEvent(new CustomEvent("ax:livecall"))} className="ax-btn ax-btn-ghost" style={{ borderColor: "rgba(255,255,255,.28)", color: "#fff", padding: "13px 22px", cursor: "pointer" }}><Phone style={{ width: 15, height: 15 }} /> Get a live call</button>
           </div>
           <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap", marginTop: 26, color: "rgba(255,255,255,.5)", fontSize: 12.5 }}>
-            {["Set up in as little as five minutes", "Cancel anytime", "Custom workflows available"].map((t) => (
+            {["Same-day setup", "Cancel anytime", "Only calls your own customers"].map((t) => (
               <span key={t} style={{ display: "inline-flex", gap: 6, alignItems: "center" }}><Check style={{ width: 14, height: 14 }} /> {t}</span>
             ))}
           </div>
@@ -662,7 +631,7 @@ function Footer() {
         <div className="ax-foot" style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr 1fr 1fr 1fr", gap: 16 }}>
           <div style={card}>
             <Link to="/" style={{ fontFamily: "var(--ax-head)", fontWeight: 700, fontSize: 20, letterSpacing: "-.03em", color: "#fff" }}>Atllas<span style={{ color: "var(--ax-accent)" }}>X</span></Link>
-            <p style={{ color: "rgba(255,255,255,.55)", fontSize: 13, lineHeight: 1.6, marginTop: 14, maxWidth: "32ch" }}>AI phone agents for inbound and outbound calls.</p>
+            <p style={{ color: "rgba(255,255,255,.55)", fontSize: 13, lineHeight: 1.6, marginTop: 14, maxWidth: "32ch" }}>Revenue recovery with AI calling.</p>
             <a href="tel:+14159694084" style={{ color: "rgba(255,255,255,.65)", fontSize: 13.5, marginTop: 16, display: "inline-flex", gap: 7, alignItems: "center" }}><Phone style={{ width: 14, height: 14 }} /> {PHONE}</a>
           </div>
           {cols.map(([h, items]) => (
@@ -684,7 +653,7 @@ function Footer() {
         </div>
         <div style={{ marginTop: 44, paddingTop: 22, borderTop: "1px solid rgba(255,255,255,.12)", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12, color: "rgba(255,255,255,.45)", fontSize: 12 }}>
           <span>© Atllas Inc. {new Date().getFullYear()}</span>
-          <span className="ax-mono">AI phone agents for inbound and outbound calls</span>
+          <span className="ax-mono">They cancel. We call. They come back.</span>
         </div>
       </div>
     </footer>
@@ -692,6 +661,99 @@ function Footer() {
 }
 
 /* ============================== App ============================== */
+
+function AtllasBridge() {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const isAtllasRef = params.get("ref") === "atllas";
+      const dismissed = sessionStorage.getItem("atllas-bridge-dismissed") === "1";
+      if (isAtllasRef && !dismissed) setShow(true);
+    } catch {}
+  }, []);
+
+  const dismiss = () => {
+    try { sessionStorage.setItem("atllas-bridge-dismissed", "1"); } catch {}
+    setShow(false);
+  };
+
+  if (!show) return null;
+
+  return (
+    <div
+      onClick={(e) => e.target === e.currentTarget && dismiss()}
+      style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,.65)", backdropFilter: "blur(6px)" }}
+    >
+      <div style={{ background: "#0f0f12", border: "1px solid rgba(255,255,255,.1)", borderRadius: 20, padding: "44px 40px 36px", maxWidth: 480, width: "calc(100% - 48px)", position: "relative", boxShadow: "0 32px 80px rgba(0,0,0,.6)", textAlign: "center" }}>
+        <button onClick={dismiss} aria-label="Close" style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,.3)", fontSize: 20, lineHeight: 1 }}>✕</button>
+        <h2 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, fontSize: "1.6rem", letterSpacing: "-.03em", color: "#fff", marginBottom: 12 }}>
+          Atllas is now AtllasX.
+        </h2>
+        <p style={{ fontFamily: "var(--ax-body)", fontSize: 15, color: "rgba(255,255,255,.65)", lineHeight: 1.6, marginBottom: 8 }}>
+          Your account, login, and everything else carry over — nothing has changed on your end.
+        </p>
+        <p style={{ fontFamily: "var(--ax-mono)", fontSize: 13.5, color: "rgba(255,255,255,.35)", marginBottom: 28, letterSpacing: ".04em" }}>
+          Same team. Same product. New name.
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <a href={LOGIN_URL} style={{ display: "block", background: "#fff", color: "#0a0a0a", padding: "13px 20px", borderRadius: 10, fontFamily: "var(--ax-body)", fontWeight: 700, fontSize: 15, textDecoration: "none" }}>
+            Log in to your account →
+          </a>
+          <button onClick={dismiss} style={{ background: "none", border: "1px solid rgba(255,255,255,.12)", color: "rgba(255,255,255,.55)", padding: "12px 20px", borderRadius: 10, fontFamily: "var(--ax-body)", fontWeight: 500, fontSize: 14, cursor: "pointer" }}>
+            Explore AtllasX
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const ANNOUNCEMENTS = [
+  { text: "For subscription businesses on Stripe & RevenueCat", href: null },
+  { text: "Try it for yourself. Call (415) 969-4084", href: "tel:+14159694084" },
+];
+
+function AnnouncementBar() {
+  const [idx, setIdx] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => {
+        setIdx((i) => (i + 1) % ANNOUNCEMENTS.length);
+        setVisible(true);
+      }, 350);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const item = ANNOUNCEMENTS[idx];
+  return (
+    <div style={{ position: "relative", background: "#000", padding: "8px 16px", textAlign: "center", fontFamily: "var(--ax-mono)", fontSize: 12.5, color: "rgba(255,255,255,.75)", letterSpacing: ".04em" }}>
+      {item.href ? (
+        <a href={item.href} style={{ color: "inherit", textDecoration: "none", transition: "opacity .35s", opacity: visible ? 1 : 0, display: "inline-block" }}>
+          {item.text}
+        </a>
+      ) : (
+        <span style={{ transition: "opacity .35s", opacity: visible ? 1 : 0, display: "inline-block" }}>
+          {item.text}
+        </span>
+      )}
+    </div>
+  );
+}
+
+const ROUTE_TITLES: Record<string, string> = {
+  "/": "AtllasX | Revenue Recovery with AI Calling — Stripe & RevenueCat",
+  "/how-it-works": "How It Works | AtllasX",
+  "/churn-intelligence": "Churn Intelligence | AtllasX",
+  "/roi": "ROI | AtllasX",
+  "/pricing": "Pricing | AtllasX",
+  "/trust": "Trust & Compliance | AtllasX",
+};
 
 function SiteLayout() {
   const [liveCallOpen, setLiveCallOpen] = useState(false);
@@ -704,37 +766,9 @@ function SiteLayout() {
     <div className="ax" style={{ background: "var(--ax-paper)", minHeight: "100vh", position: "relative" }}>
       {liveCallOpen && <LiveCallModal onClose={() => setLiveCallOpen(false)} />}
       <style>{`
-        @keyframes axmarq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .ax-marq { animation: axmarq 64s linear infinite; }
-        .ax-marq:hover { animation-play-state: paused; }
         @keyframes axwave { from { transform: scaleY(.45); } to { transform: scaleY(1); } }
-        .ax-hgrid{position:relative;z-index:2;display:grid;grid-template-columns:1.02fr .98fr;gap:24px;align-items:center;padding-top:140px;padding-bottom:110px}
-        .ax-hviz{position:relative;height:560px;display:flex;align-items:center;justify-content:center}
-        .ax-viz{position:relative;width:520px;height:520px;perspective:1300px;transform-style:preserve-3d;transition:transform .25s ease-out}
-        .ax-coreglow{position:absolute;top:50%;left:50%;width:380px;height:380px;margin:-190px 0 0 -190px;border-radius:50%;background:radial-gradient(circle,rgba(31,91,255,.30),transparent 62%);z-index:1}
-        .ax-core{position:absolute;top:50%;left:50%;width:118px;height:118px;margin:-59px 0 0 -59px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#fbfdff,#d4dce8 38%,#9aa6bb 66%,#566073);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 24px 60px -12px rgba(31,91,255,.55);z-index:4}
-        .ax-core::after{content:"";position:absolute;inset:26px;border-radius:50%;border:1px solid rgba(31,91,255,.5);box-shadow:inset 0 0 0 6px rgba(31,91,255,.07)}
-        .ax-pulse{position:absolute;top:50%;left:50%;width:118px;height:118px;margin:-59px 0 0 -59px;border-radius:50%;border:1px solid rgba(120,150,255,.5);z-index:2;animation:axpulse 3.6s ease-out infinite}
-        .ax-pulse.b{animation-delay:1.2s}.ax-pulse.c{animation-delay:2.4s}
-        @keyframes axpulse{0%{transform:scale(1);opacity:.5}100%{transform:scale(3.6);opacity:0}}
-        .ax-orbit{position:absolute;top:50%;left:50%;border:1px solid rgba(170,185,210,.18);border-radius:50%;transform-style:preserve-3d}
-        .ax-orbit.o1{width:300px;height:300px;margin:-150px 0 0 -150px;transform:rotateX(72deg)}
-        .ax-orbit.o2{width:420px;height:420px;margin:-210px 0 0 -210px;transform:rotateX(68deg) rotateY(18deg);border-color:rgba(31,91,255,.2)}
-        .ax-orbit.o3{width:520px;height:520px;margin:-260px 0 0 -260px;transform:rotateX(76deg) rotateY(-14deg);border-color:rgba(170,185,210,.12)}
-        .ax-spin{position:absolute;inset:0;transform-style:preserve-3d}
-        .ax-orbit.o1 .ax-spin{animation:axspin 16s linear infinite}
-        .ax-orbit.o2 .ax-spin{animation:axspin 24s linear infinite reverse}
-        .ax-orbit.o3 .ax-spin{animation:axspin 32s linear infinite}
-        @keyframes axspin{to{transform:rotateZ(360deg)}}
-        .ax-node{position:absolute;top:-6px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#2f6bff;box-shadow:0 0 0 4px rgba(31,91,255,.16),0 0 16px 3px rgba(31,91,255,.7)}
-        .ax-node.s{width:7px;height:7px;top:-3.5px;margin-left:-3.5px;background:#cdd6e6;box-shadow:0 0 8px rgba(205,214,230,.55)}
-        @media (prefers-reduced-motion: reduce){.ax-pulse,.ax-spin{animation:none}}
-        @media (max-width:900px){.ax-hgrid{grid-template-columns:1fr;gap:8px;padding-top:64px;padding-bottom:56px}.ax-hviz{height:360px}.ax-viz{width:330px;height:330px}.ax-orbit.o3{width:330px;height:330px;margin:-165px 0 0 -165px}.ax-orbit.o2{width:270px;height:270px;margin:-135px 0 0 -135px}.ax-orbit.o1{width:190px;height:190px;margin:-95px 0 0 -95px}}
-        @media (prefers-reduced-motion: reduce) { .ax-marq { animation: none; } }
         @media (max-width: 900px) {
           .ax-sol-grid { grid-template-columns: 1fr !important; }
-          .ax-dash-side { display: none !important; }
-          .ax-dash-cards { grid-template-columns: 1fr 1fr !important; }
           .ax-proof-grid { grid-template-columns: 1fr !important; }
           .ax-how { grid-template-columns: 1fr 1fr !important; }
           .ax-foot { grid-template-columns: 1fr 1fr !important; }
@@ -746,11 +780,12 @@ function SiteLayout() {
         }
       `}</style>
 
-      <div style={{ position: "relative", background: "#000", padding: "8px 16px", textAlign: "center", fontFamily: "var(--ax-mono)", fontSize: 12.5, color: "rgba(255,255,255,.75)", letterSpacing: ".04em" }}>
-        HubSpot App Integration Coming Soon
+      <div style={{ position: "sticky", top: 0, zIndex: 50 }}>
+        <AtllasBridge />
+        <AnnouncementBar />
+        <Nav />
       </div>
       <ScrollTop />
-      <Nav />
       <main>
         <Outlet />
       </main>
@@ -762,7 +797,13 @@ function SiteLayout() {
 
 function ScrollTop() {
   const loc = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [loc.pathname]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    document.getElementById("top")?.scrollIntoView({ block: "start" });
+    document.title = ROUTE_TITLES[loc.pathname] ?? ROUTE_TITLES["/"];
+  }, [loc.pathname]);
   return null;
 }
 
@@ -770,91 +811,143 @@ function HomePage() {
   return (
     <>
       <Hero />
-      <ThreeSolutions />
-      <DashboardSection />
-      <Integrations />
+      <RecoveryFeed />
+      <Pillars />
+      <SaveCallSection />
+      <IntelligenceSection />
+      <WhoItsFor />
+      <StatsStrip />
       <Pricing />
       <FAQ />
     </>
   );
 }
 
-function DarkHeader({ eyebrow, title, sub, banner, children }: { eyebrow: string; title: string; sub?: string; banner?: string; children?: React.ReactNode }) {
+function DarkHeader({ eyebrow, title, sub, children }: { eyebrow: string; title: string; sub?: string; children?: React.ReactNode }) {
   return (
-    <section style={{ background: "var(--ax-ink)", color: "#fff", marginTop: -64, position: "relative", overflow: "hidden" }}>
-      {banner ? (
-        <>
-          <img src={banner} alt="" aria-hidden="true" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
-          <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(8,9,12,.92) 0%, rgba(8,9,12,.6) 52%, rgba(8,9,12,.3) 100%), linear-gradient(180deg, rgba(8,9,12,.25) 0%, rgba(8,9,12,.72) 100%)" }} />
-        </>
-      ) : (
-        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "radial-gradient(60% 70% at 72% 0%, rgba(31,91,255,.16), transparent 70%)" }} />
-      )}
-      <div className="ax-wrap" style={{ position: "relative", zIndex: 2, paddingTop: 138, paddingBottom: children ? 64 : 80 }}>
+    <section style={{ background: "var(--ax-ink)", color: "#fff", marginTop: -64, position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "radial-gradient(60% 70% at 72% 0%, rgba(31,91,255,.16), transparent 70%)" }} />
+      <div className="ax-wrap" style={{ position: "relative", zIndex: 2, paddingTop: 200, paddingBottom: 120 }}>
         <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(255,255,255,.55)", marginBottom: 16 }}>{eyebrow}</div>
         <h1 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, letterSpacing: "-.03em", fontSize: "clamp(2.4rem,5vw,3.8rem)", lineHeight: 1.05, maxWidth: "20ch" }}>{title}</h1>
         {sub && <p style={{ color: "rgba(255,255,255,.7)", fontSize: "1.15rem", marginTop: 18, maxWidth: "56ch", lineHeight: 1.5 }}>{sub}</p>}
         {children}
       </div>
+      <BillingStrip />
     </section>
   );
 }
 
+/* Product mock cards */
+function ProductMock({ which }: { which: string }) {
+  const base: React.CSSProperties = { background: "#fff", border: "1px solid var(--ax-line)", borderRadius: 14, overflow: "hidden", boxShadow: "0 30px 70px -45px rgba(11,11,30,.35)" };
+  const head = (label: string) => (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", background: "var(--ax-paper-2)", borderBottom: "1px solid var(--ax-line)" }}>
+      <span className="ax-mono" style={{ fontSize: 11, color: "var(--ax-ink-3)" }}>{label}</span>
+      <span className="ax-mono" style={{ fontSize: 10.5, color: "var(--ax-live)", background: "rgba(15,169,104,.1)", padding: "3px 8px", borderRadius: 5 }}>● LIVE</span>
+    </div>
+  );
+  if (which === "winback") {
+    return (
+      <div style={base}>
+        {head("recoveries / in-progress")}
+        <div style={{ padding: 18 }}>
+          <div style={{ display: "flex", gap: 12, alignItems: "center", paddingBottom: 14, borderBottom: "1px solid var(--ax-line)" }}>
+            <div style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--ax-paper-2)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 600, color: "var(--ax-ink-2)" }}>SM</div>
+            <div><div style={{ fontWeight: 600 }}>Cancelled · Growth $349/mo</div><div className="ax-mono" style={{ fontSize: 11, color: "var(--ax-ink-3)", marginTop: 2 }}>stripe: subscription.deleted · 14:42:17</div></div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 0" }}><Wave active /><span className="ax-mono" style={{ fontSize: 12, color: "var(--ax-ink-2)" }}>calling · 45s after cancel…</span></div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+            {[["Status", "Connected"], ["Offer", "30% × 3 mo"], ["Outcome", "Saved"]].map(([k, v]) => (
+              <div key={k}><div className="ax-mono" style={{ fontSize: 9.5, textTransform: "uppercase", color: "var(--ax-ink-3)" }}>{k}</div><div style={{ fontSize: 14, fontWeight: 600, color: k === "Outcome" ? "var(--ax-live)" : "var(--ax-ink)", marginTop: 3 }}>{v}</div></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  /* insights */
+  return (
+    <div style={base}>
+      {head("churn / reasons / last-30-days")}
+      <div style={{ padding: 18 }}>
+        {REASONS.map(([label, pct]) => (
+          <div key={label} style={{ marginBottom: 13 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, marginBottom: 5 }}>
+              <span style={{ color: "var(--ax-ink-2)" }}>{label}</span>
+              <span className="ax-mono" style={{ color: "var(--ax-ink-3)" }}>{pct}%</span>
+            </div>
+            <div style={{ height: 6, borderRadius: 4, background: "var(--ax-paper-2)" }}>
+              <div style={{ width: `${pct}%`, height: "100%", borderRadius: 4, background: "var(--ax-accent)", opacity: 0.9 }} />
+            </div>
+          </div>
+        ))}
+        <p className="ax-mono" style={{ fontSize: 10, color: "var(--ax-ink-3)", marginTop: 14 }}>Illustrative dashboard data.</p>
+      </div>
+    </div>
+  );
+}
+
 const SOLUTION_PAGES: Record<string, any> = {
-  speed: {
-    id: "speed", banner: bannerSpeed, eyebrow: "Speed to Lead",
-    h1: "Call new leads while their intent is still high.",
-    sub: "Connect a lead source and AtllasX calls each new lead within ~60 seconds — introducing itself, qualifying against your criteria, and booking the meeting. Day or night.",
-    mock: "speed", line: ["New lead", "AI call in ~60s", "Qualified", "Meeting booked"],
-    intro: "One agent that picks up where your forms leave off — calling, qualifying, and booking without anyone lifting a finger.",
-    caps: ["Calls within ~60 seconds", "Personalized conversation", "Qualification against your criteria", "Appointment booking", "Booking confirmation text", "Human transfer"],
-    stepsHead: "From new lead to booked meeting.",
-    stepsSub: "Four steps, fully automatic — the lead never waits and your team never lifts a finger.",
-    steps: [["01", "Connect a lead source", "Point AtllasX at your inbound lead flow. New leads trigger a call the moment they arrive."], ["02", "AtllasX calls in ~60 seconds", "It introduces itself for your business and holds a natural, real-time phone conversation."], ["03", "Qualifies the lead", "It asks the questions you define, captures the answers, and records the outcome on every call."], ["04", "Books & confirms", "It books the meeting, sends a confirmation text, and warm-transfers to a human on request."]],
-    call: 0, callSub: "A live speed-to-lead conversation, start to finish.",
-    integHead: "Connect the systems that send you leads.",
-    integSub: "Trigger AtllasX calls from your existing lead workflow.",
-    integ: [["Lead sources", ["Meta Lead Ads", "Website forms", "Contact-list uploads"]], ["Automation", ["Zapier", "Webhooks", "Custom triggers"]], ["Scheduling", ["Calendar booking", "Confirmation texts"]]],
-    faq: [["How quickly can AtllasX call a new lead?", "When a lead arrives from a connected source, AtllasX typically calls within approximately 60 seconds — day or night, including nights and weekends."], ["What does it say on the call?", "It introduces itself for your business, asks the qualifying questions you define, and works to book a meeting. You control the script, criteria, and tone."], ["Can it transfer to a human?", "Yes. AtllasX can warm-transfer to your team the moment a lead wants to speak with a person."], ["Does it work with my CRM?", "Native HubSpot integration is coming soon. Today, leads can be connected through supported sources, and custom CRM, webhook, and follow-up workflows are available by request."]],
+  how: {
+    id: "how", eyebrow: "How It Works",
+    h1: "Cancel. Call. Offer. Back.",
+    sub: "From the cancellation event to a reactivated subscription — automatically, in minutes.",
+    mock: "winback", line: ["They cancel", "We call in minutes", "Your offer", "Saved — or reason logged"],
+    intro: "AtllasX watches your billing system. The moment a subscription is cancelled, it calls that customer with full account context and an offer you approved.",
+    caps: ["Triggers on Stripe & RevenueCat cancel events", "Calls within minutes, 24/7", "Personalized from the customer's own account", "Offers only what you pre-approved", "Retries on your schedule, within quiet hours", "Every outcome synced to billing, CRM, Slack"],
+    stepsHead: "Five steps. Zero touch.",
+    stepsSub: "Your team does nothing. The system closes the loop either way.",
+    steps: [
+      ["01", "They cancel", "Stripe fires subscription.deleted, or RevenueCat fires the cancellation event. Webhook and CSV work too."],
+      ["02", "We call in minutes", "The call goes out while the decision is still soft — 2am cancels included."],
+      ["03", "We make your offer", "Discount, pause, or downgrade — your ladder, your hard limits. The caller can't give away the store."],
+      ["04", "They come back — or tell us why not", "Saves are applied to billing on the spot. Non-saves end with the reason captured."],
+      ["05", "Your systems update", "Billing reactivated or reason logged. CRM, Slack, and webhooks notified. Recording and transcript attached."],
+    ],
+    call: 1, callSub: "A winback call after a RevenueCat cancellation — saved with a pause instead of a discount.",
+    integHead: "Plugs into your billing stack.",
+    integSub: "Native triggers from the systems that own your subscriptions.",
+    integ: [["Billing triggers", ["Stripe", "RevenueCat", "Webhooks", "CSV upload"]], ["Offers applied to", ["Stripe subscriptions", "RevenueCat entitlements"]], ["Outcomes sync to", ["Slack alerts", "HubSpot", "Zapier", "Webhooks"]]],
+    faq: [
+      ["What exactly can the AI offer?", "Only what you approve: specific discounts, pause lengths, or downgrades, in the order you set. It cannot exceed the ladder — ever."],
+      ["How fast is 'minutes'?", "The call is triggered the moment the cancellation event arrives. Timing is yours to control, including quiet-hours rules by time zone."],
+      ["What if they don't pick up?", "Retries run on your schedule. Every attempt is logged, and you decide when to stop."],
+      ["Is the AI disclosed?", "Yes. Every call opens by identifying itself as an AI assistant calling for your business."],
+    ],
   },
-  outbound: {
-    id: "outbound", banner: bannerOutbound, eyebrow: "Outbound Calling",
-    h1: "Turn existing contact lists into qualified conversations.",
-    sub: "Upload a contact list, define the objective, and AtllasX works through the campaign — handling objections, qualifying interest, and booking the next step.",
-    mock: "outbound", line: ["Contact list", "AI calls", "Interest qualified", "Next step booked"],
-    intro: "Point AtllasX at a list and an objective, and it runs the campaign end to end — calling, qualifying, and booking.",
-    caps: ["Contact-list uploads", "Custom campaign objective", "Objection handling", "Qualification", "Appointment setting", "Campaign outcomes & transcripts"],
-    stepsHead: "From cold list to booked pipeline.",
-    stepsSub: "Four steps, fully automatic — upload, set the goal, and let AtllasX work the list.",
-    steps: [["01", "Upload a contact list", "Bring the list you want worked. AtllasX takes it from there."], ["02", "Define the objective", "Set the goal, script, and qualifying criteria for the campaign."], ["03", "AtllasX works the list", "It calls through your contacts, handles objections, and qualifies interest."], ["04", "Books the next step", "It sets the appointment and records every outcome and transcript."]],
-    call: 1, callSub: "A live outbound conversation, start to finish.",
-    integHead: "Connect the tools behind your campaigns.",
-    integSub: "Run AtllasX alongside the systems you already use.",
-    integ: [["Lists", ["Contact-list uploads", "CSV import"]], ["Automation", ["Zapier", "Webhooks", "Custom triggers"]], ["Scheduling", ["Calendar booking", "Confirmation texts"]]],
-    faq: [["What kind of lists can I upload?", "Upload a contact list or CSV and define your campaign objective — AtllasX works through the list and records every outcome."], ["Does it handle objections?", "Yes. AtllasX handles common objections, qualifies interest, and keeps the conversation moving toward the next step."], ["What happens after each call?", "Every call's outcome and transcript is recorded in the AtllasX dashboard, and qualified contacts get booked automatically."], ["Can it follow up by SMS or email?", "Booking-related texts are native. SMS and email follow-up sequences are available as custom workflows configured around your process."]],
-  },
-  receptionist: {
-    id: "receptionist", banner: bannerReceptionist, eyebrow: "AI Receptionist",
-    h1: "Never send another inbound call to voicemail.",
-    sub: "AtllasX answers every incoming call 24/7 — responding from your knowledge base, capturing details, qualifying, booking, and routing callers by your rules.",
-    mock: "receptionist", line: ["Incoming call", "AI answers 24/7", "Intent understood", "Resolved or routed"],
-    intro: "A 24/7 voice agent that answers every inbound call, helps the caller, and routes anyone who needs a human.",
-    caps: ["24/7 answering", "Business-specific knowledge", "Call qualification", "Appointment booking", "Human transfer", "Call transcription"],
-    stepsHead: "From ring to resolved.",
-    stepsSub: "Four steps, fully automatic — every caller answered, helped, and routed.",
-    steps: [["01", "Forward your number", "Point your inbound line to AtllasX in minutes."], ["02", "AtllasX answers 24/7", "Every call is picked up instantly — day, night, weekends, holidays."], ["03", "Understands & qualifies", "It answers from your knowledge base and qualifies the caller."], ["04", "Resolves or routes", "It books, answers, or warm-transfers the caller to the right person."]],
-    call: 2, callSub: "A live inbound conversation, start to finish.",
-    integHead: "Fits the way calls already reach you.",
-    integSub: "Point your inbound line at AtllasX and connect your tools.",
-    integ: [["Telephony", ["Call forwarding", "Business number"]], ["Knowledge", ["Business knowledge base", "Custom Q&A"]], ["Scheduling", ["Calendar booking", "Human transfer"]]],
-    faq: [["Does it really answer 24/7?", "Yes. AtllasX answers every incoming call around the clock — nights, weekends, and holidays included."], ["How does it know about my business?", "It responds from the knowledge base you provide, so callers get accurate answers in your business's voice."], ["Can it send callers to a human?", "Yes. AtllasX qualifies the caller and warm-transfers or routes them to the right person based on your rules."], ["Are calls recorded?", "Yes. Every call is transcribed and the outcome is logged inside the AtllasX dashboard."]],
+  intel: {
+    id: "intel", eyebrow: "Churn Intelligence",
+    h1: "Why they leave. From their own mouths.",
+    sub: "Every winback call ends with a logged cancel reason — saved or not. Exit surveys get single-digit response. Phone calls get answered.",
+    mock: "insights", line: ["Call happens", "Reason captured", "Structured & logged", "In your dashboard"],
+    intro: "A cancelled subscriber will tell a phone call what they'd never type into a survey box. AtllasX captures it on every call and hands it back as structured data.",
+    caps: ["Cancel reason on every completed call", "Competitor and price mentions captured", "Structured taxonomy — not free-text soup", "Full recordings and transcripts", "Dashboard, CSV export, and webhooks", "Product-team flags for feature gaps"],
+    stepsHead: "From conversation to churn report.",
+    stepsSub: "Every call is a data point. Here's the path.",
+    steps: [
+      ["01", "The conversation happens", "Saved or not, the customer says why they cancelled."],
+      ["02", "The reason is structured", "Price, usage, missing feature, competitor — tagged into a consistent taxonomy."],
+      ["03", "Signals are extracted", "Competitor names, price points, and feature requests are pulled out and labeled."],
+      ["04", "It lands where you work", "Dashboard, CSV, webhooks, CRM fields, and Slack — your churn report finally says why."],
+    ],
+    call: 2, callSub: "A call that didn't save the customer — and still produced the data that matters.",
+    integHead: "Your churn data, where you want it.",
+    integSub: "Structured output on every call, exportable everywhere.",
+    integ: [["In the dashboard", ["Reason breakdown", "Recordings & transcripts", "Outcome per call"]], ["Exports", ["CSV export", "Webhooks", "API access"]], ["Alerts", ["Slack notifications", "HubSpot sync", "Zapier"]]],
+    faq: [
+      ["Who owns the data?", "You do. Recordings, transcripts, and structured reasons are yours — export or delete them at any time."],
+      ["How accurate is the reason tagging?", "Every tag is attached to its recording and transcript, so you can audit any call in one click."],
+      ["Can my product team use this?", "Yes — feature-gap mentions are flagged and exportable, with the customer's exact words attached."],
+      ["What about PII?", "Subscriber data is used only to make and log your calls. Retention and deletion windows are configurable. See Trust for the full posture."],
+    ],
   },
 };
 
 const SOL_LINKS: Record<string, { to: string; label: string; title: string; blurb: string }> = {
-  speed: { to: "/speed-to-lead", label: "Speed to Lead", title: "Call leads in ~60s.", blurb: "Call new leads while their intent is still high — qualified and booked, 24/7." },
-  outbound: { to: "/outbound-calling", label: "Outbound Calling", title: "Work your lists.", blurb: "Turn existing contact lists into qualified conversations and booked next steps." },
-  receptionist: { to: "/ai-receptionist", label: "AI Receptionist", title: "Answer every call.", blurb: "Never send another inbound call to voicemail — answered, qualified, routed 24/7." },
+  how: { to: "/how-it-works", label: "How It Works", title: "Cancel. Call. Offer. Back.", blurb: "From cancellation event to reactivated subscription — automatically, in minutes." },
+  intel: { to: "/churn-intelligence", label: "Churn Intelligence", title: "Why they leave.", blurb: "Every call ends with a logged cancel reason. Your churn report finally says why." },
+  roi: { to: "/roi", label: "ROI", title: "You already paid for these customers.", blurb: "Winning one back costs a fraction of replacing them. Run your own numbers." },
 };
 
 function CallPlayer({ call }: { call: any }) {
@@ -876,12 +969,13 @@ function CallPlayer({ call }: { call: any }) {
       <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 9 }}>
         {call.transcript.map((row: any, i: number) => (
           <div key={i} style={{ opacity: playing ? (i <= tline ? 1 : 0.25) : 1, transition: "opacity .3s" }}>
-            <div className="ax-mono" style={{ fontSize: 9.5, letterSpacing: ".06em", marginBottom: 3, color: row[0] === "agent" ? "var(--ax-accent)" : "var(--ax-live)" }}>{row[0] === "agent" ? "AI AGENT" : "CALLER"}</div>
+            <div className="ax-mono" style={{ fontSize: 9.5, letterSpacing: ".06em", marginBottom: 3, color: row[0] === "agent" ? "var(--ax-accent)" : "var(--ax-live)" }}>{row[0] === "agent" ? "AI AGENT" : "CUSTOMER"}</div>
             <div style={{ fontSize: 13, color: "var(--ax-ink-2)", lineHeight: 1.45 }}>{row[1]}</div>
           </div>
         ))}
       </div>
-      <p className="ax-mono" style={{ fontSize: 10.5, color: "var(--ax-ink-3)", marginTop: 12 }}>Product demonstration. Callers are speaking with an AI agent.</p>
+      <div className="ax-mono" style={{ fontSize: 11, color: "var(--ax-live)", marginTop: 14, paddingTop: 12, borderTop: "1px solid var(--ax-line)" }}>{call.outcome}</div>
+      <p className="ax-mono" style={{ fontSize: 10.5, color: "var(--ax-ink-3)", marginTop: 8 }}>Product demonstration. Customers are speaking with a disclosed AI agent.</p>
     </div>
   );
 }
@@ -911,7 +1005,7 @@ function SolutionPage({ data }: { data: any }) {
   const card: React.CSSProperties = { display: "block", border: "1px solid var(--ax-line)", borderRadius: 16, padding: 26, background: "#fff" };
   return (
     <>
-      <DarkHeader eyebrow={data.eyebrow} title={data.h1} sub={data.sub} banner={data.banner}>
+      <DarkHeader eyebrow={data.eyebrow} title={data.h1} sub={data.sub}>
         <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap", alignItems: "center" }}>
           <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 22px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
           <button onClick={() => window.dispatchEvent(new CustomEvent("ax:livecall"))} className="ax-btn ax-btn-ghost" style={{ borderColor: "rgba(255,255,255,.28)", color: "#fff", padding: "13px 20px", cursor: "pointer" }}><Phone style={{ width: 15, height: 15 }} /> Get a live call</button>
@@ -959,7 +1053,7 @@ function SolutionPage({ data }: { data: any }) {
       {/* Hear a real call */}
       <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
         <div className="ax-wrap">
-          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>Hear a real call.</h2>
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>Hear a winback call.</h2>
           <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>{data.callSub}</p>
           <CallPlayer call={CALLS[data.call]} />
         </div>
@@ -980,7 +1074,6 @@ function SolutionPage({ data }: { data: any }) {
               </div>
             ))}
           </div>
-          <p style={{ color: "var(--ax-ink-3)", fontSize: 13, marginTop: 20 }}>Native HubSpot integration coming soon · SMS &amp; email follow-up available as custom workflows.</p>
         </div>
       </section>
 
@@ -992,10 +1085,10 @@ function SolutionPage({ data }: { data: any }) {
         </div>
       </section>
 
-      {/* Explore the platform */}
+      {/* Explore */}
       <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
         <div className="ax-wrap">
-          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>One platform. Three ways to grow.</h2>
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>Keep going.</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 18, marginTop: 40 }}>
             {others.map((k) => {
               const s = SOL_LINKS[k];
@@ -1010,8 +1103,8 @@ function SolutionPage({ data }: { data: any }) {
             })}
             <Link to="/pricing" style={card}>
               <div className="ax-mono" style={{ fontSize: 10.5, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ax-ink-3)" }}>Pricing</div>
-              <h3 style={{ fontSize: "1.25rem", margin: "12px 0 8px", letterSpacing: "-.02em" }}>Plans by call volume.</h3>
-              <p style={{ color: "var(--ax-ink-2)", fontSize: ".94rem", lineHeight: 1.5 }}>Every plan includes a monthly call allotment you can use anytime, any day.</p>
+              <h3 style={{ fontSize: "1.25rem", margin: "12px 0 8px", letterSpacing: "-.02em" }}>Priced on cancellations.</h3>
+              <p style={{ color: "var(--ax-ink-2)", fontSize: ".94rem", lineHeight: 1.5 }}>Plans sized by monthly winback volume. Every plan calls 100% of cancellations.</p>
               <span style={{ color: "var(--ax-accent)", fontWeight: 500, fontSize: 14, marginTop: 16, display: "inline-flex", alignItems: "center", gap: 6 }}>See pricing <ArrowRight style={{ width: 15, height: 15 }} /></span>
             </Link>
           </div>
@@ -1021,10 +1114,201 @@ function SolutionPage({ data }: { data: any }) {
   );
 }
 
+/* ============================== ROI Page ============================== */
+
+function money(n: number) {
+  return "$" + Math.round(n).toLocaleString("en-US");
+}
+
+function RoiCalculator() {
+  const [cancels, setCancels] = useState(500);
+  const [arpu, setArpu] = useState(49);
+  const [lifetime, setLifetime] = useState(12);
+
+  const rates: [string, number][] = [["Conservative", 0.05], ["Typical", 0.1], ["Strong", 0.2]];
+  const num = (v: string, fallback: number) => {
+    const n = Number(v);
+    return Number.isFinite(n) && n >= 0 ? n : fallback;
+  };
+  const inputStyle: React.CSSProperties = { width: "100%", padding: "12px 14px", borderRadius: 10, border: "1px solid var(--ax-line)", fontSize: 16, fontFamily: "var(--ax-body)", background: "#fff", boxSizing: "border-box" };
+  const label: React.CSSProperties = { fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--ax-ink-3)", marginBottom: 8, display: "block" };
+
+  return (
+    <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
+      <div className="ax-wrap">
+        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>Run your own numbers.</h2>
+        <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>Three inputs. The math is shown, and the assumptions are yours to change.</p>
+        <div className="ax-sol-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1.3fr", gap: 40, marginTop: 40, alignItems: "start" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <div>
+              <span className="ax-mono" style={label}>Cancellations per month</span>
+              <input type="number" min={0} value={cancels} onChange={(e) => setCancels(num(e.target.value, 0))} style={inputStyle} />
+            </div>
+            <div>
+              <span className="ax-mono" style={label}>Average revenue per subscriber ($/mo)</span>
+              <input type="number" min={0} value={arpu} onChange={(e) => setArpu(num(e.target.value, 0))} style={inputStyle} />
+            </div>
+            <div>
+              <span className="ax-mono" style={label}>Months a saved subscriber stays (avg)</span>
+              <input type="number" min={0} value={lifetime} onChange={(e) => setLifetime(num(e.target.value, 0))} style={inputStyle} />
+            </div>
+            <p style={{ fontSize: 12.5, color: "var(--ax-ink-3)", lineHeight: 1.55 }}>
+              Formula: cancellations × winback rate × revenue per subscriber × months retained × 12 months of cancellations. Winback rates vary by offer, price point, and audience — these tiers are planning assumptions, not a promise.
+            </p>
+          </div>
+          <div style={{ display: "grid", gap: 14 }}>
+            {rates.map(([name, r]) => {
+              const savedPerMonth = cancels * r;
+              const annual = savedPerMonth * arpu * lifetime * 12;
+              return (
+                <div key={name} style={{ border: "1px solid var(--ax-line)", borderRadius: 16, padding: "22px 24px", background: name === "Typical" ? "var(--ax-ink)" : "#fff", color: name === "Typical" ? "#fff" : "var(--ax-ink)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8 }}>
+                    <span className="ax-mono" style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: name === "Typical" ? "rgba(255,255,255,.6)" : "var(--ax-ink-3)" }}>{name} · {Math.round(r * 100)}% winback</span>
+                    <span className="ax-mono" style={{ fontSize: 12, color: name === "Typical" ? "rgba(255,255,255,.6)" : "var(--ax-ink-3)" }}>{Math.round(savedPerMonth).toLocaleString("en-US")} subscribers saved / mo</span>
+                  </div>
+                  <div style={{ fontFamily: "var(--ax-head)", fontWeight: 800, fontSize: "2.2rem", letterSpacing: "-.02em", marginTop: 10 }}>{money(annual)}<span style={{ fontSize: "1rem", fontWeight: 500, opacity: 0.6 }}> revenue recovered / yr</span></div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function RoiPage() {
+  const facts: [string, string][] = [
+    ["5–7×", "Acquiring a new customer costs five to seven times more than keeping one. A winback call spends pennies against that."],
+    ["30–60 days", "The winback window. After ~60 days, cancelled subscribers have replaced you — before that, they still answer."],
+    ["Phone > email", "Winback emails recover single digits. A ringing phone gets answered, and an answered call can negotiate."],
+  ];
+  return (
+    <>
+      <DarkHeader eyebrow="ROI" title="You already paid for these customers once." sub="Winning one back costs a fraction of replacing them. Run your own cancellation volume through the math.">
+        <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap", alignItems: "center" }}>
+          <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 22px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
+        </div>
+      </DarkHeader>
+      <RoiCalculator />
+      <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)", background: "var(--ax-paper-2)" }}>
+        <div className="ax-wrap">
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>Why winback wins.</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 18, marginTop: 40 }}>
+            {facts.map(([v, t]) => (
+              <div key={v} style={{ border: "1px solid var(--ax-line)", borderRadius: 16, padding: 26, background: "#fff" }}>
+                <div style={{ fontFamily: "var(--ax-head)", fontWeight: 800, fontSize: "1.9rem", letterSpacing: "-.02em" }}>{v}</div>
+                <p style={{ color: "var(--ax-ink-2)", fontSize: ".97rem", lineHeight: 1.6, marginTop: 12 }}>{t}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ color: "var(--ax-ink-3)", fontSize: 12.5, marginTop: 20, maxWidth: "80ch" }}>Figures above are subscription-industry benchmarks for planning. Your recovery numbers come from your own dashboard once you're live.</p>
+        </div>
+      </section>
+      <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
+        <div className="ax-wrap" style={{ textAlign: "center" }}>
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", maxWidth: "24ch", margin: "0 auto" }}>See the math on your own cancellations.</h2>
+          <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", margin: "16px auto 26px", maxWidth: "52ch" }}>Book a demo — we'll walk your last 90 days of cancellations through the calls that would have gone out.</p>
+          <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 24px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
+        </div>
+      </section>
+    </>
+  );
+}
+
+/* ============================== Trust Page ============================== */
+
+function TrustPage() {
+  const pillars: [string, string][] = [
+    ["Your customers only", "AtllasX calls people who subscribed to your product and just cancelled — an existing relationship, a known identity, contact details they gave you."],
+    ["AI disclosed on every call", "Every call opens by identifying itself as an AI assistant calling for your business. No pretending to be human."],
+    ["Opt-out, honored instantly", "'Don't call me again' ends it — the number is suppressed across all future campaigns, automatically."],
+    ["Quiet hours by time zone", "Calls go out inside calling windows appropriate to each customer's local time. A 2am cancel gets a morning call."],
+    ["Audit log on every call", "Recording, transcript, timestamp, outcome, and offer made — retained and exportable for every single call."],
+    ["Offer guardrails", "The AI can only extend offers you pre-approved. Every offer made is logged against your ladder."],
+  ];
+  const security: [string, string][] = [
+    ["Subscriber data, scoped", "Account data is used to make and log your winback calls. Nothing else."],
+    ["Retention you control", "Recording and transcript retention windows are configurable — including deletion on request."],
+    ["Export & delete anytime", "Your data is yours: full export by CSV or API, deletion on demand."],
+  ];
+  const refused = [
+    "Purchased or scraped contact lists",
+    "Calls to people who were never your customers",
+    "Cold outbound of any kind",
+    "Undisclosed AI on any call",
+  ];
+  return (
+    <>
+      <DarkHeader eyebrow="Trust & Compliance" title="We only call your customers. Never lists." sub="Winback calls go to people with an existing relationship with your business — the cleanest category of outbound there is. Here's the posture, in full.">
+        <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap", alignItems: "center" }}>
+          <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 22px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
+        </div>
+      </DarkHeader>
+
+      <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
+        <div className="ax-wrap">
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>Six commitments. Built in, not bolted on.</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 18, marginTop: 40 }}>
+            {pillars.map(([h, p], i) => (
+              <div key={h} style={{ border: "1px solid var(--ax-line)", borderRadius: 16, padding: 26, background: "#fff" }}>
+                <div className="ax-mono" style={{ fontSize: 11, color: "var(--ax-accent)", marginBottom: 12 }}>{String(i + 1).padStart(2, "0")}</div>
+                <h3 style={{ fontSize: "1.15rem", letterSpacing: "-.02em" }}>{h}</h3>
+                <p style={{ color: "var(--ax-ink-2)", fontSize: ".95rem", lineHeight: 1.6, marginTop: 8 }}>{p}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)", background: "var(--ax-paper-2)" }}>
+        <div className="ax-wrap">
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>Your subscribers' data, handled like it's yours. Because it is.</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 18, marginTop: 40 }}>
+            {security.map(([h, p]) => (
+              <div key={h} style={{ border: "1px solid var(--ax-line)", borderRadius: 16, padding: 26, background: "#fff" }}>
+                <h3 style={{ fontSize: "1.15rem", letterSpacing: "-.02em" }}>{h}</h3>
+                <p style={{ color: "var(--ax-ink-2)", fontSize: ".95rem", lineHeight: 1.6, marginTop: 8 }}>{p}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ color: "var(--ax-ink-3)", fontSize: 13, marginTop: 20 }}>Security documentation and data-processing details available on request — <a href="mailto:info@atllas.com" style={{ color: "var(--ax-accent)" }}>info@atllas.com</a>.</p>
+        </div>
+      </section>
+
+      <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
+        <div className="ax-wrap">
+          <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>What we refuse to do.</h2>
+          <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>The product only works because the calls are wanted. So these are hard no's:</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 14, marginTop: 32 }}>
+            {refused.map((r) => (
+              <div key={r} style={{ display: "flex", gap: 10, alignItems: "flex-start", border: "1px solid var(--ax-line)", borderRadius: 12, padding: "16px 18px", fontSize: 14.5, color: "var(--ax-ink-2)" }}>
+                <X style={{ width: 17, height: 17, color: "#e05d5d", flex: "none", marginTop: 2 }} /> {r}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+/* ============================== Pricing Page ============================== */
+
 function PricingPage() {
   return (
     <>
-      <DarkHeader eyebrow="Pricing" title="Plans that scale with your call volume." sub="Every plan includes a monthly call allotment you can use anytime. Book a demo and we'll size it to your lead flow." banner={bannerPricing} />
+      <DarkHeader eyebrow="Pricing" title="Priced on cancellations. Not calls." sub="Plans sized by monthly winback volume. Book a demo and we'll size it to your cancellation flow.">
+        <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap", alignItems: "center" }}>
+          <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 22px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
+          <button onClick={() => window.dispatchEvent(new CustomEvent("ax:livecall"))} className="ax-btn ax-btn-ghost" style={{ borderColor: "rgba(255,255,255,.28)", color: "#fff", padding: "13px 20px", cursor: "pointer" }}><Phone style={{ width: 15, height: 15 }} /> Get a live call</button>
+        </div>
+        <div className="ax-mono" style={{ display: "inline-block", marginTop: 26, fontSize: 13, color: "rgba(255,255,255,.72)", background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.12)", borderRadius: 10, padding: "12px 14px" }}>
+          {["Connect billing", "Approve offers", "Go live", "Watch saves land"].map((s, i, arr) => (
+            <span key={i}>{s}{i < arr.length - 1 && <span style={{ color: "#7e9bff", margin: "0 6px" }}>→</span>}</span>
+          ))}
+        </div>
+      </DarkHeader>
       <Pricing />
       <FAQ />
     </>
@@ -1037,10 +1321,15 @@ export default function App() {
       <Routes>
         <Route element={<SiteLayout />}>
           <Route index element={<HomePage />} />
-          <Route path="/speed-to-lead" element={<SolutionPage data={SOLUTION_PAGES.speed} />} />
-          <Route path="/outbound-calling" element={<SolutionPage data={SOLUTION_PAGES.outbound} />} />
-          <Route path="/ai-receptionist" element={<SolutionPage data={SOLUTION_PAGES.receptionist} />} />
+          <Route path="/how-it-works" element={<SolutionPage data={SOLUTION_PAGES.how} />} />
+          <Route path="/churn-intelligence" element={<SolutionPage data={SOLUTION_PAGES.intel} />} />
+          <Route path="/roi" element={<RoiPage />} />
           <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/trust" element={<TrustPage />} />
+          {/* Legacy routes → home */}
+          <Route path="/speed-to-lead" element={<Navigate to="/how-it-works" replace />} />
+          <Route path="/outbound-calling" element={<Navigate to="/how-it-works" replace />} />
+          <Route path="/ai-receptionist" element={<Navigate to="/how-it-works" replace />} />
           <Route path="*" element={<HomePage />} />
         </Route>
       </Routes>
