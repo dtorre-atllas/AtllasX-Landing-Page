@@ -23,7 +23,6 @@ import { Intercom } from "./components/Intercom";
 /* ============================== Constants ============================== */
 
 const DEMO_URL = "https://meetings-na2.hubspot.com/atllas/roundrobin-atllas?uuid=17d7d132-7147-4bc3-9aaa-d0aa0a242990";
-const GET_STARTED_URL = "https://app.atllasx.com/dashboard/ai-calling/create";
 const LOGIN_URL = "https://app.atllasx.com/authentication/login";
 const DOCS_URL = "https://docs.atllasx.com";
 
@@ -91,11 +90,10 @@ const REASONS: [string, number][] = [
   ["Other", 10],
 ];
 
-const PRICING = [
-  { name: "Champion", who: "Getting started with winback", price: "$499", calls: "3,000 winback calls", per: "per month", feat: false, points: ["Stripe & RevenueCat triggers", "Pre-approved offer ladder", "Cancel reasons on every call", "Recordings & transcripts", "Live video support (USA-based)"], note: "14-day money-back guarantee" },
-  { name: "Elite", who: "Scaling cancellation volume", price: "$799", calls: "5,000 winback calls", per: "per month", feat: true, points: ["Everything in Champion", "White-glove onboarding", "Custom offer scripting", "Slack & webhook alerts"], note: "Most popular" },
-  { name: "Platinum", who: "High-volume subscription businesses", price: "$1,499", calls: "10,000 winback calls", per: "per month", feat: false, points: ["Everything in Elite", "Dedicated success manager", "Monthly churn-insight report", "Highest self-serve volume"], note: "Best value" },
-  { name: "Enterprise", who: "Custom volume & terms", price: "Custom", calls: "10,000+ winback calls", per: "performance-aligned pricing", feat: false, points: ["Pricing aligned with recovered revenue", "Custom integrations", "Dedicated support", "Tailored onboarding"], note: "Talk to sales" },
+const PRICING_MODEL = [
+  { name: "Platform fee", price: "Flat", sub: "Sized to your cancellation volume", desc: "Covers setup, integrations, offer configuration, and the dashboard. Fixed and agreed up front — no seats, no tiers.", feat: false },
+  { name: "Per call", price: "10¢", sub: "Per winback call placed", desc: "Every dial at cost-level pricing, fully itemized. You see every call, its recording, and its outcome.", feat: false },
+  { name: "Recovered revenue", price: "20%", sub: "Of revenue we win back", desc: "Our biggest line item only exists when your revenue comes back. No recovery, no commission.", feat: true },
 ];
 
 const FAQ_ITEMS: [string, string][] = [
@@ -105,7 +103,9 @@ const FAQ_ITEMS: [string, string][] = [
   ["What happens when someone isn't saved?", "The reason is captured and logged — price, missing feature, competitor — and synced to your systems. Every call produces data, saved or not."],
   ["Which billing systems do you support?", "Stripe and RevenueCat natively. Cancellation events can also come from webhooks or CSV upload."],
   ["What if the customer doesn't answer?", "AtllasX retries on a schedule you control, within quiet hours. Every attempt is logged."],
-  ["Can it call my whole cancellation volume?", "Yes — 100% of cancellations, not a segment. Every plan is sized by monthly winback calls."],
+  ["How does pricing work?", "Three parts: a flat platform fee sized to your cancellation volume, 10¢ per call placed, and 20% of the revenue we recover. The commission is our biggest line item — it only exists when your revenue comes back."],
+  ["What's the guarantee?", "If AtllasX doesn't make you money, you don't pay. Our fee structure is built around recovered revenue — no recovery, no commission. And you can cancel anytime."],
+  ["Can it call my whole cancellation volume?", "Yes — 100% of cancellations, not a segment."],
   ["Are calls recorded?", "Yes. Every call is recorded, transcribed, and logged with its outcome and cancel reason."],
   ["Do you call anyone who isn't my customer?", "No. AtllasX only calls your own cancelled subscribers — never purchased lists, never cold contacts."],
   ["How long does setup take?", "Connect Stripe or RevenueCat, approve your offer ladder, and go live — most teams are calling the same day."],
@@ -351,11 +351,11 @@ function Hero() {
 
       <div className="ax-wrap" style={{ position: "relative", zIndex: 2, paddingTop: 200, paddingBottom: 160 }}>
         <Eyebrow light>Revenue recovery with AI calling</Eyebrow>
-        <h1 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, letterSpacing: "-.035em", lineHeight: 0.98, fontSize: "clamp(3rem, 7.5vw, 6rem)", margin: "22px 0 0", maxWidth: "13ch" }}>
-          They cancel.<br />We call.<br />They come back.
+        <h1 style={{ fontFamily: "var(--ax-head)", fontWeight: 800, letterSpacing: "-.035em", lineHeight: 1.02, fontSize: "clamp(2.8rem, 6.5vw, 5.2rem)", margin: "22px 0 0", maxWidth: "16ch" }}>
+          Recover cancelled subscriptions with AI calls.
         </h1>
-        <p style={{ color: "rgba(255,255,255,.78)", fontSize: "clamp(1.05rem,1.6vw,1.3rem)", maxWidth: "48ch", marginTop: 24, lineHeight: 1.5 }}>
-          For subscription businesses on Stripe or RevenueCat. Every cancelled subscriber gets a phone call in minutes — with an offer you approved.
+        <p style={{ color: "rgba(255,255,255,.78)", fontSize: "clamp(1.05rem,1.6vw,1.3rem)", maxWidth: "50ch", marginTop: 24, lineHeight: 1.5 }}>
+          For subscription businesses on Stripe or RevenueCat. Every cancelled subscriber gets a phone call instantly — with an offer you approved. Guaranteed results, or you don't pay.
         </p>
         <div style={{ display: "flex", gap: 12, marginTop: 30, flexWrap: "wrap", alignItems: "center" }}>
           <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 22px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
@@ -427,16 +427,70 @@ function Pillars() {
   );
 }
 
-function SaveCallSection() {
+/* Intent decay — published lead-response research, applied to the cancellation moment. */
+function IntentDecaySection() {
+  const bars: [string, number][] = [["5 min", 100], ["30 min", 10], ["1 hour", 4], ["24 hours", 1]];
+  const stats: [string, string][] = [
+    ["100×", "The odds of reaching someone collapse ~100× between minute 5 and minute 30 after a trigger event. (MIT / InsideSales Lead Response study)"],
+    ["21×", "Contact within 5 minutes makes a conversion conversation 21× more likely than at 30 minutes. (Lead Response Management research)"],
+    ["7×", "Responding within the hour makes a meaningful conversation 7× more likely than waiting even one hour more. (Harvard Business Review)"],
+  ];
   return (
     <section style={{ padding: "84px 0", borderTop: "1px solid var(--ax-line)" }}>
       <div className="ax-wrap">
-        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)" }}>This is what a save sounds like.</h2>
-        <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>A winback call, minutes after a Stripe cancellation. The AI is disclosed on every call.</p>
-        <CallPlayer call={CALLS[0]} />
-        <p style={{ marginTop: 20, fontSize: 14, color: "var(--ax-ink-3)" }}>
-          Want the real thing? <button onClick={() => window.dispatchEvent(new CustomEvent("ax:livecall"))} style={{ background: "none", border: "none", padding: 0, font: "inherit", color: "var(--ax-accent)", cursor: "pointer", fontWeight: 500 }}>Get the winback call yourself</button> or dial <a href="tel:+14159694084" style={{ color: "var(--ax-accent)", fontWeight: 500 }}>{PHONE}</a>.
+        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", maxWidth: "20ch" }}>Intent dies in minutes. So we don't wait.</h2>
+        <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "62ch", lineHeight: 1.55 }}>
+          A cancellation is a trigger event — the one moment your customer is thinking about you and willing to talk. Decades of response-time research say the same thing: the window closes in minutes.
         </p>
+        <div className="ax-sol-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: 40, marginTop: 40, alignItems: "center" }}>
+          <div style={{ border: "1px solid var(--ax-line)", borderRadius: 16, padding: "24px 26px", background: "#fff" }}>
+            <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--ax-ink-3)", marginBottom: 18 }}>Odds of a live conversation, by response time</div>
+            <div style={{ display: "flex", alignItems: "flex-end", gap: 18, height: 180 }}>
+              {bars.map(([label, h]) => (
+                <div key={label} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, height: "100%", justifyContent: "flex-end" }}>
+                  <div style={{ width: "100%", height: `${h}%`, minHeight: 4, borderRadius: 6, background: h === 100 ? "var(--ax-live)" : "var(--ax-accent)", opacity: h === 100 ? 1 : 0.55 }} />
+                  <span className="ax-mono" style={{ fontSize: 11, color: "var(--ax-ink-3)", whiteSpace: "nowrap" }}>{label}</span>
+                </div>
+              ))}
+            </div>
+            <p className="ax-mono" style={{ fontSize: 10, color: "var(--ax-ink-3)", marginTop: 16, lineHeight: 1.5 }}>Relative odds, published lead-response research (MIT/InsideSales; Harvard Business Review). Directional, not to scale.</p>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            {stats.map(([v, t]) => (
+              <div key={v} style={{ display: "grid", gridTemplateColumns: "84px 1fr", gap: 18, alignItems: "start", border: "1px solid var(--ax-line)", borderRadius: 14, padding: "18px 20px", background: "#fff" }}>
+                <div style={{ fontFamily: "var(--ax-head)", fontWeight: 800, fontSize: "1.7rem", letterSpacing: "-.02em" }}>{v}</div>
+                <p style={{ color: "var(--ax-ink-2)", fontSize: ".93rem", lineHeight: 1.55 }}>{t}</p>
+              </div>
+            ))}
+            <p style={{ color: "var(--ax-ink-2)", fontSize: ".97rem", lineHeight: 1.6, marginTop: 6 }}>
+              That's the entire reason AtllasX exists as a call, not a campaign: the cancel event fires, and the phone rings <em>while the decision is still soft</em> — not in tomorrow's email digest.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* The guarantee — performance-aligned pricing as proof, not slogan. */
+function GuaranteeSection() {
+  const points = ["Our fee is a share of revenue we actually recover", "Cancel anytime — no lock-in, no minimum term", "Your data, recordings, and churn insights stay yours"];
+  return (
+    <section className="ax-dark" style={{ padding: "84px 0" }}>
+      <div className="ax-wrap" style={{ textAlign: "center" }}>
+        <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(255,255,255,.5)", marginBottom: 18 }}>The guarantee</div>
+        <h2 style={{ fontSize: "clamp(2rem,4.5vw,3.4rem)", color: "#fff", maxWidth: "20ch", margin: "0 auto", lineHeight: 1.1 }}>If we don't make you money, you don't pay.</h2>
+        <p style={{ color: "rgba(255,255,255,.65)", fontSize: "1.05rem", margin: "20px auto 0", maxWidth: "56ch", lineHeight: 1.6 }}>
+          AtllasX is paid from the revenue it recovers. When nothing comes back, our biggest line item is zero. We believe AI should work this way — functional, in service of your business, and paid from the value it creates.
+        </p>
+        <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap", marginTop: 28, color: "rgba(255,255,255,.7)", fontSize: 13.5 }}>
+          {points.map((t) => (
+            <span key={t} style={{ display: "inline-flex", gap: 7, alignItems: "center" }}><Check style={{ width: 15, height: 15, color: "var(--ax-live)" }} /> {t}</span>
+          ))}
+        </div>
+        <div style={{ marginTop: 32 }}>
+          <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 24px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
+        </div>
       </div>
     </section>
   );
@@ -520,7 +574,7 @@ function WhoItsFor() {
 
 function StatsStrip() {
   const stats: [string, string][] = [
-    ["Minutes", "from cancel event to call"],
+    ["Instant", "trigger on the cancel event"],
     ["100%", "of cancellations called"],
     ["24/7", "nights, weekends, holidays"],
     ["Every call", "recorded, transcribed, logged"],
@@ -540,34 +594,37 @@ function StatsStrip() {
 }
 
 function Pricing() {
+  const included = ["Stripe & RevenueCat triggers", "Pre-approved offer ladder", "Cancel reasons on every call", "Recordings & transcripts", "Slack & webhook alerts", "White-glove onboarding"];
   return (
     <section id="pricing" style={{ padding: "96px 0", borderTop: "1px solid var(--ax-line)" }}>
       <div className="ax-wrap">
-        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Priced on cancellations. Not calls.</h2>
-        <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "60ch" }}>Plans sized by monthly winback volume. Every plan calls 100% of your cancellations.</p>
+        <h2 style={{ fontSize: "clamp(1.9rem,3.8vw,3rem)", marginTop: 16 }}>Pricing that only works if you do.</h2>
+        <p style={{ color: "var(--ax-ink-2)", fontSize: "1.05rem", marginTop: 14, maxWidth: "62ch" }}>Three parts, all on the table. Most of what you pay is a share of revenue that came back — if we don't make you money, you don't pay.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 18, marginTop: 46 }}>
-          {PRICING.map((p) => {
+          {PRICING_MODEL.map((p) => {
             const dark = p.feat;
             return (
               <div key={p.name} style={{ display: "flex", flexDirection: "column", background: dark ? "var(--ax-ink)" : "var(--ax-paper)", color: dark ? "#fff" : "var(--ax-ink)", border: "1px solid " + (dark ? "var(--ax-ink)" : "var(--ax-line)"), borderRadius: 18, padding: 26 }}>
-                {p.note && <div className="ax-mono" style={{ fontSize: 9.5, letterSpacing: ".06em", textTransform: "uppercase", color: dark ? "#fff" : "var(--ax-ink-3)", marginBottom: 10 }}>{p.note}</div>}
                 <div className="ax-mono" style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: dark ? "rgba(255,255,255,.6)" : "var(--ax-ink-2)" }}>{p.name}</div>
-                <div style={{ fontSize: 12.5, color: dark ? "rgba(255,255,255,.55)" : "var(--ax-ink-3)", marginTop: 4 }}>{p.who}</div>
-                <div style={{ fontFamily: "var(--ax-head)", fontWeight: 800, fontSize: "2.3rem", letterSpacing: "-.02em", marginTop: 16 }}>{p.price}{p.price !== "Custom" && <span style={{ fontSize: "1rem", fontWeight: 500, color: dark ? "rgba(255,255,255,.5)" : "var(--ax-ink-3)" }}> /mo</span>}</div>
-                <div style={{ margin: "16px 0", padding: "14px 0", borderTop: "1px solid " + (dark ? "rgba(255,255,255,.14)" : "var(--ax-line)"), borderBottom: "1px solid " + (dark ? "rgba(255,255,255,.14)" : "var(--ax-line)") }}>
-                  <div style={{ fontFamily: "var(--ax-head)", fontWeight: 700, fontSize: "1.25rem" }}>{p.calls}</div>
-                  <div style={{ fontSize: 12, color: dark ? "rgba(255,255,255,.5)" : "var(--ax-ink-3)", marginTop: 2 }}>{p.per}</div>
-                </div>
-                <ul style={{ listStyle: "none", padding: 0, margin: "4px 0 22px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-                  {p.points.map((pt) => (<li key={pt} style={{ display: "flex", gap: 9, fontSize: 13.5, color: dark ? "rgba(255,255,255,.8)" : "var(--ax-ink-2)" }}><Check style={{ width: 16, height: 16, color: "var(--ax-live)", flex: "none", marginTop: 1 }} /> {pt}</li>))}
-                </ul>
-                <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className={"ax-btn " + (dark ? "ax-btn-primary" : "ax-btn-ghost")} style={{ justifyContent: "center" }}>Book a demo</a>
-                {p.price !== "Custom" && <a href={GET_STARTED_URL} style={{ textAlign: "center", marginTop: 10, fontSize: 13, color: dark ? "rgba(255,255,255,.6)" : "var(--ax-ink-3)" }}>Get started</a>}
+                <div style={{ fontFamily: "var(--ax-head)", fontWeight: 800, fontSize: "2.3rem", letterSpacing: "-.02em", marginTop: 14 }}>{p.price}</div>
+                <div style={{ fontSize: 13, color: dark ? "rgba(255,255,255,.55)" : "var(--ax-ink-3)", marginTop: 4 }}>{p.sub}</div>
+                <p style={{ fontSize: 14, color: dark ? "rgba(255,255,255,.75)" : "var(--ax-ink-2)", lineHeight: 1.55, marginTop: 14, flex: 1 }}>{p.desc}</p>
               </div>
             );
           })}
         </div>
-        <p style={{ color: "var(--ax-ink-3)", fontSize: 13, marginTop: 22 }}>Connect Stripe or RevenueCat, approve your offers, go live — most teams call the same day.</p>
+        <div style={{ marginTop: 26, border: "1px solid var(--ax-line)", borderRadius: 16, padding: "22px 26px", display: "flex", flexWrap: "wrap", gap: 24, alignItems: "center", justifyContent: "space-between", background: "var(--ax-paper-2)" }}>
+          <div>
+            <div style={{ fontFamily: "var(--ax-head)", fontWeight: 700, fontSize: "1.15rem", letterSpacing: "-.02em" }}>Every engagement includes:</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px 22px", marginTop: 12 }}>
+              {included.map((pt) => (
+                <span key={pt} style={{ display: "inline-flex", gap: 8, alignItems: "center", fontSize: 13.5, color: "var(--ax-ink-2)" }}><Check style={{ width: 15, height: 15, color: "var(--ax-live)", flex: "none" }} /> {pt}</span>
+              ))}
+            </div>
+          </div>
+          <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "12px 22px", flex: "none" }}>Get your flat fee <ArrowRight style={{ width: 15, height: 15 }} /></a>
+        </div>
+        <p style={{ color: "var(--ax-ink-3)", fontSize: 13, marginTop: 22 }}>Connect Stripe or RevenueCat, approve your offers, go live — most teams call the same day. Cancel anytime.</p>
       </div>
     </section>
   );
@@ -616,14 +673,14 @@ function Footer() {
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(8,9,11,.7) 0%, rgba(8,9,11,.9) 60%, rgba(8,9,11,.96) 100%)", zIndex: 1 }} />
       <div className="ax-wrap" style={{ position: "relative", zIndex: 2 }}>
         <div style={{ textAlign: "center", padding: "92px 0 64px" }}>
-          <h2 style={{ fontSize: "clamp(2.1rem,5vw,3.4rem)", letterSpacing: "-.03em", lineHeight: 1.05, color: "#fff", maxWidth: "22ch", margin: "0 auto" }}>Cancelled customers still answer the phone. For about 30 days.</h2>
-          <p style={{ color: "rgba(255,255,255,.65)", fontSize: "1.05rem", margin: "18px auto 28px", maxWidth: "48ch" }}>Book a demo and we'll show you the calls on your own last 90 days of cancellations.</p>
+          <h2 style={{ fontSize: "clamp(2.1rem,5vw,3.4rem)", letterSpacing: "-.03em", lineHeight: 1.05, color: "#fff", maxWidth: "22ch", margin: "0 auto" }}>Recover the revenue you already earned.</h2>
+          <p style={{ color: "rgba(255,255,255,.65)", fontSize: "1.05rem", margin: "18px auto 28px", maxWidth: "50ch" }}>Book a demo and we'll run the math on your own cancellations. If AtllasX doesn't make you money, you don't pay.</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 24px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
             <button onClick={() => window.dispatchEvent(new CustomEvent("ax:livecall"))} className="ax-btn ax-btn-ghost" style={{ borderColor: "rgba(255,255,255,.28)", color: "#fff", padding: "13px 22px", cursor: "pointer" }}><Phone style={{ width: 15, height: 15 }} /> Get a live call</button>
           </div>
           <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap", marginTop: 26, color: "rgba(255,255,255,.5)", fontSize: 12.5 }}>
-            {["Same-day setup", "Cancel anytime", "Only calls your own customers"].map((t) => (
+            {["Guaranteed results or you don't pay", "Same-day setup", "Cancel anytime"].map((t) => (
               <span key={t} style={{ display: "inline-flex", gap: 6, alignItems: "center" }}><Check style={{ width: 14, height: 14 }} /> {t}</span>
             ))}
           </div>
@@ -747,7 +804,7 @@ function AnnouncementBar() {
 }
 
 const ROUTE_TITLES: Record<string, string> = {
-  "/": "AtllasX | Revenue Recovery with AI Calling — Stripe & RevenueCat",
+  "/": "AtllasX | Recover Cancelled Subscriptions with AI Calls",
   "/how-it-works": "How It Works | AtllasX",
   "/churn-intelligence": "Churn Intelligence | AtllasX",
   "/roi": "ROI | AtllasX",
@@ -812,11 +869,12 @@ function HomePage() {
     <>
       <Hero />
       <RecoveryFeed />
+      <IntentDecaySection />
       <Pillars />
-      <SaveCallSection />
       <IntelligenceSection />
       <WhoItsFor />
       <StatsStrip />
+      <GuaranteeSection />
       <Pricing />
       <FAQ />
     </>
@@ -1103,8 +1161,8 @@ function SolutionPage({ data }: { data: any }) {
             })}
             <Link to="/pricing" style={card}>
               <div className="ax-mono" style={{ fontSize: 10.5, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ax-ink-3)" }}>Pricing</div>
-              <h3 style={{ fontSize: "1.25rem", margin: "12px 0 8px", letterSpacing: "-.02em" }}>Priced on cancellations.</h3>
-              <p style={{ color: "var(--ax-ink-2)", fontSize: ".94rem", lineHeight: 1.5 }}>Plans sized by monthly winback volume. Every plan calls 100% of cancellations.</p>
+              <h3 style={{ fontSize: "1.25rem", margin: "12px 0 8px", letterSpacing: "-.02em" }}>You pay when it works.</h3>
+              <p style={{ color: "var(--ax-ink-2)", fontSize: ".94rem", lineHeight: 1.5 }}>Flat fee + 10¢ a call + 20% of recovered revenue. If we don't make you money, you don't pay.</p>
               <span style={{ color: "var(--ax-accent)", fontWeight: 500, fontSize: 14, marginTop: 16, display: "inline-flex", alignItems: "center", gap: 6 }}>See pricing <ArrowRight style={{ width: 15, height: 15 }} /></span>
             </Link>
           </div>
@@ -1298,7 +1356,7 @@ function TrustPage() {
 function PricingPage() {
   return (
     <>
-      <DarkHeader eyebrow="Pricing" title="Priced on cancellations. Not calls." sub="Plans sized by monthly winback volume. Book a demo and we'll size it to your cancellation flow.">
+      <DarkHeader eyebrow="Pricing" title="If we don't make you money, you don't pay." sub="A flat platform fee sized to your volume, 10¢ a call, and 20% of the revenue we recover. Our incentives are your incentives.">
         <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap", alignItems: "center" }}>
           <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ax-btn ax-btn-primary" style={{ padding: "13px 22px" }}>Book a demo <ArrowRight style={{ width: 16, height: 16 }} /></a>
           <button onClick={() => window.dispatchEvent(new CustomEvent("ax:livecall"))} className="ax-btn ax-btn-ghost" style={{ borderColor: "rgba(255,255,255,.28)", color: "#fff", padding: "13px 20px", cursor: "pointer" }}><Phone style={{ width: 15, height: 15 }} /> Get a live call</button>
