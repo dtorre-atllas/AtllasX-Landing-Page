@@ -1,71 +1,48 @@
-import { useEffect } from 'react';
-
+import { useEffect } from "react";
+type IntercomWindow = Window & {
+  Intercom?: ((...args: unknown[]) => void) & { q?: unknown[][] };
+  intercomSettings?: Record<string, string | boolean>;
+};
 export function Intercom() {
   useEffect(() => {
-    // Set Intercom settings
-    (window as any).intercomSettings = {
+    const w = window as IntercomWindow;
+    w.intercomSettings = {
       api_base: "https://api-iam.intercom.io",
       app_id: "i0g3zedr",
+      hide_default_launcher: true,
+      hide_notifications: true,
     };
-
-    // Load Intercom widget
-    const w = window as any;
-    const ic = w.Intercom;
-    
-    if (typeof ic === "function") {
-      ic('reattach_activator');
-      ic('update', w.intercomSettings);
+    if (w.Intercom) {
+      w.Intercom("reattach_activator");
+      w.Intercom("update", w.intercomSettings);
     } else {
-      const d = document;
-      const i = function(...args: any[]) {
-        i.c(args);
+      const queued = (...args: unknown[]) => {
+        queued.q.push(args);
       };
-      i.q = [] as any[];
-      i.c = function(args: any) {
-        i.q.push(args);
-      };
-      w.Intercom = i;
-      
-      const l = function() {
-        const s = d.createElement('script');
-        s.type = 'text/javascript';
-        s.async = true;
-        s.src = 'https://widget.intercom.io/widget/i0g3zedr';
-        const x = d.getElementsByTagName('script')[0];
-        x.parentNode!.insertBefore(s, x);
-      };
-      
-      if (document.readyState === 'complete') {
-        l();
-      } else if (w.attachEvent) {
-        w.attachEvent('onload', l);
-      } else {
-        w.addEventListener('load', l, false);
-      }
+      queued.q = [] as unknown[][];
+      w.Intercom = queued;
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = "https://widget.intercom.io/widget/i0g3zedr";
+      script.id = "hyzl-intercom";
+      document.head.appendChild(script);
     }
-
-    // Add custom CSS to position Intercom button above sticky CTA on mobile
-    const style = document.createElement('style');
-    style.textContent = `
-      @media (max-width: 1023px) {
-        #intercom-container .intercom-launcher-frame,
-        #intercom-container iframe[name*="intercom-launcher"] {
-          bottom: 130px !important;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Cleanup function
+    if (!document.getElementById("hyzl-analytics")) {
+      const script = document.createElement("script");
+      script.id = "hyzl-analytics";
+      script.async = true;
+      script.src = "https://t.contentsquare.net/uxa/d8165fcac00d7.js";
+      document.head.appendChild(script);
+    }
     return () => {
-      if ((window as any).Intercom) {
-        (window as any).Intercom('shutdown');
-      }
-      if (document.head.contains(style)) {
-        document.head.removeChild(style);
-      }
+      w.Intercom?.("shutdown");
     };
   }, []);
+  return null;
+}
 
-  return null; // This component doesn't render anything
+export function openChat() {
+  const w = window as IntercomWindow;
+  if (w.Intercom) w.Intercom("show");
+  else window.location.href = "mailto:info@atllas.com";
 }

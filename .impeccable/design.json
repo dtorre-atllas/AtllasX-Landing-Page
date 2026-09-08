@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-08T23:58:59.540318+00:00",
+  "title": "Design System: hyzl",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "oklch(15% 0.00107 197.14)",
+          "oklch(26.43% 0.00107 197.14)",
+          "oklch(37.86% 0.00107 197.14)",
+          "oklch(49.29% 0.00107 197.14)",
+          "oklch(60.71% 0.00107 197.14)",
+          "oklch(72.14% 0.00107 197.14)",
+          "oklch(83.57% 0.00107 197.14)",
+          "oklch(95% 0.00107 197.14)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.01038 268.19)",
+          "oklch(26.43% 0.01038 268.19)",
+          "oklch(37.86% 0.01038 268.19)",
+          "oklch(49.29% 0.01038 268.19)",
+          "oklch(60.71% 0.01038 268.19)",
+          "oklch(72.14% 0.01038 268.19)",
+          "oklch(83.57% 0.01038 268.19)",
+          "oklch(95% 0.01038 268.19)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "oklch(15% 0.00761 196.89)",
+          "oklch(26.43% 0.00761 196.89)",
+          "oklch(37.86% 0.00761 196.89)",
+          "oklch(49.29% 0.00761 196.89)",
+          "oklch(60.71% 0.00761 196.89)",
+          "oklch(72.14% 0.00761 196.89)",
+          "oklch(83.57% 0.00761 196.89)",
+          "oklch(95% 0.00761 196.89)"
+        ]
+      },
+      "green": {
+        "role": "primary",
+        "displayName": "Green",
+        "tonalRamp": [
+          "oklch(15% 0.11275 153.35)",
+          "oklch(26.43% 0.11275 153.35)",
+          "oklch(37.86% 0.11275 153.35)",
+          "oklch(49.29% 0.11275 153.35)",
+          "oklch(60.71% 0.11275 153.35)",
+          "oklch(72.14% 0.11275 153.35)",
+          "oklch(83.57% 0.11275 153.35)",
+          "oklch(95% 0.11275 153.35)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": [
+          "oklch(15% 0.00611 170.42)",
+          "oklch(26.43% 0.00611 170.42)",
+          "oklch(37.86% 0.00611 170.42)",
+          "oklch(49.29% 0.00611 170.42)",
+          "oklch(60.71% 0.00611 170.42)",
+          "oklch(72.14% 0.00611 170.42)",
+          "oklch(83.57% 0.00611 170.42)",
+          "oklch(95% 0.00611 170.42)"
+        ]
+      },
+      "green-hover": {
+        "role": "primary",
+        "displayName": "Green Hover",
+        "tonalRamp": [
+          "oklch(15% 0.09274 153.53)",
+          "oklch(26.43% 0.09274 153.53)",
+          "oklch(37.86% 0.09274 153.53)",
+          "oklch(49.29% 0.09274 153.53)",
+          "oklch(60.71% 0.09274 153.53)",
+          "oklch(72.14% 0.09274 153.53)",
+          "oklch(83.57% 0.09274 153.53)",
+          "oklch(95% 0.09274 153.53)"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "White",
+        "tonalRamp": [
+          "oklch(15% 0.00000 89.88)",
+          "oklch(26.43% 0.00000 89.88)",
+          "oklch(37.86% 0.00000 89.88)",
+          "oklch(49.29% 0.00000 89.88)",
+          "oklch(60.71% 0.00000 89.88)",
+          "oklch(72.14% 0.00000 89.88)",
+          "oklch(83.57% 0.00000 89.88)",
+          "oklch(95% 0.00000 89.88)"
+        ]
+      },
+      "sage-surface": {
+        "role": "neutral",
+        "displayName": "Sage Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00924 150.68)",
+          "oklch(26.43% 0.00924 150.68)",
+          "oklch(37.86% 0.00924 150.68)",
+          "oklch(49.29% 0.00924 150.68)",
+          "oklch(60.71% 0.00924 150.68)",
+          "oklch(72.14% 0.00924 150.68)",
+          "oklch(83.57% 0.00924 150.68)",
+          "oklch(95% 0.00924 150.68)"
+        ]
+      },
+      "workflow-rule": {
+        "role": "neutral",
+        "displayName": "Workflow Rule",
+        "tonalRamp": [
+          "oklch(15% 0.02394 151.80)",
+          "oklch(26.43% 0.02394 151.80)",
+          "oklch(37.86% 0.02394 151.80)",
+          "oklch(49.29% 0.02394 151.80)",
+          "oklch(60.71% 0.02394 151.80)",
+          "oklch(72.14% 0.02394 151.80)",
+          "oklch(83.57% 0.02394 151.80)",
+          "oklch(95% 0.02394 151.80)"
+        ]
+      },
+      "workflow-note": {
+        "role": "neutral",
+        "displayName": "Workflow Note",
+        "tonalRamp": [
+          "oklch(15% 0.02072 154.80)",
+          "oklch(26.43% 0.02072 154.80)",
+          "oklch(37.86% 0.02072 154.80)",
+          "oklch(49.29% 0.02072 154.80)",
+          "oklch(60.71% 0.02072 154.80)",
+          "oklch(72.14% 0.02072 154.80)",
+          "oklch(83.57% 0.02072 154.80)",
+          "oklch(95% 0.02072 154.80)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "page-headline": {
+        "displayName": "Page headline",
+        "purpose": "Shared supporting-page introductions."
+      },
+      "section-headline": {
+        "displayName": "Section headline",
+        "purpose": "Ruled evidence section headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Reading and process explanations."
+      }
+    },
+    "shadows": [
+      {
+        "name": "explanation-overlay",
+        "value": "0 12px 30px #16181d12",
+        "purpose": "Intervention explanation above the diagram."
+      },
+      {
+        "name": "mobile-navigation",
+        "value": "0 15px 30px #16181d0b",
+        "purpose": "Navigation overlay at mobile widths."
+      },
+      {
+        "name": "intervention-halo",
+        "value": "0 0 0 5px #f5f6f670",
+        "purpose": "Resting node halo; hover expands to 0 0 0 9px #23784622."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control-transition",
+        "value": "0.2s ease",
+        "purpose": "Action hover, sample selection, and FAQ icon rotation."
+      },
+      {
+        "name": "comparison-bar",
+        "value": "0.45s ease",
+        "purpose": "Scale change for illustrative cohort rates."
+      },
+      {
+        "name": "trace",
+        "value": "2s ease-out forwards",
+        "purpose": "User-started stroke trace with pause, resume, and replay; omitted under reduced motion."
+      },
+      {
+        "name": "note-entry",
+        "value": "0.2s ease-out",
+        "purpose": "Explanation opacity .4 to 1 and translateY(5px) to 0."
+      },
+      {
+        "name": "node-signal",
+        "value": "0.6s ease-out",
+        "purpose": "Brief expanded-node halo."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile-max",
+        "value": "760px"
+      },
+      {
+        "name": "compact-max",
+        "value": "1200px"
+      },
+      {
+        "name": "wide-min",
+        "value": "1700px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Canonical demo action with SVG arrow.",
+      "html": "<a class=\"ds-button\" href=\"/demo\">Book a demo<svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-7-7 7 7-7 7\"/></svg></a>",
+      "css": ".ds-button{display:inline-flex;align-items:center;justify-content:space-between;gap:28px;background:var(--green,#237846);color:white;padding:17px 24px;border-radius:40px;font:600 17px/1.4 var(--body,Manrope,sans-serif);text-decoration:none;transition:background .2s,transform .2s}.ds-button:hover{background:#185b34;transform:translateY(-2px)}.ds-button:focus-visible{outline:2px solid var(--green,#237846);outline-offset:5px;}@media(prefers-reduced-motion:reduce){.ds-button{transition:none}}"
+    },
+    {
+      "name": "Text link",
+      "kind": "button",
+      "refersTo": "text-link",
+      "description": "Quiet secondary navigation with a drawn arrow.",
+      "html": "<a class=\"ds-link\" href=\"/how-it-works\">See how it works<svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-7-7 7 7-7 7\"/></svg></a>",
+      "css": ".ds-link{display:inline-flex;align-items:center;gap:16px;color:var(--ink,#16181d);font:500 16px var(--body,Manrope,sans-serif);text-decoration:none}.ds-link:hover{color:var(--green,#237846)}.ds-link:focus-visible{outline:2px solid var(--green,#237846);outline-offset:5px;}"
+    },
+    {
+      "name": "Sample selector",
+      "kind": "custom",
+      "refersTo": "segment",
+      "description": "Selected and unselected sample states; preview is static, application supplies state changes.",
+      "html": "<div class=\"ds-segmented\" aria-label=\"Illustrative sample size\"><button aria-pressed=\"true\">Larger sample</button><button aria-pressed=\"false\">Early sample</button></div>",
+      "css": ".ds-segmented{display:inline-flex;padding:4px;border:1px solid var(--line,#c9cecc);border-radius:40px}.ds-segmented button{border:0;background:transparent;border-radius:32px;font:400 13px var(--body,Manrope,sans-serif);padding:11px 18px;color:var(--ink,#16181d);cursor:pointer;transition:background .2s,color .2s}.ds-segmented button[aria-pressed=\"true\"]{background:var(--ink,#16181d);color:var(--paper,#f5f6f6)}.ds-segmented button:focus-visible{outline:2px solid var(--green,#237846);outline-offset:5px;}@media(prefers-reduced-motion:reduce){.ds-segmented button{transition:none}}"
+    },
+    {
+      "name": "Desktop navigation",
+      "kind": "nav",
+      "description": "Concise navigation with the arrowless primary action.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Main navigation\"><a href=\"/how-it-works\">How it works</a><a href=\"/churn-intelligence\">Measurement</a><a class=\"ds-button\" href=\"/demo\">Book a demo</a></nav>",
+      "css": ".ds-button{display:inline-flex;align-items:center;justify-content:space-between;gap:28px;background:var(--green,#237846);color:white;padding:17px 24px;border-radius:40px;font:600 17px/1.4 var(--body,Manrope,sans-serif);text-decoration:none;transition:background .2s,transform .2s}.ds-button:hover{background:#185b34;transform:translateY(-2px)}.ds-button:focus-visible{outline:2px solid var(--green,#237846);outline-offset:5px;}@media(prefers-reduced-motion:reduce){.ds-button{transition:none}}.ds-nav{display:flex;align-items:center;gap:24px;font:400 15px var(--body,Manrope,sans-serif);color:var(--ink,#16181d)}.ds-nav>a:not(.ds-button){padding:12px 0;color:inherit;text-decoration:none}.ds-nav>a:not(.ds-button):hover{color:var(--green,#237846)}.ds-nav>a:focus-visible{outline:2px solid var(--green,#237846);outline-offset:5px;}.ds-nav .ds-button{font-size:18px;padding:13px 23px;gap:20px}"
+    },
+    {
+      "name": "Booking container",
+      "kind": "card",
+      "refersTo": "booking-panel",
+      "description": "Square sage container for the booking handoff.",
+      "html": "<div class=\"ds-booking\"><a class=\"ds-button\" href=\"/demo\">Book a demo<svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-7-7 7 7-7 7\"/></svg></a></div>",
+      "css": ".ds-button{display:inline-flex;align-items:center;justify-content:space-between;gap:28px;background:var(--green,#237846);color:white;padding:17px 24px;border-radius:40px;font:600 17px/1.4 var(--body,Manrope,sans-serif);text-decoration:none;transition:background .2s,transform .2s}.ds-button:hover{background:#185b34;transform:translateY(-2px)}.ds-button:focus-visible{outline:2px solid var(--green,#237846);outline-offset:5px;}@media(prefers-reduced-motion:reduce){.ds-button{transition:none}}.ds-booking{background:#e4eae5;padding:36px 40px}.ds-booking .ds-button{display:flex;margin-top:28px}@media(max-width:760px){.ds-booking{padding:26px}}"
+    },
+    {
+      "name": "FAQ disclosure",
+      "kind": "custom",
+      "description": "Native disclosure with a drawn plus and muted answer.",
+      "html": "<details class=\"ds-faq\"><summary>Does hyzl contact every customer?<span><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M12 5v14\"/></svg></span></summary><p>Outreach depends on billing status, eligibility, consent, and your workflow rules.</p></details>",
+      "css": ".ds-faq{border-bottom:1px solid var(--line,#c9cecc);color:var(--ink,#16181d);font-family:var(--body,Manrope,sans-serif)}.ds-faq summary{display:flex;align-items:center;justify-content:space-between;gap:25px;list-style:none;padding:25px 0;font-size:17px;cursor:pointer}.ds-faq summary::-webkit-details-marker{display:none}.ds-faq summary span{transition:transform .2s}.ds-faq[open] summary span{transform:rotate(45deg)}.ds-faq p{margin:0;font-size:15px;line-height:1.7;color:var(--muted,#535959);padding:0 40px 25px 0}.ds-faq summary:focus-visible{outline:2px solid var(--green,#237846);outline-offset:5px;}@media(prefers-reduced-motion:reduce){.ds-faq summary span{transition:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Scientific Publication",
+    "overview": "hyzl pairs the openness of a contemporary scientific publication with the scale of an engineering launch. Cool paper, measured rules, monumental headings, and a functional green make the interface feel precise and direct. Supporting pages retain the same materials and typography without reproducing the home composition.\n\nThe interface explains a process through labelled diagrams, comparison groups, ordered steps, and short disclosures. Its expressive material is a translucent recovery ribbon; the surrounding controls and text remain crisp. This record is derived from the final CSS cascade and React implementation, including the retained supplied SVG brand and contrast-safe control green.",
+    "keyCharacteristics": [
+      "Monumental Kanit headings with readable Manrope explanations.",
+      "Open editorial grids divided by fine rules.",
+      "Functional green for actions and the treated comparison group.",
+      "Translucent diagram material surrounded by flat interface surfaces.",
+      "Visible illustrative labels and user-controlled motion."
+    ],
+    "rules": [
+      {
+        "name": "The Functional Green Rule",
+        "body": "Use green to connect actions, treatment data, and the intervention; retain textual group labels so meaning does not depend on color.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Kanit carries headings and large results; Manrope carries explanations, controls, labels, and disclosures.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ruled Page Rule",
+        "body": "Separate reading groups with whitespace and fine rules; reserve filled containers for content with a distinct role, such as a message example or booking handoff.",
+        "section": "layout"
+      },
+      {
+        "name": "The Material Depth Rule",
+        "body": "Depth belongs to the ribbon and transient overlays; reading sections remain flat and ruled.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Visible Evidence Rule",
+        "body": "Keep synthetic examples visibly labelled and preserve uncertainty next to results; decorative treatment must never imply verified customer evidence.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** preserve the supplied SVG brand and use the darker functional green for readable actions.",
+      "**Do** pair Kanit headings with Manrope reading text and keep tracking no tighter than \u22120.04em.",
+      "**Do** preserve group labels, method disclosures, and inconclusive comparison states.",
+      "**Do** keep the diagram understandable before animation and when motion is reduced.",
+      "**Do** use drawn SVG icons with accessible action names and visible keyboard focus."
+    ],
+    "donts": [
+      "**Don't** replace labelled product explanations with decorative telemetry or unrelated imagery.",
+      "**Don't** invent customer evidence, testimonials, or transcript authenticity through visual presentation.",
+      "**Don't** introduce section kickers, hard offset shadows, glyph icons, or system display faces as house style.",
+      "**Don't** propagate one-off geometry, small incidental labels, or unused CSS selectors as reusable tokens."
+    ]
+  }
+}
