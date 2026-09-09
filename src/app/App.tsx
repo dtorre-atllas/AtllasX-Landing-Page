@@ -1,8 +1,7 @@
-import { ArrowUpRight, ArrowRight, X, Plus, Menu } from "lucide-react";
+import { ArrowUpRight, ArrowRight, X, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router";
-import { RecoveryStory } from "./site/RecoveryStory";
-import { Workflow } from "./site/Workflow";
+import { PortalHome } from "./site/PortalHome";
 import {
   DemoPage,
   HowPage,
@@ -50,6 +49,9 @@ function Header() {
         <Link to="/churn-intelligence">Measurement</Link>
         <DemoLink />
       </nav>
+      <Link className="portal-mobile-demo" to="/demo">
+        Book a demo
+      </Link>
       <button
         className="menu-toggle"
         aria-label={open ? "Close menu" : "Open menu"}
@@ -66,96 +68,6 @@ function Header() {
     </header>
   );
 }
-function Home() {
-  return (
-    <main id="main" tabIndex={-1} className="home-refined">
-      <section className="hero">
-        <div className="hero-top">
-          <h1>
-            Recover lost
-            <br />
-            revenue<span>.</span>
-          </h1>
-          <div className="hero-intro">
-            <p>
-              hyzl brings subscription customers back with AI. You pay only for
-              the revenue it adds.
-            </p>
-            <DemoLink />
-            <Link className="text-link" to="/how-it-works">
-              See how it works <Arrow />
-            </Link>
-            <small>For subscription apps on Stripe and RevenueCat</small>
-          </div>
-        </div>
-        <RecoveryStory />
-      </section>
-      <Workflow />
-      <section className="incentive section">
-        <h2>
-          Pay for the
-          <br />
-          difference<span>.</span>
-        </h2>
-        <div>
-          <p>
-            We verify purchases in your billing system and compare with
-            customers who receive no outreach. You pay a share of what hyzl
-            adds.
-          </p>
-          <div className="incentive-links">
-            <Link className="text-link" to="/churn-intelligence">
-              How we measure it <Arrow />
-            </Link>
-            <Link className="text-link" to="/pricing">
-              Pricing <Arrow />
-            </Link>
-          </div>
-        </div>
-      </section>
-      <FAQ />
-    </main>
-  );
-}
-
-function FAQ() {
-  const questions = [
-    [
-      "Is hyzl right for my app?",
-      "hyzl is built for consumer subscription apps using RevenueCat or Stripe. We’ll confirm the right setup in your demo.",
-    ],
-    [
-      "How do you know a customer wouldn’t have bought anyway?",
-      "We randomly leave some eligible customers uncontacted and compare the purchase rates. Customers who buy before outreach are tracked separately.",
-    ],
-    [
-      "Does hyzl contact every customer?",
-      "Outreach depends on billing status, eligibility, consent, and your workflow rules. Some customers buy on their own; some are held out for measurement; others are not contactable.",
-    ],
-    [
-      "Which workflows can I use today?",
-      "Signup Recovery is live on RevenueCat, and Cancellation Recovery runs on RevenueCat and Stripe. Flexible channel sequences, engagement-gated calls, and billing support are evolving. We’ll show the current capabilities for your setup.",
-    ],
-  ];
-  return (
-    <section className="faq section">
-      <h2>A few answers.</h2>
-      <div>
-        {questions.map(([q, a]) => (
-          <details key={q}>
-            <summary>
-              {q}
-              <span aria-hidden="true">
-                <Plus size={20} />
-              </span>
-            </summary>
-            <p>{a}</p>
-          </details>
-        ))}
-      </div>
-    </section>
-  );
-}
 function Footer() {
   const { pathname } = useLocation();
   return (
@@ -163,9 +75,9 @@ function Footer() {
       {pathname !== "/demo" && (
         <div className="closing">
           <h2>
-            Put intelligence
+            Give intent
             <br />
-            to work.
+            your attention.
           </h2>
           <DemoLink />
         </div>
@@ -238,14 +150,14 @@ function RouteEffects() {
 }
 export default function App() {
   return (
-    <>
+    <div className="portal-edition">
       <RouteEffects />
       <a className="skip-link" href="#main">
         Skip to content
       </a>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<PortalHome />} />
         <Route path="/how-it-works" element={<HowPage />} />
         <Route path="/churn-intelligence" element={<MeasurementPage />} />
         <Route
@@ -273,6 +185,6 @@ export default function App() {
       </Routes>
       <Footer />
       {import.meta.env.PROD && <Intercom />}
-    </>
+    </div>
   );
 }

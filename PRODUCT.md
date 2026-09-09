@@ -12,7 +12,7 @@ The attached product brief identifies founders and growth leads at consumer subs
 
 ## Product Purpose
 
-hyzl performs revenue recovery for subscription apps and measures incremental revenue against a randomized holdout. The public website must explain what hyzl does, convey the future of functional AI, and lead visitors to book a demo.
+hyzl acts on customer intent to create new revenue as well as recover and retain revenue. The user specifically identified abandoned paywalls, frontend and backend opportunities, speed to lead, and speed to first touch. Incremental revenue is measured against a randomized comparison group. The public website must explain what hyzl does, convey the future of functional AI, and lead visitors to book a demo.
 
 ## Operating Context
 
@@ -57,3 +57,7 @@ Creative direction, lead positioning, brand retention, technical base, and publi
 After reviewing a dark space exploration, the user rejected it as childish and said the first version was better. The bright scientific-publication design and flowing ribbon are restored. Clearer factual headline and plain comparison labels are retained. The discarded dark exploration is not visual authority.
 
 The user then authorized developing the restored ribbon into a Detect / Check / Act / Verify recovery story while substantially reducing surrounding homepage copy. The story is illustrative, purchases are conditional, and incremental measurement remains distinct from purchase confirmation.
+
+## Portal concept branch
+
+User explicitly approved a new two-portal website to compare against the existing ribbon version. With hyzl opens trigger-driven product cards; Without hyzl remains static. Lead with turning intent into revenue and timely attention, not only lost subscription revenue. Detection may be immediate; outreach still follows eligibility, organic-purchase wait windows, consent and timing rules. The new-lead scenario is illustrative and availability is setup-dependent. This worktree and branch are separate from the original concept.

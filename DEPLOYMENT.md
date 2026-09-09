@@ -2,6 +2,8 @@
 
 ## Current delivery
 
+The portal concept is isolated on `codex/hyzl-portals`, based on the preserved `codex/hyzl-redesign` branch. Review the comparison before choosing either version for deployment.
+
 This branch contains a complete React/Vite website. Build command: `npm run build`. Output: `dist`. No backend service or environment secrets are required for the public site.
 
 Existing destinations are retained:

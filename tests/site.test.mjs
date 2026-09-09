@@ -47,12 +47,13 @@ test("every public route ships useful HTML and route-specific metadata before Ja
 test("conversion and illustrative evidence remain honest in static HTML", async () => {
   const home = await readPage("/");
   const demo = await readPage("/demo");
-  assert.match(home, /Illustrative recovery/);
+  assert.match(home, /Explore with hyzl/);
+  assert.match(home, /Explore without hyzl/);
   assert.match(
     await readPage("/churn-intelligence"),
     /Illustrative data, not customer results/,
   );
-  assert.match(home, /Sample message, not a customer transcript/);
+  assert.match(home, /Turn intent/);
   assert.match(
     demo,
     /https:\/\/meetings-na2.hubspot.com\/d-torre\/hyzl-revenue-recovery/,

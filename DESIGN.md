@@ -1,223 +1,187 @@
 ---
-name: hyzl
-description: A bright scientific publication for functional AI and measured revenue recovery.
+name: hyzl — Portal edition
+description: A quiet architectural installation for customer intent and considered action.
 colors:
-  paper: "#f5f6f6"
-  ink: "#16181d"
-  muted: "#535959"
-  green: "#237846"
-  line: "#c9cecc"
-  green-hover: "#185b34"
+  paper: "#eceee9"
+  ink: "#202820"
+  muted: "#5f695f"
+  green: "#27593c"
+  line: "#c9d0c7"
+  action: "#243b2c"
+  action-hover: "#355840"
   white: "#ffffff"
-  sage-surface: "#e4eae5"
-  workflow-rule: "#627065"
-  workflow-note: "#b4c2b8"
+  card: "#fafbf8"
+  card-line: "#dce3d7"
+  switch-selected: "#263e2e"
+  switch-text: "#f7f9f5"
 typography:
-  page-headline:
-    fontFamily: "Kanit, sans-serif"
-    fontSize: "clamp(56px, 7.3vw, 122px)"
-    fontWeight: 400
-    lineHeight: 1.02
-    letterSpacing: "-0.04em"
-  section-headline:
-    fontFamily: "Kanit, sans-serif"
-    fontSize: "clamp(42px, 5.6vw, 94px)"
-    fontWeight: 400
-    lineHeight: 1.06
-    letterSpacing: "-0.035em"
-  process-title:
-    fontFamily: "Kanit, sans-serif"
-    fontSize: "36px"
-    fontWeight: 400
-    lineHeight: 1.15
-    letterSpacing: "-0.02em"
   body:
+    fontFamily: "Manrope, sans-serif"
+    fontSize: "14px"
+    fontWeight: 400
+    lineHeight: 1.7
+  reading:
     fontFamily: "Manrope, sans-serif"
     fontSize: "17px"
     fontWeight: 400
     lineHeight: 1.7
-  lead:
-    fontFamily: "Manrope, sans-serif"
-    fontSize: "22px"
-    fontWeight: 400
-    lineHeight: 1.5
   button:
     fontFamily: "Manrope, sans-serif"
-    fontSize: "17px"
-    fontWeight: 600
-    lineHeight: 1.4
-  text-link:
-    fontFamily: "Manrope, sans-serif"
-    fontSize: "16px"
+    fontSize: "14px"
     fontWeight: 500
+    lineHeight: 1.4
+  label:
+    fontFamily: "Manrope, sans-serif"
+    fontSize: "12px"
+    fontWeight: 400
 rounded:
-  pill: "40px"
-  segment: "32px"
+  control: "3px"
+  action: "4px"
+  card: "12px"
   circle: "50%"
 spacing:
-  inline-small: "8px"
-  inline: "16px"
-  control-gap: "20px"
+  inline: "8px"
+  compact: "12px"
+  group: "20px"
   content: "24px"
-  group: "32px"
-  section: "60px"
+  spacious: "30px"
 components:
   button-primary:
-    backgroundColor: "{colors.green}"
+    backgroundColor: "{colors.action}"
     textColor: "{colors.white}"
     typography: "{typography.button}"
-    rounded: "{rounded.pill}"
-    padding: "17px 24px"
+    rounded: "{rounded.action}"
+    padding: "15px 20px"
   button-primary-hover:
-    backgroundColor: "{colors.green-hover}"
-  text-link:
-    typography: "{typography.text-link}"
-    textColor: "{colors.ink}"
-  text-link-hover:
-    textColor: "{colors.green}"
-  segment:
+    backgroundColor: "{colors.action-hover}"
+  world-option:
     backgroundColor: "transparent"
-    rounded: "{rounded.segment}"
-    padding: "11px 18px"
-  segment-selected:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.paper}"
-  booking-panel:
-    backgroundColor: "{colors.sage-surface}"
-    padding: "36px 40px"
+    textColor: "{colors.muted}"
+    typography: "{typography.label}"
+    rounded: "{rounded.control}"
+    padding: "9px 17px"
+  world-option-selected:
+    backgroundColor: "{colors.switch-selected}"
+    textColor: "{colors.switch-text}"
+  action-card:
+    backgroundColor: "{colors.card}"
+    rounded: "{rounded.card}"
+    padding: "25px 30px 18px"
 ---
 
-# Design System: hyzl
+# Design System: hyzl — Portal edition
 
 ## Overview
 
-**Creative North Star: "The Scientific Publication"**
+**Creative North Star: "Paired Architectural Thresholds"**
 
-hyzl pairs the openness of a contemporary scientific publication with the scale of an engineering launch. Cool paper, measured rules, monumental headings, and a functional green make the interface feel precise and direct. Supporting pages retain the same materials and typography without reproducing the home composition.
+A quiet architectural installation gives customer intent a physical setting: pale mineral ground, machined graphite thresholds, forest signals, and photographic light. The supplied hyzl SVG remains the identity source. Manrope now carries both monumental statements and precise explanations; the earlier Kanit-and-ribbon system is not this edition’s visual authority.
 
-The interface explains a process through labelled diagrams, comparison groups, ordered steps, and short disclosures. Its expressive material is a translucent recovery ribbon with a restrained SVG path and travelling point; the surrounding controls and text remain crisp. Stage explanations connect the diagram to eligibility, action, and measurement without treating a purchase as proof of incremental lift. This record is derived from the final CSS cascade and React implementation, including the retained supplied SVG brand and contrast-safe control green.
+This record follows the shipped portal CSS cascade and shared routes. The user pinned the paired-threshold metaphor; implementation was code-led, and the generated scene is a production asset, not an approved UI comp. Supporting pages preserve open ruled reading structures while inheriting this edition’s palette, typography, and rectangular actions.
 
 **Key Characteristics:**
-- Monumental Kanit headings with readable Manrope explanations.
-- Open editorial grids divided by fine rules.
-- Functional green for actions and the treated comparison group.
-- Translucent diagram material surrounded by flat interface surfaces.
-- Visible illustrative labels and user-controlled motion.
+- Photographic architectural material with restrained interface chrome.
+- One type family, substantial headline scale, and compact functional labels.
+- Forest green identifies action and selected state.
+- Layered cards explain a workflow; reading sections stay open.
+- Manual controls and visible illustrative disclosures accompany motion.
 
 ## Colors
 
-Cool neutral materials carry the reading surface; green identifies action and treatment, while quieter gray-green marks the held-out comparison.
+Pale mineral neutrals support graphite architecture and subdued forest action.
 
 ### Primary
-- **Functional Green** (`green`): primary demo actions, treated data, intervention traces, focus outlines, and green punctuation. This is deliberately darker than the supplied logo green; preserve the SVG's embedded brand colors independently.
-- **Deep Action Green** (`green-hover`): primary action hover state.
+- **Forest** (`green`): functional links, selection cues, and focus outlines.
+- **Deep Forest Action** (`action`, `action-hover`): rectangular demo buttons and their hover response.
+- **Selected Forest** (`switch-selected`, `switch-text`): comparison state with a light readable label.
 
 ### Neutral
-- **Cool Paper** (`paper`): page canvas, navigation, and intervention explanation.
-- **Ink** (`ink`): primary text and selected sample controls.
-- **Muted Graphite** (`muted`): secondary explanations, sample details, and method notes.
-- **Measured Rule** (`line`): fine structural separators and control boundaries.
-- **White** (`white`): primary button text and active workflow text.
-- **Sage Surface** (`sage-surface`): quiet supporting bands, booking container, and footer.
-- **Workflow Rule** (`workflow-rule`) and **Workflow Note** (`workflow-note`): recurring dividers and supporting text inside the dark workflow surface. Its local dark green ground and pale message block are component materials, not a second accent palette.
+- **Mineral Paper** (`paper`): page canvas and mobile navigation.
+- **Graphite Ink** (`ink`): primary reading text; **Muted Sage Graphite** (`muted`): secondary explanations.
+- **Mineral Rule** (`line`): reading-section dividers.
+- **Porcelain Card** (`card`) and **Card Rule** (`card-line`): recurring workflow sheets and internal rows.
+- **White** (`white`): primary-action text. The supplied SVG’s embedded brand colors remain independent.
 
-**The Functional Green Rule.** Use green to connect actions, treatment data, and the intervention; retain textual group labels so meaning does not depend on color.
+**The Functional Forest Rule.** Use green for action, selection, and workflow meaning; retain text labels so color never carries the distinction alone.
 
 ## Typography
 
-**Display Font:** Kanit, sans-serif; locally bundled weight 400.
-**Body Font:** Manrope, sans-serif; locally bundled weights 400, 500, 600, and 700. There is no separate monospace family.
+**Display Font:** Manrope, sans-serif.
+**Body Font:** Manrope, sans-serif; locally bundled weights 400, 500, 600, and 700.
 
-The type ramp is intentionally non-modular: very large, close-set display text is balanced by smaller reading and measurement text. The frontmatter records reusable roles; component-specific headline sizes remain local.
+The ramp is deliberately non-modular: large, close-set statements lead compact workflow details and more generous supporting-page prose. Frontmatter contains reused reading/control roles; headline values below describe their actual surface roles rather than a universal heading token.
 
 ### Hierarchy
-- **Display:** the home heading uses `clamp(90px, 11.75vw, 210px)`, weight 400, line height 0.86, and tracking −0.04em. This is a home composition value, not the default for all headings.
-- **Headline:** page introductions and section headings use the frontmatter roles. Workflow headings have their own scale, `clamp(44px, 5.7vw, 96px)`, with line height 1.04.
-- **Title:** ordered process titles use the smaller Kanit role. Workflow story titles use `clamp(36px, 3.5vw, 58px)` with line height 1.08.
-- **Body:** explanatory copy uses Manrope, usually 17px with line height 1.65–1.7; lead paragraphs use the larger role. Local reading columns commonly cap at 440–510px.
-- **Label:** Manrope metadata is generally 11–14px on desktop. Keep small labels descriptive and subordinate; they are not invented section kickers.
-- **Numbers:** comparison rates and estimated lift use Kanit at weight 400; rate numerals use tabular figures. Units are visibly subordinate to values.
+- **Display:** home headline uses weight 500, `clamp(46px, 6.4vw, 92px)`, line height 1.09, tracking −0.04em. Mobile uses `clamp(40px, 10.8vw, 68px)` and line height 1.1.
+- **Headline:** supporting page introductions use weight 400, `clamp(50px, 6.6vw, 104px)`, line height 1.02; mobile is 48px. Thesis and closing headings use weight 500 with the same tight tracking.
+- **Title:** recurring action sheets use weight 500, `clamp(24px, 2.1vw, 31px)`, line height 1.18, tracking −0.03em; mobile is 26px.
+- **Body:** portal explanation commonly uses the body role; supporting process prose uses reading. Hero explanation is 16px desktop and 13px mobile. Text columns remain bounded rather than spanning the full scene.
+- **Label:** interface controls use 12–14px; selected steps add weight 600. Mobile workflow labels and disclosures have a 12px floor. Smaller desktop metadata exists but is not a general type token.
 
-**The Two Voices Rule.** Kanit carries headings and large results; Manrope carries explanations, controls, labels, and disclosures.
+**The Single Voice Rule.** Use Manrope throughout this edition; size, weight, and spacing establish hierarchy.
 
 ## Layout
 
-The site uses a fluid editorial grid. Desktop outer gutters are 3.65%; common content sections begin with a fine top rule and 36px top / 100px bottom padding. Spacing values are an observed vocabulary rather than a rigid arithmetic scale. There is no shared fixed-width page container.
+The home composition centers its headline over a photographic stage capped at 1360px with a 1672:941 ratio. Two semantic choice targets align to the physical thresholds. This paired topology belongs to the homepage experience, not to every site section.
 
-Supporting introductions use a 2:1 grid with an 8% gap. Workflow and explanation bodies use two columns; ordered process rows align a number, title, and explanation. The dedicated measurement route uses two cohort columns and a separate lift column (`1fr 1fr 1.1fr`). The home page instead places the recovery story directly beneath the hero, followed by scenario selection, the pricing principle, and FAQ; it does not repeat the measurement table or ordered process rows. The home heading/explanation division is locally 68.2% / 31.8%.
+The sticky header uses 5% gutters and an 84px height. The entered experience is 86% wide, capped at 1100px; its active body pairs a narrative rail with a card stack in a 0.82:1.18 grid and a 9% gap. Lower reading sections use 88% width capped at 1160px. Supporting page introductions retain a 2:1 editorial grid and ruled process rows.
 
-At 1200px and below, the home split becomes 65% / 35%, navigation gaps tighten, and some secondary cohort labels disappear while primary labels remain. At 760px and below, gutters become 6%, most editorial grids stack, the menu becomes a disclosure, and process rows retain a narrow number rail. Cohorts remain a two-column comparison; lift moves below them. Workflow selectors become full-width rows and the footer becomes two columns after a full-width brand line.
-
-Mobile page headlines use `clamp(46px, 11.5vw, 80px)` and line height 1.03; the home heading uses 18vw and line height 0.92. The home explanation stacks above two adjacent actions, with its audience note below. Section padding becomes 30px top / 58px bottom. At 1700px and above, the home composition receives additional vertical room.
-
-The recovery story keeps its controls beneath the ribbon on a shared rule, with an explanation below rather than an overlay. On mobile, all four stage buttons stay in one horizontal row with 48px minimum height; playback becomes an icon with an accessible name. The explanation reserves vertical space across stage changes. The home workflow pairs concise scenario copy with one sample message, retaining the availability note and transcript disclosure. These are surface-specific arrangements, not a template for every supporting route.
-
-**The Ruled Page Rule.** Separate reading groups with whitespace and fine rules; reserve filled containers for content with a distinct role, such as a message example or booking handoff.
+At 1050px the experience widens to 90% and its columns become 0.7:1.3. At 760px, the header is 74px, the entry scene is 350px tall, reading grids stack, the world switch moves beneath Back/Close, triggers become a two-column grid, and all four stages form a horizontal row above the sheet. A permanent demo link stays beside the menu toggle. The active scene reserves at least 870px; quiet mode reserves 650px. Supporting routes retain inherited 1200px/760px adjustments. Spacing is an observed vocabulary, not a strict arithmetic scale.
 
 ## Elevation & Depth
 
-Interface surfaces are principally flat. The ribbon image carries translucent shading and depth; preserve that material instead of imposing a global no-shadow prohibition. Mobile navigation uses a soft shadow because it overlays content. The recovery story uses flat linework, a paper-filled check node, and a ringed travelling point; its explanation remains in the page flow.
+The architectural raster supplies perspective, light, and grounded shadows. Workflow depth uses two rotated backing sheets beneath a soft-shadowed porcelain card. These are physical sheets, not hard offset shadow effects. On entry the scene becomes faint and blurred; quiet mode is faint and grayscale without transition. Reading sections use flat rules. The mobile menu has a soft overlay shadow.
 
 ### Shadow Vocabulary
-- **Mobile navigation:** `0 15px 30px #16181d0b`.
+- **Workflow sheet:** `0 24px 50px #253a2620`.
+- **Mobile menu:** `0 15px 30px #16181d0b`.
 
-**The Material Depth Rule.** Depth belongs to the ribbon and transient overlays; reading sections remain flat and ruled.
+**The Material Depth Rule.** Let the architectural image and workflow stack carry depth; keep reading sections flat and separated by space or fine rules.
 
 ## Shapes
 
-Primary actions and segmented controls use pill geometry; data marks, intervention nodes, and accent dots are circular. Message examples and booking panels are square cornered. Fine solid borders define content and controls; dashed guide lines locate the intervention in the diagram. Do not apply pill radii to editorial containers by default.
-
-The supplied header SVG is the identity source. The typographic footer name is an implemented footer treatment, not a replacement master logo. Arrows, menu, close, and disclosure marks use drawn Lucide SVG geometry. Shared arrows are 19px with 1.5 stroke width on desktop and 16px on mobile; contextual actions may override size. The hero action arrow is 25px desktop and 18px mobile. Keep decorative SVGs hidden from assistive technology and name the containing action.
+Compact controls have small rectangular corners; workflow sheets have gently rounded corners. Step marks are circular. The shared measurement selector retains pill geometry as a local data-control pattern; it does not make every action a pill. Booking panels and editorial sections remain square. Drawn SVG arrows, checks, and navigation icons carry functions; decorative SVGs are hidden from assistive technology.
 
 ## Components
 
 ### Buttons
 
-Confident pill actions use the primary frontmatter variant. Hover deepens green and lifts by 2px over 0.2s. Keyboard focus is a green 2px outline with a 5px offset. The navigation variant omits the arrow; its final desktop label is 18px with 13px / 23px padding. The prominent home action uses 24px text and 13px / 24px padding; mobile reduces it to 14px text and 15px / 20px padding. Reuse the normal button role elsewhere.
-
-### Text links
-
-Manrope medium-weight labels pair with drawn horizontal or diagonal arrows. Hover turns the text green. Footer links instead underline with a 5px offset. Focus uses the same visible outline as buttons. The standard demo action leads to the demo information page; the booking panel provides the external scheduler handoff.
-
-### Sample selector
-
-A ruled outer pill holds two inset pill buttons. Selected state uses ink with paper text and `aria-pressed`; it changes the comparison content in a polite live region. Preserve both the positive-lift and inconclusive examples, including the interval and illustrative-data disclosure. The build has no separate chip taxonomy or text-input system to inherit.
-
-### Cards / Containers
-
-The square booking panel uses sage fill and the documented padding; mobile padding is 26px. The illustrative message uses a pale local material (`#e7eee7`), ink text, and 24px / 26px padding, becoming 22px on mobile. It is a sample-message container with sender, message, and action row, not a testimonial. Reading sections use open rows rather than a general card grid.
+Primary actions use the frontmatter variant with forest hover and no lift. A 0.2s background transition gives feedback. Shared keyboard focus uses a 2px forest outline with 5px offset; portal choice targets use 6px offset. Navigation actions are smaller (13px, 13px/19px padding). Text actions remain transparent with drawn arrows.
 
 ### Navigation
 
-A supplied SVG brand sits opposite concise navigation and a demo action. Mobile opens a paper menu beneath the header with a fine bottom rule and soft shadow; its toggle exposes `aria-expanded` and switches between Menu and Close with SVG icons. A route change closes it. The skip link appears on keyboard focus; route transitions focus the main content.
+The supplied SVG sits opposite concise links and the demo action. Mobile uses an accessible Menu/Close toggle with `aria-expanded`, a mineral dropdown, and a permanent demo shortcut. Route changes close the menu and focus main content; a keyboard-visible skip link precedes it.
 
-### Recovery story
+### World switch and trigger controls
 
-The supplied raster ribbon retains its translucent material. Native SVG linework overlays it with a dashed intervention guide, outlined check node, travelling green point, and two endpoint marks. Persistent HTML labels identify “hyzl intervenes”, “With hyzl”, and “Without outreach”; a visible caption calls the recovery illustrative and the timing condensed.
+The bordered world switch has a 5px outer corner and inset 3px option corners. Pressed state fills forest. Four bordered trigger buttons identify abandoned paywall, new lead, cancellation, and failed payment. Selected triggers combine a darker border with sage fill and text. Both groups use `aria-pressed`; trigger changes reset to Signal and pause playback.
 
-Four text buttons—Detect, Check, Act, Verify—use `aria-pressed`, a green dot and underline for selection, ink active text, and muted inactive text. Each selects a meaningful stopping point, pauses playback, and exposes a Kanit title with a short Manrope explanation beneath the shared rule. Hover turns controls green; keyboard focus inherits the shared outline. Manual selection announces the explanation politely; automatic progress does not announce each stage.
+### Workflow stack
 
-Playback runs once over 20 seconds, with short cubic ease-out movements and reading pauses at the four stages. Pause/Play preserves elapsed progress; Replay appears at completion and restarts the story. Playback suspends while the figure is offscreen or the document is hidden. One requestAnimationFrame loop updates SVG geometry directly and React updates at stage changes. Reduced motion disables autoplay and hides playback, while all four manual stage controls, labels, and explanations remain available. The workflow body changes without entry animation on the home page.
+Four reusable sheet states—Signal, Decision, First touch, Outcome—share a heading, explanatory copy, and a bottom next-action row. Supporting content changes between event details, eligibility checks, an illustrative message, and purchase/measurement explanation. Two backing sheets convey a coherent physical stack. The message preview is an inset sage rectangle, not evidence of a real customer transcript. There is no text-input primitive in this build.
 
-### Workflow and disclosures
+The stage rail combines text, circular selection marks, and completed checks. Selecting a stage or Next action pauses for reading. Entry into With starts one sequence with 5500ms per stage; Play/Pause/Replay controls remain explicit. Timers suspend when hidden or below the observer’s 0.1 intersection threshold; resuming starts the current stage’s timer again. Card arrival lasts 0.55s with `cubic-bezier(0.16, 1, 0.3, 1)`. Reduced motion disables automatic progression and card/scene transitions while preserving manual access. Manual changes use the live-region path; automatic progression does not repeatedly announce content.
 
-Workflow selection uses three ruled rows on mobile or three horizontal options on desktop. Active state combines brighter text and a pale underline with `aria-pressed`; content updates in a polite live region. The home scenario options have plain text labels without number prefixes; their body pairs a short explanation with one illustrative sample message. Preserve the sample-message disclaimer and setup-dependent availability note. FAQ uses native details/summary; its drawn plus rotates 45 degrees on expansion and answers remain muted, generously led text.
+### Quiet comparison and return path
 
-**The Visible Evidence Rule.** Keep synthetic examples visibly labelled and preserve uncertainty next to results; decorative treatment must never imply verified customer evidence.
+Without remains a still explanation with no card sequence. The event appears in body copy beneath the heading; the note preserves the possibility of organic conversion. Both worlds remain switchable. Back, Close, and Escape dismiss the experience and restore focus to the selected side’s portal button.
+
+### Supporting reading and measurement
+
+Open ruled rows explain method, pricing, and contact constraints. The measurement component retains labelled cohorts, selectable examples, uncertainty, and a separate lift result. Booking uses a square sage panel and an external scheduler handoff. Preserve these functional patterns without importing the retired ribbon homepage.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** preserve the supplied SVG brand and use the darker functional green for readable actions.
-- **Do** pair Kanit headings with Manrope reading text and keep tracking no tighter than −0.04em.
-- **Do** preserve group labels, method disclosures, and inconclusive comparison states.
-- **Do** keep the diagram understandable before animation and when motion is reduced.
-- **Do** use drawn SVG icons with accessible action names and visible keyboard focus.
+- **Do** preserve the supplied SVG identity and architectural material.
+- **Do** keep both comparison choices labelled and keyboard reachable.
+- **Do** keep illustrative disclosures, organic-conversion context, and conditional outcome language beside the demonstration.
+- **Do** preserve manual workflow access, visible focus, and reduced-motion behavior.
 
 ### Don't:
-- **Don't** replace labelled product explanations with decorative telemetry or unrelated imagery.
-- **Don't** invent customer evidence, testimonials, or transcript authenticity through visual presentation.
-- **Don't** introduce section kickers, hard offset shadows, glyph icons, or system display faces as house style.
-- **Don't** propagate one-off geometry, small incidental labels, or unused CSS selectors as reusable tokens.
+- **Don’t** promote a purchase into proof of incremental revenue.
+- **Don’t** introduce decorative telemetry, cartoon worlds, or unrelated space imagery.
+- **Don’t** propagate kickers, glyph icons, hard offset shadows, or system display faces as house style.
+- **Don’t** inherit legacy ribbon geometry, Kanit typography, or tiny incidental metadata as reusable tokens.
 
-<!-- Evidence: src/styles/index.css (final cascade), src/app/App.tsx, src/app/site/RecoveryStory.tsx and RecoveryStory.css, Measurement.tsx, Workflow.tsx, Pages.tsx; PRODUCT.md and .impeccable/surfaces/source-src-app-app-tsx.md. Refreshed 2026-09-08 for the authorized recovery-story refinement. This document records implementation and does not certify the separate finish gate. Not canonized: unused legacy overlay/trace CSS and incidental small diagram labels are not reusable tokens. -->
+<!-- Evidence: src/app/site/PortalHome.css and PortalHome.tsx; src/app/App.tsx; src/styles/index.css; src/app/site/Pages.tsx; .impeccable/surfaces/portals.md; PRODUCT.md. Recorded 2026-09-08 from shipped implementation. Scope: portal-source only. Not canonized: residual desktop metadata below 12px and unused legacy ribbon styles; incidental small text is not a reusable type floor, and retired visual devices are not current authority. -->

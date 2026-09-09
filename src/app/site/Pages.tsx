@@ -6,9 +6,9 @@ const booking =
 export const pageMeta: Record<string, { title: string; description: string }> =
   {
     "/": {
-      title: "hyzl — Recover lost subscription revenue.",
+      title: "hyzl — Turn intent into revenue.",
       description:
-        "Functional AI for subscription apps. Recover lost revenue, measure incremental lift against a holdout, and pay a share of what hyzl adds.",
+        "Functional AI that acts on customer intent, from abandoned paywalls to renewals. Explore timely first touch, new revenue, and measurable incremental results.",
     },
     "/how-it-works": {
       title: "How it works — hyzl",
