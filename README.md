@@ -24,7 +24,7 @@ The build produces six prerendered public pages, a 404 page, self-hosted fonts, 
 
 ## Routes
 
-- `/` — positioning, recovery illustration, measurement example, workflow scenarios, FAQ
+- `/` — positioning, interactive recovery story, workflow scenarios, pricing explanation, FAQ
 - `/how-it-works` — recovery sequence
 - `/churn-intelligence` — holdout measurement and uncertainty
 - `/pricing` — incremental-revenue commercial model
@@ -37,6 +37,7 @@ Legacy route redirects are recorded in `vercel.json` and the client router. `/ro
 
 - `src/app/App.tsx`: shared shell, homepage, FAQ, navigation
 - `src/app/site/`: supporting pages and interactive examples
+- `src/app/site/RecoveryStory.tsx`: the four-stage ribbon story, pause/replay, offscreen suspension, and reduced-motion handling
 - `src/styles/index.css`: design tokens, responsive styles, reduced motion
 - `scripts/prerender.mjs`: static HTML and sitemap generation
 - `src/app/components/Intercom.tsx`: existing support/analytics integrations, production only

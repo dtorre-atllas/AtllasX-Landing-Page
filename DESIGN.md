@@ -95,7 +95,7 @@ components:
 
 hyzl pairs the openness of a contemporary scientific publication with the scale of an engineering launch. Cool paper, measured rules, monumental headings, and a functional green make the interface feel precise and direct. Supporting pages retain the same materials and typography without reproducing the home composition.
 
-The interface explains a process through labelled diagrams, comparison groups, ordered steps, and short disclosures. Its expressive material is a translucent recovery ribbon; the surrounding controls and text remain crisp. This record is derived from the final CSS cascade and React implementation, including the retained supplied SVG brand and contrast-safe control green.
+The interface explains a process through labelled diagrams, comparison groups, ordered steps, and short disclosures. Its expressive material is a translucent recovery ribbon with a restrained SVG path and travelling point; the surrounding controls and text remain crisp. Stage explanations connect the diagram to eligibility, action, and measurement without treating a purchase as proof of incremental lift. This record is derived from the final CSS cascade and React implementation, including the retained supplied SVG brand and contrast-safe control green.
 
 **Key Characteristics:**
 - Monumental Kanit headings with readable Manrope explanations.
@@ -144,28 +144,28 @@ The type ramp is intentionally non-modular: very large, close-set display text i
 
 The site uses a fluid editorial grid. Desktop outer gutters are 3.65%; common content sections begin with a fine top rule and 36px top / 100px bottom padding. Spacing values are an observed vocabulary rather than a rigid arithmetic scale. There is no shared fixed-width page container.
 
-Supporting introductions use a 2:1 grid with an 8% gap. Workflow and explanation bodies use two columns; ordered process rows align a number, title, and explanation. Measurement uses two cohort columns and a separate lift column (`1fr 1fr 1.1fr`). The home heading/explanation division is locally 68.2% / 31.8%.
+Supporting introductions use a 2:1 grid with an 8% gap. Workflow and explanation bodies use two columns; ordered process rows align a number, title, and explanation. The dedicated measurement route uses two cohort columns and a separate lift column (`1fr 1fr 1.1fr`). The home page instead places the recovery story directly beneath the hero, followed by scenario selection, the pricing principle, and FAQ; it does not repeat the measurement table or ordered process rows. The home heading/explanation division is locally 68.2% / 31.8%.
 
 At 1200px and below, the home split becomes 65% / 35%, navigation gaps tighten, and some secondary cohort labels disappear while primary labels remain. At 760px and below, gutters become 6%, most editorial grids stack, the menu becomes a disclosure, and process rows retain a narrow number rail. Cohorts remain a two-column comparison; lift moves below them. Workflow selectors become full-width rows and the footer becomes two columns after a full-width brand line.
 
 Mobile page headlines use `clamp(46px, 11.5vw, 80px)` and line height 1.03; the home heading uses 18vw and line height 0.92. The home explanation stacks above two adjacent actions, with its audience note below. Section padding becomes 30px top / 58px bottom. At 1700px and above, the home composition receives additional vertical room.
 
+The recovery story keeps its controls beneath the ribbon on a shared rule, with an explanation below rather than an overlay. On mobile, all four stage buttons stay in one horizontal row with 48px minimum height; playback becomes an icon with an accessible name. The explanation reserves vertical space across stage changes. The home workflow pairs concise scenario copy with one sample message, retaining the availability note and transcript disclosure. These are surface-specific arrangements, not a template for every supporting route.
+
 **The Ruled Page Rule.** Separate reading groups with whitespace and fine rules; reserve filled containers for content with a distinct role, such as a message example or booking handoff.
 
 ## Elevation & Depth
 
-Interface surfaces are principally flat. The ribbon image carries translucent shading and depth; preserve that material instead of imposing a global no-shadow prohibition. The intervention explanation and mobile navigation use soft shadows because they overlay content. The intervention node has a soft halo, with a brief signal on expansion.
+Interface surfaces are principally flat. The ribbon image carries translucent shading and depth; preserve that material instead of imposing a global no-shadow prohibition. Mobile navigation uses a soft shadow because it overlays content. The recovery story uses flat linework, a paper-filled check node, and a ringed travelling point; its explanation remains in the page flow.
 
 ### Shadow Vocabulary
-- **Explanation overlay:** `0 12px 30px #16181d12`.
 - **Mobile navigation:** `0 15px 30px #16181d0b`.
-- **Intervention halo:** `0 0 0 5px #f5f6f670`, expanding on hover to `0 0 0 9px #23784622`.
 
 **The Material Depth Rule.** Depth belongs to the ribbon and transient overlays; reading sections remain flat and ruled.
 
 ## Shapes
 
-Primary actions and segmented controls use pill geometry; data marks, intervention nodes, and accent dots are circular. Message examples, booking panels, and explanation overlays are square cornered. Fine solid borders define content and controls; dashed guide lines locate the intervention in the diagram. Do not apply pill radii to editorial containers by default.
+Primary actions and segmented controls use pill geometry; data marks, intervention nodes, and accent dots are circular. Message examples and booking panels are square cornered. Fine solid borders define content and controls; dashed guide lines locate the intervention in the diagram. Do not apply pill radii to editorial containers by default.
 
 The supplied header SVG is the identity source. The typographic footer name is an implemented footer treatment, not a replacement master logo. Arrows, menu, close, and disclosure marks use drawn Lucide SVG geometry. Shared arrows are 19px with 1.5 stroke width on desktop and 16px on mobile; contextual actions may override size. The hero action arrow is 25px desktop and 18px mobile. Keep decorative SVGs hidden from assistive technology and name the containing action.
 
@@ -191,13 +191,17 @@ The square booking panel uses sage fill and the documented padding; mobile paddi
 
 A supplied SVG brand sits opposite concise navigation and a demo action. Mobile opens a paper menu beneath the header with a fine bottom rule and soft shadow; its toggle exposes `aria-expanded` and switches between Menu and Close with SVG icons. A route change closes it. The skip link appears on keyboard focus; route transitions focus the main content.
 
-### Recovery diagram
+### Recovery story
 
-The static ribbon image and HTML labels remain the primary explanation. The labelled intervention node opens a bordered explanatory overlay, which closes using its SVG close control, the node, or Escape. A two-second SVG trace (`ease-out`) starts on opening, can pause/resume, and can replay after completion. Labels and diagram remain present throughout. Reduced motion suppresses the trace and its playback control, disables animation/transitions globally, and switches scrolling to immediate behavior.
+The supplied raster ribbon retains its translucent material. Native SVG linework overlays it with a dashed intervention guide, outlined check node, travelling green point, and two endpoint marks. Persistent HTML labels identify “hyzl intervenes”, “With hyzl”, and “Without outreach”; a visible caption calls the recovery illustrative and the timing condensed.
+
+Four text buttons—Detect, Check, Act, Verify—use `aria-pressed`, a green dot and underline for selection, ink active text, and muted inactive text. Each selects a meaningful stopping point, pauses playback, and exposes a Kanit title with a short Manrope explanation beneath the shared rule. Hover turns controls green; keyboard focus inherits the shared outline. Manual selection announces the explanation politely; automatic progress does not announce each stage.
+
+Playback runs once over 20 seconds, with short cubic ease-out movements and reading pauses at the four stages. Pause/Play preserves elapsed progress; Replay appears at completion and restarts the story. Playback suspends while the figure is offscreen or the document is hidden. One requestAnimationFrame loop updates SVG geometry directly and React updates at stage changes. Reduced motion disables autoplay and hides playback, while all four manual stage controls, labels, and explanations remain available. The workflow body changes without entry animation on the home page.
 
 ### Workflow and disclosures
 
-Workflow selection uses three ruled rows on mobile or three horizontal options on desktop. Active state combines brighter text and a pale underline with `aria-pressed`; content updates in a polite live region. Keep scenario numbers and illustrative captions attached to the example. FAQ uses native details/summary; its drawn plus rotates 45 degrees on expansion and answers remain muted, generously led text.
+Workflow selection uses three ruled rows on mobile or three horizontal options on desktop. Active state combines brighter text and a pale underline with `aria-pressed`; content updates in a polite live region. The home scenario options have plain text labels without number prefixes; their body pairs a short explanation with one illustrative sample message. Preserve the sample-message disclaimer and setup-dependent availability note. FAQ uses native details/summary; its drawn plus rotates 45 degrees on expansion and answers remain muted, generously led text.
 
 **The Visible Evidence Rule.** Keep synthetic examples visibly labelled and preserve uncertainty next to results; decorative treatment must never imply verified customer evidence.
 
@@ -216,4 +220,4 @@ Workflow selection uses three ruled rows on mobile or three horizontal options o
 - **Don't** introduce section kickers, hard offset shadows, glyph icons, or system display faces as house style.
 - **Don't** propagate one-off geometry, small incidental labels, or unused CSS selectors as reusable tokens.
 
-<!-- Evidence: src/styles/index.css (final cascade), src/app/App.tsx, src/app/site/Measurement.tsx, Workflow.tsx, Pages.tsx; PRODUCT.md and ../.impeccable/planning/surface-contract.md. Recorded 2026-09-08. Visual review fixes 1–7 resolved according to ../.impeccable/review/finish-verdict.md. Automated comparison/persistence remains unresolved; this system document is not a passed finish gate. -->
+<!-- Evidence: src/styles/index.css (final cascade), src/app/App.tsx, src/app/site/RecoveryStory.tsx and RecoveryStory.css, Measurement.tsx, Workflow.tsx, Pages.tsx; PRODUCT.md and .impeccable/surfaces/source-src-app-app-tsx.md. Refreshed 2026-09-08 for the authorized recovery-story refinement. This document records implementation and does not certify the separate finish gate. Not canonized: unused legacy overlay/trace CSS and incidental small diagram labels are not reusable tokens. -->

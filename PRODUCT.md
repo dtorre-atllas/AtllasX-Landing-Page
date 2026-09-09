@@ -55,3 +55,5 @@ Creative direction, lead positioning, brand retention, technical base, and publi
 ## Latest design decision
 
 After reviewing a dark space exploration, the user rejected it as childish and said the first version was better. The bright scientific-publication design and flowing ribbon are restored. Clearer factual headline and plain comparison labels are retained. The discarded dark exploration is not visual authority.
+
+The user then authorized developing the restored ribbon into a Detect / Check / Act / Verify recovery story while substantially reducing surrounding homepage copy. The story is illustrative, purchases are conditional, and incremental measurement remains distinct from purchase confirmation.

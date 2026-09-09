@@ -1,8 +1,7 @@
 import { ArrowUpRight, ArrowRight, X, Plus, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router";
-import ribbons from "../assets/recovery-ribbons.png";
-import { Measurement } from "./site/Measurement";
+import { RecoveryStory } from "./site/RecoveryStory";
 import { Workflow } from "./site/Workflow";
 import {
   DemoPage,
@@ -67,129 +66,9 @@ function Header() {
     </header>
   );
 }
-function RecoveryFigure() {
-  const [open, setOpen] = useState(false);
-  const [running, setRunning] = useState(false);
-  const [paused, setPaused] = useState(false);
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => {
-      setReduced(preference.matches);
-      if (preference.matches) setRunning(false);
-    };
-    update();
-    preference.addEventListener("change", update);
-    return () => preference.removeEventListener("change", update);
-  }, []);
-  useEffect(() => {
-    if (!open) return;
-    const close = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-        setRunning(false);
-      }
-    };
-    document.addEventListener("keydown", close);
-    return () => document.removeEventListener("keydown", close);
-  }, [open]);
-  const toggle = () => {
-    setOpen(!open);
-    setPaused(false);
-    setRunning(!open && !reduced);
-  };
-  return (
-    <figure
-      className="recovery-figure"
-      aria-label="Illustration comparing customers reached by hyzl with a randomized holdout group over time"
-    >
-      <img
-        className="recovery-ribbons"
-        src={ribbons}
-        alt=""
-        width="2172"
-        height="724"
-        {...{ fetchpriority: "high" }}
-      />
-      {open && running && (
-        <svg
-          className="recovery-trace"
-          viewBox="0 0 1000 300"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-          style={{ animationPlayState: paused ? "paused" : "running" }}
-        >
-          <path d="M 467 130 C 640 128 727 42 911 29" pathLength="1" />
-          <path
-            className="control-trace"
-            d="M 467 130 C 623 161 731 184 911 164"
-            pathLength="1"
-            onAnimationEnd={() => setRunning(false)}
-          />
-        </svg>
-      )}
-      <div className="outreach-marker">
-        <span>Outreach</span>
-        <i />
-        <button
-          aria-label="Explain the outreach point"
-          aria-expanded={open}
-          aria-controls="outreach-note"
-          onClick={toggle}
-        />
-        <i className="lower-guide" />
-      </div>
-      <span className="endpoint treated-end" aria-hidden="true" />
-      <span className="endpoint control-end" aria-hidden="true" />
-      {open && (
-        <div className="outreach-note" id="outreach-note">
-          <button
-            className="note-close"
-            aria-label="Close outreach explanation"
-            onClick={() => {
-              setOpen(false);
-              setRunning(false);
-            }}
-          >
-            <X size={18} aria-hidden="true" />
-          </button>
-          <strong>See what hyzl adds.</strong>
-          <p>
-            We randomly leave some eligible customers without outreach.
-            Comparing the two groups shows what hyzl adds.
-          </p>
-          {!reduced && (
-            <button
-              className="trace-control"
-              onClick={() => {
-                if (running) setPaused(!paused);
-                else {
-                  setRunning(true);
-                  setPaused(false);
-                }
-              }}
-            >
-              {running
-                ? paused
-                  ? "Resume trace"
-                  : "Pause trace"
-                : "Replay trace"}
-            </button>
-          )}
-        </div>
-      )}
-      <span className="ribbon-label treated">With hyzl</span>
-      <span className="ribbon-label control">Without hyzl</span>
-      <figcaption>Illustrative diagram</figcaption>
-      <div className="time-axis">
-        Time <ArrowRight size={18} aria-hidden="true" />
-      </div>
-    </figure>
-  );
-}
 function Home() {
   return (
-    <main id="main" tabIndex={-1}>
+    <main id="main" tabIndex={-1} className="home-refined">
       <section className="hero">
         <div className="hero-top">
           <h1>
@@ -209,33 +88,29 @@ function Home() {
             <small>For subscription apps on Stripe and RevenueCat</small>
           </div>
         </div>
-        <RecoveryFigure />
-      </section>
-      <section className="proof section">
-        <div className="section-heading">
-          <h2>
-            The result is the difference<span className="accent-period">.</span>
-          </h2>
-          <p>Every purchase is confirmed in your billing system.</p>
-        </div>
-        <Measurement />
+        <RecoveryStory />
       </section>
       <Workflow />
       <section className="incentive section">
         <h2>
-          We earn
+          Pay for the
           <br />
-          when you do<span>.</span>
+          difference<span>.</span>
         </h2>
         <div>
           <p>
-            hyzl does the recovery work. You pay a share of the incremental
-            revenue it adds.
+            We verify purchases in your billing system and compare with
+            customers who receive no outreach. You pay a share of what hyzl
+            adds.
           </p>
-          <Link className="text-link" to="/pricing">
-            How the model works{" "}
-            <ArrowUpRight className="inline-arrow" aria-hidden="true" />
-          </Link>
+          <div className="incentive-links">
+            <Link className="text-link" to="/churn-intelligence">
+              How we measure it <Arrow />
+            </Link>
+            <Link className="text-link" to="/pricing">
+              Pricing <Arrow />
+            </Link>
+          </div>
         </div>
       </section>
       <FAQ />
@@ -247,11 +122,11 @@ function FAQ() {
   const questions = [
     [
       "Is hyzl right for my app?",
-      "hyzl is built for consumer subscription apps using RevenueCat or Stripe. We’ll review your billing setup, customer volume, and recovery opportunities during the demo.",
+      "hyzl is built for consumer subscription apps using RevenueCat or Stripe. We’ll confirm the right setup in your demo.",
     ],
     [
       "How do you know a customer wouldn’t have bought anyway?",
-      "We leave a randomized group of eligible customers uncontacted. Comparing their purchase rate with the treated group helps estimate the revenue added by hyzl. Customers who buy during the initial wait window are tracked separately.",
+      "We randomly leave some eligible customers uncontacted and compare the purchase rates. Customers who buy before outreach are tracked separately.",
     ],
     [
       "Does hyzl contact every customer?",
@@ -261,18 +136,10 @@ function FAQ() {
       "Which workflows can I use today?",
       "Signup Recovery is live on RevenueCat, and Cancellation Recovery runs on RevenueCat and Stripe. Flexible channel sequences, engagement-gated calls, and billing support are evolving. We’ll show the current capabilities for your setup.",
     ],
-    [
-      "How do we get started?",
-      "Book a demo. We’ll work through the integration, choose a workflow, and agree the offer, contact rules, measurement, and commercial terms together.",
-    ],
   ];
   return (
     <section className="faq section">
-      <h2>
-        A few useful
-        <br />
-        answers.
-      </h2>
+      <h2>A few answers.</h2>
       <div>
         {questions.map(([q, a]) => (
           <details key={q}>

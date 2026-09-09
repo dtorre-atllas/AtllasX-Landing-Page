@@ -3,11 +3,11 @@ import { useState } from "react";
 import { Link } from "react-router";
 const cases = [
   {
-    name: "Signup recovery",
+    name: "Missed signups",
     number: "01",
-    title: "Interest deserves a second chance.",
+    title: "They leave. You follow up.",
     description:
-      "Someone reaches your paywall and leaves. Give them time to buy on their own, then follow up if they are still unpaid and eligible.",
+      "Reach eligible customers who leave your paywall, after giving them time to buy on their own.",
     event: "Paywall abandoned",
     wait: "Wait for an organic purchase",
     verify: "Still unpaid · consent checked",
@@ -17,11 +17,11 @@ const cases = [
     detail: "Offers and timing are agreed with your team.",
   },
   {
-    name: "Cancellation recovery",
+    name: "Cancellations",
     number: "02",
-    title: "A cancellation can start a conversation.",
+    title: "Understand why they’re leaving.",
     description:
-      "Before access ends, understand what changed. A relevant offer can give a customer a reason to stay.",
+      "Find out what changed and offer a relevant reason to stay before access ends.",
     event: "Cancellation received",
     wait: "Check the recovery window",
     verify: "Subscription status verified",
@@ -31,11 +31,11 @@ const cases = [
     detail: "Discounts, pauses, and plan changes depend on your setup.",
   },
   {
-    name: "Payment recovery",
+    name: "Failed payments",
     number: "03",
-    title: "A failed payment needn’t be goodbye.",
+    title: "Keep a failed payment from ending it.",
     description:
-      "When a renewal fails or a subscription lapses, help the customer take the next useful step.",
+      "Help eligible customers update their payment details or restart their subscription.",
     event: "Renewal failed",
     wait: "Check the payment state",
     verify: "Unresolved · eligibility checked",
@@ -52,16 +52,10 @@ export function Workflow() {
     <section className="workflow-section">
       <div className="workflow-heading">
         <h2>
-          Built for the
+          Bring subscribers
           <br />
-          moment that matters.
+          back.
         </h2>
-        <p>
-          A missed signup. A cancellation.
-          <br />A payment that didn’t go through.
-          <br />
-          Different moments, one measurable outcome.
-        </p>
       </div>
       <div className="workflow-tabs" aria-label="Recovery scenarios">
         {cases.map((c, i) => (
@@ -70,7 +64,6 @@ export function Workflow() {
             aria-pressed={active === i}
             onClick={() => setActive(i)}
           >
-            <span>{c.number}</span>
             {c.name}
             <ArrowUpRight className="inline-arrow" aria-hidden="true" />
           </button>
@@ -86,24 +79,6 @@ export function Workflow() {
           </Link>
         </div>
         <div className="case-study">
-          <div className="case-caption">
-            <span>Illustrative scenario</span>
-            <span>{item.number} / 03</span>
-          </div>
-          <ol className="case-sequence">
-            <li>
-              {item.event}
-              <span>Received</span>
-            </li>
-            <li>
-              {item.wait}
-              <span>Wait</span>
-            </li>
-            <li>
-              {item.verify}
-              <span>Verified</span>
-            </li>
-          </ol>
           <div className="message-example">
             <div className="message-from">
               <span className="legend-dot green" /> Your app · via hyzl
@@ -120,8 +95,8 @@ export function Workflow() {
         </div>
       </div>
       <p className="workflow-note">
-        Channel sequences and engagement-gated calling are being rolled out.
-        We’ll confirm the right setup for your app.
+        Workflows and channels depend on your setup. We’ll confirm availability
+        in your demo.
       </p>
     </section>
   );

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-08T23:58:59.540318+00:00",
+  "generatedAt": "2026-09-09T00:27:24.653292+00:00",
   "title": "Design System: hyzl",
   "extensions": {
     "colorMeta": {
@@ -161,19 +161,9 @@
     },
     "shadows": [
       {
-        "name": "explanation-overlay",
-        "value": "0 12px 30px #16181d12",
-        "purpose": "Intervention explanation above the diagram."
-      },
-      {
         "name": "mobile-navigation",
         "value": "0 15px 30px #16181d0b",
         "purpose": "Navigation overlay at mobile widths."
-      },
-      {
-        "name": "intervention-halo",
-        "value": "0 0 0 5px #f5f6f670",
-        "purpose": "Resting node halo; hover expands to 0 0 0 9px #23784622."
       }
     ],
     "motion": [
@@ -188,19 +178,9 @@
         "purpose": "Scale change for illustrative cohort rates."
       },
       {
-        "name": "trace",
-        "value": "2s ease-out forwards",
-        "purpose": "User-started stroke trace with pause, resume, and replay; omitted under reduced motion."
-      },
-      {
-        "name": "note-entry",
-        "value": "0.2s ease-out",
-        "purpose": "Explanation opacity .4 to 1 and translateY(5px) to 0."
-      },
-      {
-        "name": "node-signal",
-        "value": "0.6s ease-out",
-        "purpose": "Brief expanded-node halo."
+        "name": "recovery-story",
+        "value": "20000ms; cubic ease-out movement with stage holds",
+        "purpose": "One pass with Pause/Play and Replay; suspended offscreen or while document is hidden. Manual stage selection pauses. Reduced motion keeps manual static selection and omits playback."
       }
     ],
     "breakpoints": [
@@ -264,11 +244,18 @@
       "description": "Native disclosure with a drawn plus and muted answer.",
       "html": "<details class=\"ds-faq\"><summary>Does hyzl contact every customer?<span><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M12 5v14\"/></svg></span></summary><p>Outreach depends on billing status, eligibility, consent, and your workflow rules.</p></details>",
       "css": ".ds-faq{border-bottom:1px solid var(--line,#c9cecc);color:var(--ink,#16181d);font-family:var(--body,Manrope,sans-serif)}.ds-faq summary{display:flex;align-items:center;justify-content:space-between;gap:25px;list-style:none;padding:25px 0;font-size:17px;cursor:pointer}.ds-faq summary::-webkit-details-marker{display:none}.ds-faq summary span{transition:transform .2s}.ds-faq[open] summary span{transform:rotate(45deg)}.ds-faq p{margin:0;font-size:15px;line-height:1.7;color:var(--muted,#535959);padding:0 40px 25px 0}.ds-faq summary:focus-visible{outline:2px solid var(--green,#237846);outline-offset:5px;}@media(prefers-reduced-motion:reduce){.ds-faq summary span{transition:none}}"
+    },
+    {
+      "name": "Recovery stage controls",
+      "kind": "custom",
+      "description": "Four ruled stage controls and the selected explanation. Static preview; React supplies selection and bounded playback in the application.",
+      "html": "<div class=\"ds-story\"><div class=\"ds-story-steps\" role=\"group\" aria-label=\"Explore the recovery steps\"><button type=\"button\" aria-pressed=\"true\"><span aria-hidden=\"true\"></span>Detect</button><button type=\"button\" aria-pressed=\"false\"><span aria-hidden=\"true\"></span>Check</button><button type=\"button\" aria-pressed=\"false\"><span aria-hidden=\"true\"></span>Act</button><button type=\"button\" aria-pressed=\"false\"><span aria-hidden=\"true\"></span>Verify</button></div><div class=\"ds-story-explanation\"><h2>A customer leaves the paywall.</h2><p>hyzl spots the missed signup. First, it gives the customer time to buy on their own.</p></div><p class=\"ds-story-caption\">Illustrative recovery. Timing condensed; outcomes vary.</p></div>",
+      "css": ".ds-story{color:var(--ink,#16181d);font-family:var(--body,Manrope,sans-serif)}.ds-story-steps{display:flex;gap:clamp(24px,5vw,90px);border-bottom:1px solid var(--line,#c9cecc)}.ds-story-steps button{position:relative;display:flex;align-items:center;gap:10px;border:0;background:none;padding:18px 0;font:400 15px var(--body,Manrope,sans-serif);color:var(--muted,#535959);cursor:pointer}.ds-story-steps button:after{content:\"\";position:absolute;bottom:-1px;left:0;right:0;height:2px;background:transparent}.ds-story-steps button span{width:5px;height:5px;border-radius:50%;background:#abb4ae}.ds-story-steps button[aria-pressed=\"true\"]{color:var(--ink,#16181d)}.ds-story-steps button[aria-pressed=\"true\"]:after,.ds-story-steps button[aria-pressed=\"true\"] span{background:var(--green,#237846)}.ds-story-steps button:hover{color:var(--green,#237846)}.ds-story-steps button:focus-visible{outline:2px solid var(--green,#237846);outline-offset:5px}.ds-story-explanation{padding-top:25px;min-height:128px}.ds-story-explanation h2{margin:0;font:400 clamp(25px,2.5vw,40px)/1.15 var(--display,Kanit,sans-serif);letter-spacing:-.025em}.ds-story-explanation p{margin:12px 0 0;max-width:740px;font-size:15px;line-height:1.65;color:var(--muted,#535959)}.ds-story-caption{margin:22px 0 0;font-size:11px;color:var(--muted,#535959)}@media(max-width:760px){.ds-story-steps{justify-content:space-between;gap:8px}.ds-story-steps button{font-size:12px;gap:5px;min-height:48px}.ds-story-steps button span{width:4px;height:4px}.ds-story-explanation{padding-top:22px;min-height:160px}.ds-story-explanation h2{font-size:26px;line-height:1.2;max-width:330px}.ds-story-explanation p{font-size:13px;margin-top:10px}.ds-story-caption{font-size:10px;margin-top:16px}}"
     }
   ],
   "narrative": {
     "northStar": "The Scientific Publication",
-    "overview": "hyzl pairs the openness of a contemporary scientific publication with the scale of an engineering launch. Cool paper, measured rules, monumental headings, and a functional green make the interface feel precise and direct. Supporting pages retain the same materials and typography without reproducing the home composition.\n\nThe interface explains a process through labelled diagrams, comparison groups, ordered steps, and short disclosures. Its expressive material is a translucent recovery ribbon; the surrounding controls and text remain crisp. This record is derived from the final CSS cascade and React implementation, including the retained supplied SVG brand and contrast-safe control green.",
+    "overview": "hyzl pairs the openness of a contemporary scientific publication with the scale of an engineering launch. Cool paper, measured rules, monumental headings, and a functional green make the interface feel precise and direct. Supporting pages retain the same materials and typography without reproducing the home composition.\n\nThe interface explains a process through labelled diagrams, comparison groups, ordered steps, and short disclosures. Its expressive material is a translucent recovery ribbon with a restrained SVG path and travelling point; the surrounding controls and text remain crisp. Stage explanations connect the diagram to eligibility, action, and measurement without treating a purchase as proof of incremental lift. This record is derived from the final CSS cascade and React implementation, including the retained supplied SVG brand and contrast-safe control green.",
     "keyCharacteristics": [
       "Monumental Kanit headings with readable Manrope explanations.",
       "Open editorial grids divided by fine rules.",
@@ -305,7 +292,7 @@
     ],
     "dos": [
       "**Do** preserve the supplied SVG brand and use the darker functional green for readable actions.",
-      "**Do** pair Kanit headings with Manrope reading text and keep tracking no tighter than \u22120.04em.",
+      "**Do** pair Kanit headings with Manrope reading text and keep tracking no tighter than −0.04em.",
       "**Do** preserve group labels, method disclosures, and inconclusive comparison states.",
       "**Do** keep the diagram understandable before animation and when motion is reduced.",
       "**Do** use drawn SVG icons with accessible action names and visible keyboard focus."
