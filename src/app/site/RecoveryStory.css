@@ -1,0 +1,299 @@
+.recovery-story {
+  margin: 4px -1.1% 0;
+}
+.story-canvas {
+  position: relative;
+  height: clamp(300px, 27vw, 470px);
+}
+.story-ribbons {
+  position: absolute;
+  width: 95.7%;
+  height: 100%;
+  top: -20px;
+  left: 0;
+  object-fit: fill;
+  mix-blend-mode: darken;
+  filter: brightness(1.09);
+}
+.story-linework {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.story-guide {
+  fill: none;
+  stroke: #87958c;
+  stroke-width: 0.7;
+  stroke-dasharray: 2 3;
+}
+.story-travel {
+  fill: none;
+  stroke: url(#story-trace-color);
+  stroke-width: 1.1;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.story-check-node {
+  fill: var(--paper);
+  stroke: #527b60;
+  stroke-width: 0.8;
+}
+.story-cursor {
+  fill: var(--green);
+}
+.story-cursor-ring {
+  fill: var(--paper);
+  stroke: var(--green);
+  stroke-width: 1;
+}
+.story-intervention,
+.story-result-label,
+.story-control-label {
+  position: absolute;
+  font-size: 13px;
+}
+.story-intervention {
+  left: 46.7%;
+  top: 9%;
+  transform: translateX(-50%);
+  color: var(--muted);
+}
+.story-result-label {
+  right: 0;
+  top: 8%;
+  color: var(--green);
+}
+.story-control-label {
+  right: 0;
+  top: 62%;
+  color: var(--muted);
+}
+.story-console {
+  margin: -12px 1.1% 0;
+  padding-bottom: 48px;
+}
+.story-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  border-bottom: 1px solid var(--line);
+}
+.story-steps {
+  display: flex;
+  gap: clamp(24px, 5vw, 90px);
+}
+.story-steps button {
+  position: relative;
+  border: 0;
+  background: none;
+  padding: 18px 0;
+  font-size: 15px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.story-steps button::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+}
+.story-steps button[aria-pressed="true"] {
+  color: var(--ink);
+}
+.story-steps button[aria-pressed="true"]::after {
+  background: var(--green);
+}
+.story-step-mark {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #abb4ae;
+}
+.story-steps button[aria-pressed="true"] .story-step-mark {
+  background: var(--green);
+}
+.story-steps button:hover {
+  color: var(--green);
+}
+.story-playback {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 0;
+  background: transparent;
+  padding: 14px 0 14px 14px;
+  font-size: 12px;
+  min-width: 75px;
+  color: var(--muted);
+}
+.story-playback:hover {
+  color: var(--green);
+}
+.story-explanation {
+  padding-top: 25px;
+  min-height: 128px;
+}
+.story-explanation h2 {
+  font: 400 clamp(25px, 2.5vw, 40px)/1.15 var(--display);
+  letter-spacing: -0.025em;
+}
+.story-explanation p {
+  margin-top: 12px;
+  max-width: 740px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.story-console figcaption {
+  margin-top: 22px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.home-refined .incentive {
+  border-top: 0;
+  padding-top: 90px;
+  padding-bottom: 90px;
+}
+.home-refined .incentive-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.home-refined .faq {
+  border-top: 0;
+  padding-top: 25px;
+}
+.home-refined .workflow-heading {
+  display: block;
+}
+.home-refined .workflow-section {
+  padding-top: 65px;
+  padding-bottom: 55px;
+}
+.home-refined .workflow-heading h2 {
+  font-size: clamp(44px, 5.7vw, 96px);
+}
+.home-refined .case-study {
+  padding-top: 0;
+}
+.home-refined .message-example {
+  margin-top: 0;
+}
+.home-refined .workflow-note {
+  border-top: 0;
+  margin-top: 40px;
+  padding-top: 0;
+}
+.home-refined .case-detail {
+  margin-top: 15px;
+}
+@media (min-width: 1700px) {
+  .story-explanation {
+    min-height: 145px;
+  }
+}
+@media (max-width: 760px) {
+  .recovery-story {
+    margin-top: 12px;
+  }
+  .story-canvas {
+    height: 245px;
+  }
+  .story-ribbons {
+    top: -6px;
+  }
+  .story-intervention,
+  .story-result-label,
+  .story-control-label {
+    font-size: 10px;
+  }
+  .story-intervention {
+    top: 12%;
+  }
+  .story-result-label {
+    top: 3%;
+  }
+  .story-control-label {
+    top: 65%;
+  }
+  .story-cursor-ring {
+    stroke-width: 2;
+  }
+  .story-travel {
+    stroke-width: 1.5;
+  }
+  .story-console {
+    margin-top: -22px;
+    padding-bottom: 40px;
+  }
+  .story-controls {
+    gap: 8px;
+  }
+  .story-steps {
+    flex: 1;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .story-steps button {
+    font-size: 12px;
+    gap: 5px;
+    min-height: 48px;
+  }
+  .story-step-mark {
+    width: 4px;
+    height: 4px;
+  }
+  .story-playback {
+    min-width: 36px;
+    justify-content: flex-end;
+    padding-left: 8px;
+    min-height: 48px;
+  }
+  .story-playback span {
+    display: none;
+  }
+  .story-explanation {
+    padding-top: 22px;
+    min-height: 160px;
+  }
+  .story-explanation h2 {
+    font-size: 26px;
+    line-height: 1.2;
+    max-width: 330px;
+  }
+  .story-explanation p {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  .story-console figcaption {
+    font-size: 10px;
+    margin-top: 16px;
+  }
+  .home-refined .workflow-section {
+    padding-top: 42px;
+    padding-bottom: 38px;
+  }
+  .home-refined .workflow-heading h2 {
+    font-size: 43px;
+  }
+  .home-refined .incentive {
+    padding-top: 55px;
+    padding-bottom: 45px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .story-playback {
+    display: none;
+  }
+}
+
+.home-refined .workflow-body { min-height: 0; padding-bottom: 0; animation: none; }
+.home-refined .incentive-links { row-gap: 0; }

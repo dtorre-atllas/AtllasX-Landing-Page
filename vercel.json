@@ -1,0 +1,38 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/measurement",
+      "destination": "/churn-intelligence",
+      "permanent": true
+    },
+    {
+      "source": "/roi",
+      "destination": "/churn-intelligence",
+      "permanent": true
+    },
+    {
+      "source": "/book-demo",
+      "destination": "/demo",
+      "permanent": true
+    },
+    {
+      "source": "/speed-to-lead",
+      "destination": "/how-it-works",
+      "permanent": true
+    },
+    {
+      "source": "/outbound-calling",
+      "destination": "/how-it-works",
+      "permanent": true
+    },
+    {
+      "source": "/ai-receptionist",
+      "destination": "/how-it-works",
+      "permanent": true
+    }
+  ]
+}
