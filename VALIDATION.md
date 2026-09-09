@@ -24,3 +24,7 @@ This is a separate comparison branch and local preview. No production deployment
 ## Brand palette refinement — September 9, 2026
 
 Replaced sage surfaces with neutral gray, the footer with supplied brand charcoal, and primary actions with exact logo green and charcoal text. Production build passes. Browser checked the how-it-works page, mobile entry, active first-touch card, selected state, and footer; mobile remains 390px without overflow. Contrast ratios: primary action 6.01:1, footer body 16.26:1, footer secondary 9.42:1, secondary page text 6.25:1, green text links 5.00:1. Layout, copy, and behavior are unchanged. This is a local palette refinement, not a new independent whole-surface review.
+
+## Original backend login retained (September 9, 2026)
+
+Compared login with origin/main and restored https://app.atllasx.com/authentication/login in desktop navigation, the mobile menu, and footer. Browser navigation from the mobile menu reached the existing Sign In page with Google, Apple, email/password, and password recovery controls. No credentials were entered and no authenticated session was tested. TypeScript, production build, and all four regression tests pass. The new regression covers the exact login destination in navigation and footer on every public route.

@@ -67,3 +67,14 @@ test("sitemap contains public pages, and unknown pages are not indexed", async (
   assert.match(missing, /name="robots" content="noindex"/);
   assert.match(missing, /This page/);
 });
+
+test("every public page retains the original backend login in navigation and footer", async () => {
+  const login = 'href="https://app.atllasx.com/authentication/login"';
+  for (const route of routes) {
+    const html = await readPage(route);
+    const navigation = html.match(/<nav\b[^>]*>[\s\S]*?<\/nav>/)?.[0];
+    const footer = html.match(/<footer\b[^>]*>[\s\S]*?<\/footer>/)?.[0];
+    assert.ok(navigation?.includes(login), route + " navigation must retain backend login");
+    assert.ok(footer?.includes(login), route + " footer must retain backend login");
+  }
+});

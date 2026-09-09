@@ -14,6 +14,8 @@ import {
 import { Intercom, openChat } from "./components/Intercom";
 import logo from "../../hyzl-logo-kit/hyzl-logo.svg";
 
+const LOGIN_URL = "https://app.atllasx.com/authentication/login";
+
 export function Arrow({ diagonal = false }: { diagonal?: boolean }) {
   const Icon = diagonal ? ArrowUpRight : ArrowRight;
   return <Icon className="arrow" aria-hidden="true" />;
@@ -47,6 +49,7 @@ function Header() {
       >
         <Link to="/how-it-works">How it works</Link>
         <Link to="/churn-intelligence">Measurement</Link>
+        <a href={LOGIN_URL}>Log in</a>
         <DemoLink />
       </nav>
       <Link className="portal-mobile-demo" to="/demo">
@@ -101,7 +104,7 @@ function Footer() {
             Documentation{" "}
             <ArrowUpRight className="inline-arrow" aria-hidden="true" />
           </a>
-          <a href="https://app.hyzl.ai/authentication/login">
+          <a href={LOGIN_URL}>
             Log in <ArrowUpRight className="inline-arrow" aria-hidden="true" />
           </a>
         </div>

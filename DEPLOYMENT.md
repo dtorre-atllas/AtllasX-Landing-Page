@@ -8,7 +8,7 @@ This branch contains a complete React/Vite website. Build command: `npm run buil
 
 Existing destinations are retained:
 - Demo: https://meetings-na2.hubspot.com/d-torre/hyzl-revenue-recovery
-- Login: https://app.hyzl.ai/authentication/login
+- Login: https://app.atllasx.com/authentication/login
 - Documentation: https://docs.atllasx.com/
 - Legal pages remain on app.atllas.com.
 - Existing Intercom and ContentSquare integrations load only in production. Chat is opened from the footer to prevent automatic overlays covering the page. Email remains available if chat cannot load.
