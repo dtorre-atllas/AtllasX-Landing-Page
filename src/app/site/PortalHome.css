@@ -1,18 +1,19 @@
 body {
-  background: #eceee9;
+  background: #f4f5f5;
 }
 .portal-edition {
-  --paper: #eceee9;
-  --ink: #202820;
-  --muted: #5f695f;
-  --green: #27593c;
-  --line: #c9d0c7;
+  --paper: #f4f5f5;
+  --ink: #16181d;
+  --muted: #575b61;
+  --green: #237846;
+  --brand-green: #2fab5d;
+  --line: #ced1d4;
   --display: "Manrope", sans-serif;
   color: var(--ink);
   background: var(--paper);
 }
 .portal-edition ::selection {
-  background: #c3d4c1;
+  background: #c5ecd3;
 }
 .portal-edition .header {
   position: sticky;
@@ -22,8 +23,8 @@ body {
   width: 100%;
   margin: 0;
   padding: 0 5%;
-  background: #eceee9f5;
-  border-bottom: 1px solid #2028200b;
+  background: #f4f5f5f5;
+  border-bottom: 1px solid #16181d0b;
 }
 .portal-edition .brand img {
   width: 119px;
@@ -34,7 +35,8 @@ body {
   gap: 30px;
 }
 .portal-edition .button {
-  background: #243b2c;
+  background: var(--brand-green);
+  color: var(--ink);
   border-radius: 4px;
   font-size: 14px;
   font-weight: 500;
@@ -42,7 +44,7 @@ body {
   gap: 28px;
 }
 .portal-edition .button:hover {
-  background: #355840;
+  background: #39b968;
   transform: none;
 }
 .portal-edition .navigation .button {
@@ -143,7 +145,7 @@ body {
   margin-top: 9px;
 }
 .door-with .portal-door-label {
-  color: #21492e;
+  color: #237846;
 }
 .portal-door:hover .portal-door-label > span {
   color: var(--green);
@@ -208,9 +210,9 @@ body {
   display: flex;
   gap: 2px;
   padding: 3px;
-  border: 1px solid #bfc8bd;
+  border: 1px solid #c6cacf;
   border-radius: 5px;
-  background: #e7ebe4;
+  background: #e9ebed;
 }
 .world-switch button {
   font-size: 12px;
@@ -221,8 +223,8 @@ body {
   color: var(--muted);
 }
 .world-switch button[aria-pressed="true"] {
-  background: #263e2e;
-  color: #f7f9f5;
+  background: #2fab5d;
+  color: #16181d;
 }
 .signal-selector {
   display: flex;
@@ -233,20 +235,20 @@ body {
   margin-top: 25px;
 }
 .signal-selector button {
-  border: 1px solid #b8c3b5;
+  border: 1px solid #c6cacf;
   border-radius: 3px;
-  background: #ecefe9;
+  background: #f4f5f5;
   font-size: 11px;
   padding: 10px 13px;
   color: var(--muted);
 }
 .signal-selector button[aria-pressed="true"] {
-  border-color: #52644f;
-  color: #203b29;
-  background: #d9e2d5;
+  border-color: #237846;
+  color: #185b34;
+  background: #e1f2e7;
 }
 .signal-selector button:hover {
-  border-color: #52644f;
+  border-color: #237846;
 }
 .active-experience {
   display: grid;
@@ -287,28 +289,28 @@ body {
   font-size: 13px;
   background: transparent;
   border: 0;
-  color: #677263;
+  color: #60646a;
 }
 .experience-steps button[aria-pressed="true"] {
-  color: #193823;
+  color: #185b34;
   font-weight: 600;
 }
 .step-dot {
   width: 16px;
   height: 16px;
-  border: 1px solid #99a792;
+  border: 1px solid #8d939a;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .experience-steps button[aria-pressed="true"] .step-dot {
-  border: 5px solid #356d45;
+  border: 5px solid #237846;
 }
 .step-dot.is-done {
-  border-color: #54744d;
-  color: #33572e;
-  background: #d7e2d2;
+  border-color: #237846;
+  color: #185b34;
+  background: #e1f2e7;
 }
 .experience-play {
   border: 0;
@@ -329,7 +331,7 @@ body {
 .stack-sheet {
   position: absolute;
   inset: 0;
-  background: #dce2d8;
+  background: #e4e6e8;
   border-radius: 12px;
   pointer-events: none;
 }
@@ -338,17 +340,17 @@ body {
 }
 .sheet-two {
   transform: translate(20px, 20px) rotate(2.5deg);
-  background: #c6d1c1;
+  background: #ced1d4;
 }
 .action-card {
   position: relative;
-  background: #fafbf8;
+  background: #ffffff;
   border-radius: 12px;
   padding: 25px 30px 18px;
   min-height: 452px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 24px 50px #253a2620;
+  box-shadow: 0 24px 50px #16181d20;
   animation: card-arrival 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes card-arrival {
@@ -366,7 +368,7 @@ body {
   justify-content: space-between;
   align-items: center;
   font-size: 10px;
-  color: #687365;
+  color: #60646a;
   margin-bottom: 27px;
 }
 .card-system {
@@ -375,18 +377,18 @@ body {
   align-items: center;
   font-weight: 600;
   font-size: 13px;
-  color: #263d28;
+  color: #16181d;
 }
 .system-dot {
   display: inline-block;
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #397a48;
+  background: #2fab5d;
   flex-shrink: 0;
 }
 .card-symbol {
-  color: #35593b;
+  color: #237846;
   margin-bottom: 17px;
 }
 .action-card h3 {
@@ -398,7 +400,7 @@ body {
 .action-card > p {
   font-size: 13px;
   line-height: 1.7;
-  color: #616d5e;
+  color: #575b61;
   margin-top: 13px;
 }
 .event-details {
@@ -410,15 +412,15 @@ body {
   justify-content: space-between;
   gap: 20px;
   padding: 10px 0;
-  border-bottom: 1px solid #dce3d7;
+  border-bottom: 1px solid #dce0e3;
 }
 .event-details dt {
-  color: #5f6b59;
+  color: #60646a;
 }
 .event-details dd {
   margin: 0;
   text-align: right;
-  color: #354631;
+  color: #34383e;
 }
 .card-conclusion {
   display: flex;
@@ -428,7 +430,7 @@ body {
   margin-bottom: 22px;
   font-size: 10px;
   line-height: 1.5;
-  color: #526b4b;
+  color: #575b61;
 }
 .card-navigation {
   display: flex;
@@ -436,9 +438,9 @@ body {
   align-items: center;
   margin-top: auto;
   padding-top: 17px;
-  border-top: 1px solid #dce3d7;
+  border-top: 1px solid #dce0e3;
   font-size: 10px;
-  color: #5f6b59;
+  color: #60646a;
   font-variant-numeric: tabular-nums;
 }
 .card-navigation button {
@@ -448,7 +450,7 @@ body {
   padding: 7px 0 7px 12px;
   border: 0;
   background: transparent;
-  color: #294e30;
+  color: #237846;
   font-size: 11px;
 }
 .decision-checks {
@@ -463,17 +465,17 @@ body {
   font-size: 11px;
   line-height: 1.6;
   padding: 10px 0;
-  color: #52694c;
+  color: #575b61;
 }
 .outreach-preview {
   margin-top: 20px;
   padding: 18px;
-  background: #e9eee5;
+  background: #f0f2f3;
   border-radius: 4px;
 }
 .outreach-preview > span {
   font-size: 9px;
-  color: #5d7154;
+  color: #575b61;
 }
 .outreach-preview > p {
   font-size: 13px;
@@ -485,7 +487,7 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  color: #335e39;
+  color: #237846;
   margin-top: 20px;
   font-size: 11px;
 }
@@ -496,7 +498,7 @@ body {
   font-size: 11px;
   line-height: 1.5;
   margin-top: 28px;
-  color: #42613b;
+  color: #237846;
 }
 .outcome-path > span {
   display: flex;
@@ -514,7 +516,7 @@ body {
 .experience-disclosure {
   text-align: center;
   font-size: 10px;
-  color: #697363;
+  color: #60646a;
   line-height: 1.6;
   margin: 38px auto 0;
 }
@@ -531,12 +533,12 @@ body {
   font-size: 14px;
   line-height: 1.7;
   margin-top: 26px;
-  color: #70786a;
+  color: #60646a;
 }
 .quiet-note {
   display: block;
   font-size: 11px;
-  color: #70786a;
+  color: #60646a;
   margin-top: 22px;
 }
 .portal-text-action {
@@ -548,7 +550,7 @@ body {
   font-size: 13px;
   margin-top: 30px;
   padding: 10px;
-  color: #2b5434;
+  color: #237846;
 }
 .portal-stage.is-quiet .portal-scene {
   opacity: 0.12;
@@ -583,7 +585,7 @@ body {
   gap: 15px;
   font-size: 13px;
   margin-top: 25px;
-  color: #294d31;
+  color: #237846;
 }
 .portal-principles {
   width: 88%;
@@ -610,7 +612,7 @@ body {
   margin-top: 14px;
 }
 .portal-edition .footer {
-  background: #e1e6dc;
+  background: #16181d;
   padding: 65px 6% 28px;
 }
 .portal-edition .closing {
@@ -682,8 +684,8 @@ body {
   .portal-mobile-demo {
     display: inline-flex;
     margin-left: auto;
-    background: #243b2c;
-    color: #f7f9f4;
+    background: #2fab5d;
+    color: #16181d;
     padding: 11px 13px;
     border-radius: 3px;
     font-size: 12px;
@@ -698,7 +700,7 @@ body {
   }
   .portal-edition .navigation.is-open {
     top: 74px;
-    background: #eceee9;
+    background: #f4f5f5;
   }
   .portal-intro {
     padding: 32px 6% 0;
@@ -949,7 +951,7 @@ body {
   }
 }
 
-.portal-door-label > span { color: #2d382d; }
+.portal-door-label > span { color: #34383e; }
 
 @media (max-width: 760px) {
   .action-card-top,
@@ -969,4 +971,30 @@ body {
   .portal-invitation {
     bottom: -23px;
   }
+}
+
+/* Brand neutrals continue through supporting pages and the shared footer. */
+.portal-edition .quiet-band,
+.portal-edition .booking-panel {
+  background: #e9ebed;
+}
+.portal-edition .footer {
+  color: #f4f5f5;
+  --green: #2fab5d;
+}
+.portal-edition .closing,
+.portal-edition .footer-bottom {
+  border-color: #3b3e44;
+}
+.portal-edition .footer-bottom {
+  color: #b9bdc4;
+}
+.portal-edition .footer-name span {
+  color: var(--brand-green);
+}
+.portal-edition .footer :focus-visible {
+  outline-color: var(--brand-green);
+}
+.portal-edition .portal-mobile-demo:hover {
+  background: #39b968;
 }

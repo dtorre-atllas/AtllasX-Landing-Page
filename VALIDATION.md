@@ -20,3 +20,7 @@ The reviewer’s final disposition was **ship** at the scope of two scored corre
 ## Deployment scope
 
 This is a separate comparison branch and local preview. No production deployment or DNS changes were made. See DEPLOYMENT.md for publishing details.
+
+## Brand palette refinement — September 9, 2026
+
+Replaced sage surfaces with neutral gray, the footer with supplied brand charcoal, and primary actions with exact logo green and charcoal text. Production build passes. Browser checked the how-it-works page, mobile entry, active first-touch card, selected state, and footer; mobile remains 390px without overflow. Contrast ratios: primary action 6.01:1, footer body 16.26:1, footer secondary 9.42:1, secondary page text 6.25:1, green text links 5.00:1. Layout, copy, and behavior are unchanged. This is a local palette refinement, not a new independent whole-surface review.

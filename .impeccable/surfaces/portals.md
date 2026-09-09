@@ -24,3 +24,5 @@ CONTENT: All outcomes conditional, demo content labelled illustrative. A purchas
 QUALITY BAR: Architectural material must read as real, with precise perspective, grounded shadows and controlled light. Portal scale carries the page rather than two generic cards. Active cards are product demonstrations explicitly requested, not site scaffolding. Inactive state stays calm. Typography and labels remain legible at1440/943/390. The user should understand mechanism and demo action within seconds.
 
 FINISH: Independent finish review of actual entry and active/quiet states; production build, direct routes, mobile, keyboard and state verification. Record new system only in this worktree. Publish comparison branch and local preview; do not deploy production.
+
+PALETTE REFINEMENT (2026-09-09): User approved the portal composition and requested brand colors in place of muted greens. Exact logo charcoal #16181D and green #2FAB5D now anchor a neutral #f4f5f5 canvas and charcoal footer. This supersedes the original forest/sage color direction; topology and behavior are preserved.

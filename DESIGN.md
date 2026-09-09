@@ -2,18 +2,22 @@
 name: hyzl — Portal edition
 description: A quiet architectural installation for customer intent and considered action.
 colors:
-  paper: "#eceee9"
-  ink: "#202820"
-  muted: "#5f695f"
-  green: "#27593c"
-  line: "#c9d0c7"
-  action: "#243b2c"
-  action-hover: "#355840"
+  paper: "#f4f5f5"
+  ink: "#16181d"
+  muted: "#575b61"
+  green: "#237846"
+  line: "#ced1d4"
+  brand-green: "#2fab5d"
+  footer: "#16181d"
+  footer-text: "#f4f5f5"
+  footer-muted: "#b9bdc4"
+  action: "#2fab5d"
+  action-hover: "#39b968"
   white: "#ffffff"
-  card: "#fafbf8"
-  card-line: "#dce3d7"
-  switch-selected: "#263e2e"
-  switch-text: "#f7f9f5"
+  card: "#ffffff"
+  card-line: "#dce0e3"
+  switch-selected: "#2fab5d"
+  switch-text: "#16181d"
 typography:
   body:
     fontFamily: "Manrope, sans-serif"
@@ -48,7 +52,7 @@ spacing:
 components:
   button-primary:
     backgroundColor: "{colors.action}"
-    textColor: "{colors.white}"
+    textColor: "{colors.ink}"
     typography: "{typography.button}"
     rounded: "{rounded.action}"
     padding: "15px 20px"
@@ -75,34 +79,34 @@ components:
 
 **Creative North Star: "Paired Architectural Thresholds"**
 
-A quiet architectural installation gives customer intent a physical setting: pale mineral ground, machined graphite thresholds, forest signals, and photographic light. The supplied hyzl SVG remains the identity source. Manrope now carries both monumental statements and precise explanations; the earlier Kanit-and-ribbon system is not this edition’s visual authority.
+A quiet architectural installation gives customer intent a physical setting: pale mineral ground, machined graphite thresholds, brand-green signals, and photographic light. The supplied hyzl SVG remains the identity source. Manrope now carries both monumental statements and precise explanations; the earlier Kanit-and-ribbon system is not this edition’s visual authority.
 
 This record follows the shipped portal CSS cascade and shared routes. The user pinned the paired-threshold metaphor; implementation was code-led, and the generated scene is a production asset, not an approved UI comp. Supporting pages preserve open ruled reading structures while inheriting this edition’s palette, typography, and rectangular actions.
 
 **Key Characteristics:**
 - Photographic architectural material with restrained interface chrome.
 - One type family, substantial headline scale, and compact functional labels.
-- Forest green identifies action and selected state.
+- Brand green identifies action and selected state.
 - Layered cards explain a workflow; reading sections stay open.
 - Manual controls and visible illustrative disclosures accompany motion.
 
 ## Colors
 
-Pale mineral neutrals support graphite architecture and subdued forest action.
+Neutral gray surfaces support the supplied brand charcoal (#16181D) and green (#2FAB5D). Large areas carry no sage tint. The footer uses charcoal with off-white text; green identifies actions and accents.
 
 ### Primary
-- **Forest** (`green`): functional links, selection cues, and focus outlines.
-- **Deep Forest Action** (`action`, `action-hover`): rectangular demo buttons and their hover response.
-- **Selected Forest** (`switch-selected`, `switch-text`): comparison state with a light readable label.
+- **Accessible Green** (`green`): functional links, selection cues, and focus outlines.
+- **Brand Green Action** (`action`, `action-hover`): rectangular demo buttons and their hover response.
+- **Selected Brand Green** (`switch-selected`, `switch-text`): comparison state with a charcoal readable label.
 
 ### Neutral
 - **Mineral Paper** (`paper`): page canvas and mobile navigation.
-- **Graphite Ink** (`ink`): primary reading text; **Muted Sage Graphite** (`muted`): secondary explanations.
+- **Graphite Ink** (`ink`): primary reading text; **Muted Graphite** (`muted`): secondary explanations.
 - **Mineral Rule** (`line`): reading-section dividers.
 - **Porcelain Card** (`card`) and **Card Rule** (`card-line`): recurring workflow sheets and internal rows.
-- **White** (`white`): primary-action text. The supplied SVG’s embedded brand colors remain independent.
+- **White** (`white`): workflow sheets. Primary-action labels use charcoal on exact brand green; small green text on light surfaces uses the darker accessible variant #237846.
 
-**The Functional Forest Rule.** Use green for action, selection, and workflow meaning; retain text labels so color never carries the distinction alone.
+**The Functional Green Rule.** Use green for action, selection, and workflow meaning; retain text labels so color never carries the distinction alone.
 
 ## Typography
 
@@ -133,7 +137,7 @@ At 1050px the experience widens to 90% and its columns become 0.7:1.3. At 760px,
 The architectural raster supplies perspective, light, and grounded shadows. Workflow depth uses two rotated backing sheets beneath a soft-shadowed porcelain card. These are physical sheets, not hard offset shadow effects. On entry the scene becomes faint and blurred; quiet mode is faint and grayscale without transition. Reading sections use flat rules. The mobile menu has a soft overlay shadow.
 
 ### Shadow Vocabulary
-- **Workflow sheet:** `0 24px 50px #253a2620`.
+- **Workflow sheet:** `0 24px 50px #16181d20`.
 - **Mobile menu:** `0 15px 30px #16181d0b`.
 
 **The Material Depth Rule.** Let the architectural image and workflow stack carry depth; keep reading sections flat and separated by space or fine rules.
@@ -146,7 +150,7 @@ Compact controls have small rectangular corners; workflow sheets have gently rou
 
 ### Buttons
 
-Primary actions use the frontmatter variant with forest hover and no lift. A 0.2s background transition gives feedback. Shared keyboard focus uses a 2px forest outline with 5px offset; portal choice targets use 6px offset. Navigation actions are smaller (13px, 13px/19px padding). Text actions remain transparent with drawn arrows.
+Primary actions use the frontmatter variant with brighter brand-green hover and no lift. A 0.2s background transition gives feedback. Shared keyboard focus uses a 2px forest outline with 5px offset; portal choice targets use 6px offset. Navigation actions are smaller (13px, 13px/19px padding). Text actions remain transparent with drawn arrows.
 
 ### Navigation
 
@@ -154,11 +158,11 @@ The supplied SVG sits opposite concise links and the demo action. Mobile uses an
 
 ### World switch and trigger controls
 
-The bordered world switch has a 5px outer corner and inset 3px option corners. Pressed state fills forest. Four bordered trigger buttons identify abandoned paywall, new lead, cancellation, and failed payment. Selected triggers combine a darker border with sage fill and text. Both groups use `aria-pressed`; trigger changes reset to Signal and pause playback.
+The bordered world switch has a 5px outer corner and inset 3px option corners. Pressed state fills brand green with charcoal text. Four bordered trigger buttons identify abandoned paywall, new lead, cancellation, and failed payment. Selected triggers combine a darker green border with a pale green selected-state fill and text. Both groups use `aria-pressed`; trigger changes reset to Signal and pause playback.
 
 ### Workflow stack
 
-Four reusable sheet states—Signal, Decision, First touch, Outcome—share a heading, explanatory copy, and a bottom next-action row. Supporting content changes between event details, eligibility checks, an illustrative message, and purchase/measurement explanation. Two backing sheets convey a coherent physical stack. The message preview is an inset sage rectangle, not evidence of a real customer transcript. There is no text-input primitive in this build.
+Four reusable sheet states—Signal, Decision, First touch, Outcome—share a heading, explanatory copy, and a bottom next-action row. Supporting content changes between event details, eligibility checks, an illustrative message, and purchase/measurement explanation. Two backing sheets convey a coherent physical stack. The message preview is an inset neutral gray rectangle, not evidence of a real customer transcript. There is no text-input primitive in this build.
 
 The stage rail combines text, circular selection marks, and completed checks. Selecting a stage or Next action pauses for reading. Entry into With starts one sequence with 5500ms per stage; Play/Pause/Replay controls remain explicit. Timers suspend when hidden or below the observer’s 0.1 intersection threshold; resuming starts the current stage’s timer again. Card arrival lasts 0.55s with `cubic-bezier(0.16, 1, 0.3, 1)`. Reduced motion disables automatic progression and card/scene transitions while preserving manual access. Manual changes use the live-region path; automatic progression does not repeatedly announce content.
 
@@ -168,7 +172,7 @@ Without remains a still explanation with no card sequence. The event appears in 
 
 ### Supporting reading and measurement
 
-Open ruled rows explain method, pricing, and contact constraints. The measurement component retains labelled cohorts, selectable examples, uncertainty, and a separate lift result. Booking uses a square sage panel and an external scheduler handoff. Preserve these functional patterns without importing the retired ribbon homepage.
+Open ruled rows explain method, pricing, and contact constraints. The measurement component retains labelled cohorts, selectable examples, uncertainty, and a separate lift result. Booking uses a square neutral gray panel and an external scheduler handoff. Preserve these functional patterns without importing the retired ribbon homepage.
 
 ## Do's and Don'ts
 
@@ -185,3 +189,7 @@ Open ruled rows explain method, pricing, and contact constraints. The measuremen
 - **Don’t** inherit legacy ribbon geometry, Kanit typography, or tiny incidental metadata as reusable tokens.
 
 <!-- Evidence: src/app/site/PortalHome.css and PortalHome.tsx; src/app/App.tsx; src/styles/index.css; src/app/site/Pages.tsx; .impeccable/surfaces/portals.md; PRODUCT.md. Recorded 2026-09-08 from shipped implementation. Scope: portal-source only. Not canonized: residual desktop metadata below 12px and unused legacy ribbon styles; incidental small text is not a reusable type floor, and retired visual devices are not current authority. -->
+
+## Palette refinement — September 9, 2026
+
+User approved the portal design and requested brand alignment. Neutral page #f4f5f5, charcoal footer #16181d, off-white footer text #f4f5f5, secondary footer text #b9bdc4, and exact brand-green primary actions #2fab5d replace the muted forest/sage treatment. Layout, copy, and behavior are preserved.
