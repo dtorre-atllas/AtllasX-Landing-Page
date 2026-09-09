@@ -61,3 +61,5 @@ The user then authorized developing the restored ribbon into a Detect / Check / 
 ## Portal concept branch
 
 User explicitly approved a new two-portal website to compare against the existing ribbon version. With hyzl opens trigger-driven product cards; Without hyzl remains static. Lead with turning intent into revenue and timely attention, not only lost subscription revenue. Detection may be immediate; outreach still follows eligibility, organic-purchase wait windows, consent and timing rules. The new-lead scenario is illustrative and availability is setup-dependent. This worktree and branch are separate from the original concept.
+
+Copy preference (2026-09-09): Do not use em dashes in public copy or page titles. State the consumer subscription app audience in the hero, footer, and homepage metadata.

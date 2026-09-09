@@ -160,9 +160,9 @@ export function PortalHome() {
           <br className="portal-mobile-break" /> into revenue.
         </h1>
         <p>
-          hyzl uses AI to act on customer intent—from the first abandoned
-          paywall to the next renewal. Be there while the opportunity is still
-          open.
+          AI for consumer subscription apps. hyzl turns customer intent into
+          revenue, from abandoned paywalls to renewals. Reach customers while
+          the opportunity is still open.
         </p>
       </section>
 

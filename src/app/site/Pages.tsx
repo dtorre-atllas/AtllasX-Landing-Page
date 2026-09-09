@@ -6,32 +6,32 @@ const booking =
 export const pageMeta: Record<string, { title: string; description: string }> =
   {
     "/": {
-      title: "hyzl — Turn intent into revenue.",
+      title: "hyzl | Turn intent into revenue.",
       description:
-        "Functional AI that acts on customer intent, from abandoned paywalls to renewals. Explore timely first touch, new revenue, and measurable incremental results.",
+        "AI for consumer subscription apps. Turn customer intent into new revenue, from abandoned paywalls to renewals, with timely outreach and measurable results.",
     },
     "/how-it-works": {
-      title: "How it works — hyzl",
+      title: "How it works | hyzl",
       description:
         "Follow a recovery from billing event to outreach, purchase verification, and incremental revenue measurement.",
     },
     "/churn-intelligence": {
-      title: "Measurement — hyzl",
+      title: "Measurement | hyzl",
       description:
         "See how randomized holdouts separate purchases that would happen anyway from the revenue hyzl adds.",
     },
     "/pricing": {
-      title: "Pay for what it adds — hyzl",
+      title: "Pay for what it adds | hyzl",
       description:
         "hyzl charges a share of incremental revenue. Discuss your workflow, eligible volume, and commercial terms in a demo.",
     },
     "/demo": {
-      title: "Book a demo — hyzl",
+      title: "Book a demo | hyzl",
       description:
         "Explore revenue recovery for your subscription app on Stripe or RevenueCat. Book a conversation with the hyzl team.",
     },
     "/trust": {
-      title: "Customer contact, considered — hyzl",
+      title: "Customer contact, considered | hyzl",
       description:
         "Consent, eligibility, customer time zones, and billing verification shape every recovery workflow.",
     },

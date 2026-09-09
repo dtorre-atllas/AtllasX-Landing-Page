@@ -119,7 +119,7 @@ function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <span>Functional AI for subscription apps.</span>
+        <span>Functional AI for consumer subscription apps.</span>
         <span>© 2026 hyzl</span>
       </div>
     </footer>
@@ -129,7 +129,7 @@ function RouteEffects() {
   const { pathname } = useLocation();
   useEffect(() => {
     const meta = pageMeta[pathname] ?? {
-      title: "Page not found — hyzl",
+      title: "Page not found | hyzl",
       description:
         "Return to hyzl to explore functional AI for subscription apps.",
     };

@@ -37,7 +37,7 @@ const missing = template
     '<div id="root"></div>',
     '<div id="root">' + render("/404") + "</div>",
   )
-  .replace(/<title>.*?<\/title>/, "<title>Page not found — hyzl</title>")
+  .replace(/<title>.*?<\/title>/, "<title>Page not found | hyzl</title>")
   .replace("</head>", '<meta name="robots" content="noindex" /></head>');
 await writeFile("dist/404.html", missing);
 await writeFile(
