@@ -51,3 +51,7 @@ The user requests tactical, engineered, revolutionary, clean design with an ethe
 ## Open Decisions
 
 Creative direction, lead positioning, brand retention, technical base, and public-page scope are resolved through the user’s delegated build instruction. No verified customer evidence is available, so demonstrations are labelled illustrative. The publishing path into Figma remains unverified; deployment is user-controlled. Confirm current rollout availability and commercial terms before publishing changed factual claims.
+
+## Latest design decision
+
+After reviewing a dark space exploration, the user rejected it as childish and said the first version was better. The bright scientific-publication design and flowing ribbon are restored. Clearer factual headline and plain comparison labels are retained. The discarded dark exploration is not visual authority.

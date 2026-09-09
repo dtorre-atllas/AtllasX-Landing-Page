@@ -6,7 +6,7 @@ const booking =
 export const pageMeta: Record<string, { title: string; description: string }> =
   {
     "/": {
-      title: "hyzl — AI that earns its keep.",
+      title: "hyzl — Recover lost subscription revenue.",
       description:
         "Functional AI for subscription apps. Recover lost revenue, measure incremental lift against a holdout, and pay a share of what hyzl adds.",
     },

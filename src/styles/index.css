@@ -1787,7 +1787,7 @@ main:focus {
   top: 54.5%;
 }
 .ribbon-label.control {
-  top: 52%;
+  top: calc(52% + 22px);
 }
 @media (max-width: 760px) {
   .hero h1 {
@@ -1805,6 +1805,6 @@ main:focus {
     top: 50%;
   }
   .ribbon-label.control {
-    top: 49%;
+    top: calc(49% + 18px);
   }
 }

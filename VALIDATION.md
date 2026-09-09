@@ -2,6 +2,8 @@
 
 Checked September 8, 2026.
 
+Latest revision restores the first bright design after user review. The headline now says Recover lost revenue, with subscription AI context in the lead. Without hyzl replaces Held out in the two comparison labels. Caption placement was checked at 1440, 943, and 390 pixels, with no horizontal overflow. TypeScript, production build, and all three regression tests pass for the restored revision.
+
 - TypeScript check passes.
 - Production build passes and generates six static public pages, 404.html, and sitemap.xml.
 - Three build regression tests pass: route-specific HTML/metadata/assets, honest example labeling and booking destination, sitemap/404 behavior.

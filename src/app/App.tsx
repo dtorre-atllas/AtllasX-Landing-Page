@@ -153,10 +153,10 @@ function RecoveryFigure() {
           >
             <X size={18} aria-hidden="true" />
           </button>
-          <strong>One moment. Two groups.</strong>
+          <strong>See what hyzl adds.</strong>
           <p>
-            Eligible customers are randomly assigned. One group receives
-            outreach. The other is held out, so we can measure the difference.
+            We randomly leave some eligible customers without outreach.
+            Comparing the two groups shows what hyzl adds.
           </p>
           {!reduced && (
             <button
@@ -179,7 +179,7 @@ function RecoveryFigure() {
         </div>
       )}
       <span className="ribbon-label treated">With hyzl</span>
-      <span className="ribbon-label control">Held out</span>
+      <span className="ribbon-label control">Without hyzl</span>
       <figcaption>Illustrative diagram</figcaption>
       <div className="time-axis">
         Time <ArrowRight size={18} aria-hidden="true" />
@@ -193,14 +193,14 @@ function Home() {
       <section className="hero">
         <div className="hero-top">
           <h1>
-            AI that earns
+            Recover lost
             <br />
-            its keep<span>.</span>
+            revenue<span>.</span>
           </h1>
           <div className="hero-intro">
             <p>
-              hyzl recovers lost subscription revenue, proves what it added, and
-              charges only on the difference.
+              hyzl brings subscription customers back with AI. You pay only for
+              the revenue it adds.
             </p>
             <DemoLink />
             <Link className="text-link" to="/how-it-works">

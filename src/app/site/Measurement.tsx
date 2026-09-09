@@ -39,7 +39,7 @@ export function Measurement({ full = false }: { full?: boolean }) {
         <div className="cohort holdout">
           <div className="cohort-label">
             <span className="legend-dot" />
-            Held out <span>No outreach</span>
+            Without hyzl <span>No outreach</span>
           </div>
           <p className="rate">
             {early ? "10" : "6"}
