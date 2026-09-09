@@ -2,11 +2,13 @@
 
 ## Current delivery
 
+The portal concept is isolated on `codex/hyzl-portals`, based on the preserved `codex/hyzl-redesign` branch. Review the comparison before choosing either version for deployment.
+
 This branch contains a complete React/Vite website. Build command: `npm run build`. Output: `dist`. No backend service or environment secrets are required for the public site.
 
 Existing destinations are retained:
 - Demo: https://meetings-na2.hubspot.com/d-torre/hyzl-revenue-recovery
-- Login: https://app.hyzl.ai/authentication/login
+- Login: https://app.atllasx.com/authentication/login
 - Documentation: https://docs.atllasx.com/
 - Legal pages remain on app.atllas.com.
 - Existing Intercom and ContentSquare integrations load only in production. Chat is opened from the footer to prevent automatic overlays covering the page. Email remains available if chat cannot load.
@@ -27,7 +29,7 @@ Figma's standard **Push to GitHub** integration is one-way. Changes pushed here 
 
 If you continue publishing through Make, confirm that your account supports importing this code before merging it into the branch Make controls. Keep this redesign on its separate branch until the publishing path is established.
 
-Sources checked September 8, 2026:
+Sources rechecked September 9, 2026:
 - [Figma: Push from Make to GitHub](https://help.figma.com/hc/en-us/articles/35463818346647-Push-from-Figma-Make-to-GitHub)
 - [Figma: Make in your local codebase](https://help.figma.com/hc/en-us/articles/40775535020695-Make-in-your-local-codebase)
 - [Vercel Git deployments](https://vercel.com/docs/git)

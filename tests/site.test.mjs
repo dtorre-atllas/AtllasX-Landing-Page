@@ -47,12 +47,13 @@ test("every public route ships useful HTML and route-specific metadata before Ja
 test("conversion and illustrative evidence remain honest in static HTML", async () => {
   const home = await readPage("/");
   const demo = await readPage("/demo");
-  assert.match(home, /Illustrative recovery/);
+  assert.match(home, /Explore with hyzl/);
+  assert.match(home, /Explore without hyzl/);
   assert.match(
     await readPage("/churn-intelligence"),
     /Illustrative data, not customer results/,
   );
-  assert.match(home, /Sample message, not a customer transcript/);
+  assert.match(home, /Turn intent/);
   assert.match(
     demo,
     /https:\/\/meetings-na2.hubspot.com\/d-torre\/hyzl-revenue-recovery/,
@@ -65,4 +66,15 @@ test("sitemap contains public pages, and unknown pages are not indexed", async (
   const missing = await readFile("dist/404.html", "utf8");
   assert.match(missing, /name="robots" content="noindex"/);
   assert.match(missing, /This page/);
+});
+
+test("every public page retains the original backend login in navigation and footer", async () => {
+  const login = 'href="https://app.atllasx.com/authentication/login"';
+  for (const route of routes) {
+    const html = await readPage(route);
+    const navigation = html.match(/<nav\b[^>]*>[\s\S]*?<\/nav>/)?.[0];
+    const footer = html.match(/<footer\b[^>]*>[\s\S]*?<\/footer>/)?.[0];
+    assert.ok(navigation?.includes(login), route + " navigation must retain backend login");
+    assert.ok(footer?.includes(login), route + " footer must retain backend login");
+  }
 });
